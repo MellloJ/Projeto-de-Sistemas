@@ -1,4 +1,4 @@
-<h1 align="center"> Projeto-de-Sistemas </h1>
+<h1 align="center"> Projeto-de-Sistemas | Padrões</h1>
 
 <table align="center">
     <tr>

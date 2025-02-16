@@ -59,6 +59,10 @@ Em Breve
   <img src="docs/icons/LucidChart-Dark.svg" width="48" style="margin-left: 4px;">
 </p>
 
+<div style="margin-left: 40px;">
+  Este é um texto com margem à esquerda de 4px.
+</div>
+
 <!-- ## Licença
 
 Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes. -->

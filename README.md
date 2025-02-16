@@ -48,11 +48,9 @@ Em Breve
 
 - Banco de Dados:
 <p>
-  <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=mysql" />
-  </a>
-    <img src="docs/icons/DBeaver-Dark.svg" width="48">
-    <img src="docs/icons/Trello-Dark.svg" width="48">
+  <a href="https://skillicons.dev"><img src="https://skillicons.dev/icons?i=mysql"/></a>
+  <img src="docs/icons/DBeaver-Dark.svg" width="48">
+  <img src="docs/icons/Trello-Dark.svg" width="48">
 </p>
 
 - Ferramentas:

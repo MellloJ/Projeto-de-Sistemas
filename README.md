@@ -54,14 +54,10 @@ Em Breve
 - Ferramentas:
 <p>
   <a href="https://skillicons.dev"><img src="https://skillicons.dev/icons?i=vscode,figma,git" /></a>
-  <img src="docs/icons/DBeaver-Dark.svg" width="48" style="margin-left: 4px;">
-  <img src="docs/icons/Trello-Dark.svg" width="48" style="margin-left: 4px;">
-  <img src="docs/icons/LucidChart-Dark.svg" width="48" style="margin-left: 4px;">
+  <img src="docs/icons/DBeaver-Dark.svg" width="48">
+  <img src="docs/icons/Trello-Dark.svg" width="48">
+  <img src="docs/icons/LucidChart-Dark.svg" width="48">
 </p>
-
-<div style="margin-left: 40px;">
-  Este é um texto com margem à esquerda de 4px.
-</div>
 
 <!-- ## Licença
 

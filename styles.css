@@ -1,0 +1,22 @@
+:root {
+    --my-green-color: #F5B000; /* Defina a cor personalizada aqui */
+  }
+
+  main {
+    background-image: url('dec2.svg');
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    height: 1000px;
+  }
+  
+  .text-my-green-color {
+    color: var(--my-green-color);
+  }
+  
+  .bg-my-green-color {
+    background-color: var(--my-green-color);
+  }
+
+  /* .decoration{
+    margin-top: -50px;
+  } */

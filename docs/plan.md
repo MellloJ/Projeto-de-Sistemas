@@ -38,11 +38,11 @@ Se não estiver instalado, instale o [Docker](https://www.docker.com/get-started
 
 #### Primeira vez:
 1. Certifique-se de estar no diretório base do projeto.
-2. Execute o comando abaixo para iniciar o container do banco de dados:
+2. Abra um novo terminal e execute o comando abaixo para iniciar o container do banco de dados:
     ```bash
-    docker run --name nome_do_container
+    docker-compose up
     ```
-3. Verifique se o container está em execução:
+3. Verifique se o container está em execução (outro terminal):
     ```bash
     docker ps
     ```
@@ -56,11 +56,21 @@ Se não estiver instalado, instale o [Docker](https://www.docker.com/get-started
     ```
 
 #### Iniciando o container existente:
-1. Para iniciar um container que já foi criado anteriormente, use o comando:
+
+Para ver todos os containers existentes, use o comando: `docker ps -a`
+
+1. Certifique-se de estar no diretório base do projeto.
+2. Para iniciar um container que já foi criado anteriormente,abra um novo terminal e use o comando:
     ```bash
     docker start nome_do_container
     ```
-2. Verifique se o container está em execução:
+3. Verifique se o container está em execução (outro terminal):
     ```bash
     docker ps
+    ```
+
+#### Parando o container:
+1. Para parar o container em execução, use o comando:
+    ```bash
+    docker stop nome_do_container
     ```

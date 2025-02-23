@@ -31,3 +31,36 @@
 - [Service Layer](https://breadcrumbscollector.tech/how-to-implement-a-service-layer-in-django-rest-framework/) (Camada de Serviço)
 - [Repository patterns](https://medium.com/@slowmoe329/repository-design-pattern-in-django-a-clean-and-scalable-approach-a94d2645fd77)
 - Arquitetura Modular (Divisão de [Apps](https://docs-djangoproject-com.translate.goog/en/5.1/ref/applications/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=wa))
+
+### Configurando banco de dados:
+
+Se não estiver instalado, instale o [Docker](https://www.docker.com/get-started/).
+
+#### Primeira vez:
+1. Certifique-se de estar no diretório base do projeto.
+2. Execute o comando abaixo para iniciar o container do banco de dados:
+    ```bash
+    docker run --name nome_do_container
+    ```
+3. Verifique se o container está em execução:
+    ```bash
+    docker ps
+    ```
+4. Configure as variáveis de ambiente no seu arquivo `.env`:
+    ```
+    DATABASE_NAME=nome_do_banco
+    DATABASE_USER=usuario
+    DATABASE_PASSWORD=senha
+    DATABASE_HOST=localhost
+    DATABASE_PORT=5432
+    ```
+
+#### Iniciando o container existente:
+1. Para iniciar um container que já foi criado anteriormente, use o comando:
+    ```bash
+    docker start nome_do_container
+    ```
+2. Verifique se o container está em execução:
+    ```bash
+    docker ps
+    ```

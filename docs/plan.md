@@ -24,22 +24,22 @@
 ## Pardronizações
 
 - ### Branchs
-  Cada brach terá uma funcão princial, dentre elas:
+  Cada branch terá uma funcão princial, dentre elas:
   #### Nova funcionalidade
-  ```brash
-  feat/000-descrição
+  ```bash
+  feat/000/descricao-da-branch
   ```
   #### Correções de bugs
-  ```brash
-  fix/000-descrição
+  ```bash
+  fix/000/descricao-da-branch
   ```
   #### Melhorias de código
-  ```brash
-  refr/000-descrição
+  ```bash
+  refr/000/descricao-da-branch
   ```
   #### Documentação
-  ```brash
-  doc/000-descrição
+  ```bash
+  doc/000/descricao-da-branch
   ```
 
 - ### Commits

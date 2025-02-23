@@ -42,7 +42,7 @@ Em Breve
 - Frameworks:
 <p>
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=django,flutter" />
+    <img src="https://skillicons.dev/icons?i=django,flutter,tailwind" />
   </a>
 </p>
 

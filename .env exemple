@@ -1,13 +1,19 @@
-SECRET_KEY=your-secret-key
+# Para gerar uma SECRET_KEY use:
+# python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+
+SECRET_KEY='django-insecure-[Sua chave aki]'
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1,yourdomain.com
 
 # Database configuration
+
+# Lembre de criar o banco de dados [your-db-name] na conexao do dbeaver
+
 DB_NAME=your-db-name
-DB_USER=your-db-user
-DB_PASSWORD=your-db-password
-DB_HOST=your-db-host
-DB_PORT=your-db-port
+DB_USER=root
+DB_PASSWORD=1
+DB_HOST=localhost
+DB_PORT=5432
 
 # Email configuration
 EMAIL_HOST=smtp.example.com
@@ -18,10 +24,6 @@ EMAIL_HOST_PASSWORD=your-email-password
 
 # JWT signing key
 SIGNING_KEY=your-signing-key
-
-# Cache configuration
-CACHE_BACKEND=django.core.cache.backends.memcached.MemcachedCache
-CACHE_LOCATION=127.0.0.1:11211
 
 # Security configuration
 SECURE_SSL_REDIRECT=True
@@ -36,5 +38,5 @@ LOG_LEVEL=DEBUG
 LOG_FILE=debug.log
 
 # Internationalization
-LANGUAGE_CODE=en-us
-TIME_ZONE=UTC
+LANGUAGE_CODE=pt-br
+TIME_ZONE=America/Sao_Paulo

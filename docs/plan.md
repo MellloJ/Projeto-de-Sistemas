@@ -74,3 +74,19 @@ Para ver todos os containers existentes, use o comando: `docker ps -a`
     ```bash
     docker stop nome_do_container
     ```
+### Configurando o Dbeaver
+
+1. Instale o [Dbeaver Community](https://dbeaver.io/download/) e execute.
+   
+2. Clique para criar uma nova conexão:
+   ![Group 1](https://github.com/user-attachments/assets/344c06a8-ccfd-408a-949b-1c3e6d18eabd)
+   
+3. Selecione **PostregeSQL** e clique em **concluir**
+   ![Group 2](https://github.com/user-attachments/assets/db00db5e-ebf3-4d24-9787-7ed61a0a1dcb)
+
+4. Clique em **Exibir todos bancos de dados**, defina o **Nome de usuário** para: **root** e a **Senha** para: **1**
+    ![Group 3](https://github.com/user-attachments/assets/c156b91a-f6cb-4641-95ad-6d38adf8eed6)
+
+
+
+

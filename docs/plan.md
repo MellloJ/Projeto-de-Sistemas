@@ -25,6 +25,7 @@
 
 - Utilizar autenticação [JWT (Json Web Token)](https://www.totvs.com/blog/gestao-para-assinatura-de-documentos/jwt-token/) para todas as requisições do projeto desde o começo.
 - Escrever os arquivos de [teste](https://docs-djangoproject-com.translate.goog/en/5.1/topics/testing/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc) para cada funcionalidade nova.
+- Tenha [Node.js](https://nodejs.org/pt/download) Instalado.
 
 ### Padrões Django para a aplicação WEB:
 
@@ -86,7 +87,4 @@ Para ver todos os containers existentes, use o comando: `docker ps -a`
 
 4. Clique em **Exibir todos bancos de dados**, defina o **Nome de usuário** para: **root** e a **Senha** para: **1**
     ![Group 3](https://github.com/user-attachments/assets/c156b91a-f6cb-4641-95ad-6d38adf8eed6)
-
-
-
 

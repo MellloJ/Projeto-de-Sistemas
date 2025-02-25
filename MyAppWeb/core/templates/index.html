@@ -1,0 +1,29 @@
+<!-- templates/index.html -->
+
+{% extends "_base.html" %}
+
+{% block content %}
+
+
+
+<div class="grid grid-cols-4 gap-4 m-0 mx-auto bg-blue-100 pt-4 px-4">
+  <!-- Primeiro div: oculto em telas pequenas e visível a partir de telas médias -->
+  <div class="col-span-0 bg-blue-500 lg:col-span-1 sm:block hidden">
+    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg" alt="">
+  </div>
+
+  <!-- Segundo div: sempre visível, ocupa 4 colunas em telas pequenas e 2 colunas em telas maiores -->
+  <div class="col-span-4 bg-blue-500 sm:col-span-2">
+    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
+  </div>
+
+  <!-- Terceiro div: oculto em telas pequenas e visível a partir de telas médias -->
+  <div class="col-span-0 bg-blue-500 lg:col-span-1 sm:block hidden">
+    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt="">
+  </div>
+</div>
+
+
+
+
+{% endblock content %}

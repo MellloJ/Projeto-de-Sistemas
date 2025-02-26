@@ -7,8 +7,9 @@ For more information on this file, see
 https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 """
 
-import os
+# filepath: /home/jesse/codding/python/framework/django/projects/Projeto-de-Sistemas/MyAppWeb/MyAppWeb/wsgi.py
 
+import os
 from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'MyAppWeb.settings')

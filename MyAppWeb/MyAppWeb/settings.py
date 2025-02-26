@@ -32,6 +32,7 @@ INSTALLED_APPS = [
   
     'rest_framework',  # Django REST Framework
     'rest_framework_simplejwt',  # JWT
+    'django_dump_die',
 ]
 
 MIDDLEWARE = [
@@ -43,6 +44,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django_dump_die.middleware.DumpAndDieMiddleware',
 ]
 
 ROOT_URLCONF = 'MyAppWeb.urls'

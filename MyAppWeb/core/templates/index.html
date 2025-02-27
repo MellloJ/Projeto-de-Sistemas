@@ -12,25 +12,33 @@
 
 {% block content %}
 
-<div class="grid grid-cols-7 w-full gap-4 m-0 mx-auto bg-blue-100 pt-4 px-4">
+<div class="
+md:px-0
+grid grid-cols-7 w-full gap-4 m-0 mx-auto pt-4 px-4
+">
 
   <!-- Primeiro div: oculto em telas pequenas, visível a partir de telas médias e grandes -->
   <div class="
-  lg:bg-blue-500 lg:col-span-2
-  md:bg-green-500 md:col-span-2
-  sm:bg-red-500 sm:col-span-2
-  bg-gray-500 col-span-2 w-full 
+  lg:col-span-2 g:block
+  md:col-span-2 md:block
+  sm:hidden
+  hidden w-full 
   ">
-    <!-- Imagem à esquerda, visível apenas em telas médias e grandes -->
-    <img class="h-auto max-w-full rounded-lg" src="{% static 'src/core/img/Left.svg' %}" alt="">
+    <!-- Imagem à direita, visível apenas em telas médias e grandes -->
+    <!-- <img class="h-max max-w-full rounded-lg" src="{% static 'src/core/img/Left_back.png' %}" alt="Left_back"> -->
+
+    <svg id="left_svg" width="280" height="520" viewBox="0 0 1129 2000" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 1954.18C0 1954.18 815.046 2119.8 1058.99 1821.28C1351.67 1463.11 596.935 638.464 1058.99 280.239C1459.49 -30.2656 0 0.868744 0 0.868744V1954.18Z" fill=var(--bg-white) fill-opacity="1"/>
+    </svg>
+
   </div>
 
   <!-- Segundo div: sempre visível, ocupa 7 colunas em telas pequenas, 3 colunas em telas médias e 3 colunas em telas grandes -->
   <div class="
   lg:bg-blue-500 lg:col-span-3
   md:bg-green-500 md:col-span-3
-  sm:bg-red-500 sm:col-span-3
-  bg-gray-500 col-span-3 w-full 
+  sm:bg-red-500 sm:col-span-7
+  bg-gray-500 col-span-7 w-full 
   ">
     <!-- Imagem central, sempre visível -->
     <img class="h-auto max-w-full" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
@@ -38,13 +46,13 @@
 
   <!-- Terceiro div: oculto em telas pequenas, visível a partir de telas médias e grandes -->
   <div class="
-  lg:bg-blue-500 lg:col-span-2
-  md:bg-green-500 md:col-span-2
-  sm:bg-red-500 sm:col-span-2
-  bg-gray-500 col-span-2 w-full 
+  lg:bg-blue-500 lg:col-span-2 g:block
+  md:bg-green-500 md:col-span-2 md:block
+  sm:bg-red-500 sm:hidden
+  bg-gray-500 hidden w-full 
   ">
     <!-- Imagem à direita, visível apenas em telas médias e grandes -->
-    <img class="h-auto max-w-full rounded-lg" src="{% static 'src/core/img/Right.svg' %}" alt="">
+    <img id="right_png" class="h-max max-w-full rounded-lg" src="{% static 'src/core/img/Right_back.png' %}" alt="Right_back">
   </div>
 </div>
 

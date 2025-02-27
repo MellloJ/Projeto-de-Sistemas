@@ -2,26 +2,54 @@
 
 {% extends "_base.html" %}
 
+{% load static %}
+
+{% block title %} <title> Home</title> {% endblock title %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'src/core/css/styles.css' %}">
+{% endblock head %}
+
 {% block content %}
 
-<div class="grid grid-cols-4 gap-4 m-0 mx-auto bg-blue-100 pt-4 px-4">
-  <!-- Primeiro div: oculto em telas pequenas e visível a partir de telas médias -->
-  <div class="col-span-0 bg-blue-500 lg:col-span-1 sm:block hidden">
-    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg" alt="">
+<div class="grid grid-cols-7 w-full gap-4 m-0 mx-auto bg-blue-100 pt-4 px-4">
+
+  <!-- Primeiro div: oculto em telas pequenas, visível a partir de telas médias e grandes -->
+  <div class="
+  lg:bg-blue-500 lg:col-span-2
+  md:bg-green-500 md:col-span-2
+  sm:bg-red-500 sm:col-span-2
+  bg-gray-500 col-span-2 w-full 
+  ">
+    <!-- Imagem à esquerda, visível apenas em telas médias e grandes -->
+    <img class="h-auto max-w-full rounded-lg" src="{% static 'src/core/img/Left.svg' %}" alt="">
   </div>
 
-  <!-- Segundo div: sempre visível, ocupa 4 colunas em telas pequenas e 2 colunas em telas maiores -->
-  <div class="col-span-4 bg-blue-500 sm:col-span-2">
-    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
+  <!-- Segundo div: sempre visível, ocupa 7 colunas em telas pequenas, 3 colunas em telas médias e 3 colunas em telas grandes -->
+  <div class="
+  lg:bg-blue-500 lg:col-span-3
+  md:bg-green-500 md:col-span-3
+  sm:bg-red-500 sm:col-span-3
+  bg-gray-500 col-span-3 w-full 
+  ">
+    <!-- Imagem central, sempre visível -->
+    <img class="h-auto max-w-full" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
   </div>
 
-  <!-- Terceiro div: oculto em telas pequenas e visível a partir de telas médias -->
-  <div class="col-span-0 bg-blue-500 lg:col-span-1 sm:block hidden">
-    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt="">
+  <!-- Terceiro div: oculto em telas pequenas, visível a partir de telas médias e grandes -->
+  <div class="
+  lg:bg-blue-500 lg:col-span-2
+  md:bg-green-500 md:col-span-2
+  sm:bg-red-500 sm:col-span-2
+  bg-gray-500 col-span-2 w-full 
+  ">
+    <!-- Imagem à direita, visível apenas em telas médias e grandes -->
+    <img class="h-auto max-w-full rounded-lg" src="{% static 'src/core/img/Right.svg' %}" alt="">
   </div>
 </div>
 
-
-
-
 {% endblock content %}
+
+{% block scripts %}
+  <script src="{% static 'src/core/js/scripts.js' %}"></script>
+{% endblock scripts %}

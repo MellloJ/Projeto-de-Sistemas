@@ -15,7 +15,8 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')
+# ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -52,7 +53,13 @@ ROOT_URLCONF = 'MyAppWeb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'templates',
+            BASE_DIR / 'core' / 'templates',
+            BASE_DIR / 'users' / 'templates',
+            BASE_DIR / 'auth' / 'templates',
+            # Adicione outros diretórios de templates conforme necessário
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
@@ -30,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'users',
+    'auth_app',
   
     'rest_framework',  # Django REST Framework
     'rest_framework_simplejwt',  # JWT
@@ -57,7 +59,7 @@ TEMPLATES = [
             BASE_DIR / 'templates',
             BASE_DIR / 'core' / 'templates',
             BASE_DIR / 'users' / 'templates',
-            BASE_DIR / 'auth' / 'templates',
+            BASE_DIR / 'auth_app' / 'templates',
             # Adicione outros diretórios de templates conforme necessário
         ],
         'APP_DIRS': True,
@@ -121,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 
@@ -137,6 +139,7 @@ STATIC_URL = '/static/'
 
 # The absolute path to the directory where collectstatic will collect static files for deployment.
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 # Additional locations the staticfiles app will traverse if the FileSystemFinder finder is enabled.
 STATICFILES_DIRS = [

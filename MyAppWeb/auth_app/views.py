@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from auth.services import loginUser
+from auth_app.services import loginUser
 
 # Create your views here.
 

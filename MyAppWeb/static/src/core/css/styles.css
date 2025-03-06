@@ -1,17 +1,22 @@
 * {
     font-family: Poppins, sans-serif !important;
-    --bg-white: #ffffff;
+    --bg-white: #fff;
+    --bg-dark: #000;
 }
 
+.decoration{
+}
 
-#left_svg {
-    filter: drop-shadow(0 0 100px black);
-    position: absolute;
+body {
+    height: 100dvh;
+}
+
+#left_img {
+    filter: drop-shadow(0 40px 60px rgb(206, 206, 206)) ;
     z-index: -1;
 }
 
-#right_svg {
-    filter: drop-shadow(0 0 100px black);
-    position: absolute;
+#right_img {
+    filter: drop-shadow(0 40px 60px rgb(206, 206, 206));
     z-index: -1;
 }

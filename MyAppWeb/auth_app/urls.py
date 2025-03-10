@@ -3,5 +3,5 @@ from auth_app import views
 
 urlpatterns = [
     path('login/', views.Login.as_view(), name='login'),
-    path('teste/', views.Teste.as_view(), name='teste'),
+    path('logout/', views.Logout.as_view(), name='logout'),
 ]

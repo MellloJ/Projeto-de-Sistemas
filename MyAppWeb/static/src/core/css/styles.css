@@ -1,11 +1,17 @@
 * {
     font-family: Poppins, sans-serif !important;
     --bg-white: #fff;
-    --bg-dark: #000;
+    --base-color: #FFC107;
 }
 
-.decoration{
+.main-bg-color{
+    background-color: var(--base-color) !important;
 }
+
+.main-color{
+    color: var(--base-color) !important;
+}
+
 
 body {
     height: 100dvh;
@@ -13,10 +19,26 @@ body {
 
 #left_img {
     filter: drop-shadow(0 40px 60px rgb(206, 206, 206)) ;
-    z-index: -1;
+    z-index: -10;
 }
 
 #right_img {
     filter: drop-shadow(0 40px 60px rgb(206, 206, 206));
-    z-index: -1;
+    z-index: -10;
+}
+
+#default-carousel img{
+    min-width: 100px;
+    min-height: 100px;
+    max-width: 400px;
+    max-height: 400px;
+    width: 80dvh;
+    height: 80dvh;
+    object-fit: cover;
+    min-width: 300px;
+}
+
+
+#default-carousel div {
+    /* height: fit-content !important; */
 }

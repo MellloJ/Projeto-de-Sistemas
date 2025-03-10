@@ -20,3 +20,21 @@
 //             });
 //     });
 // });
+
+document.addEventListener("DOMContentLoaded", function() {
+    const baseColorVariable = '--base-color';
+    const colors = [
+        'rgb(255, 193, 7)', // #FFC107
+        'rgb(255, 87, 34)', // #FF5722
+        'rgb(76, 175, 80)', // #4CAF50
+        'rgb(33, 150, 243)' // #2196F3
+    ];
+    let currentColorIndex = 0;
+
+    function changeBaseColor() {
+        document.documentElement.style.setProperty(baseColorVariable, colors[currentColorIndex]);
+        currentColorIndex = (currentColorIndex + 1) % colors.length;
+    }
+
+    setInterval(changeBaseColor, 1000); // Change color every second
+});

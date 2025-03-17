@@ -13,6 +13,7 @@ from rest_framework_simplejwt.tokens import OutstandingToken, BlacklistedToken
 # Create your views here.
 
 class Register(View):
+    
     def get(self, request):
         email = "teste@email.com"
         password = "123456"

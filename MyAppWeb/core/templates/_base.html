@@ -14,6 +14,10 @@
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'src/css/core/styles.css' %}">
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 </head>
 
 <body class="bg-green-50">
@@ -23,7 +27,12 @@
         <div class="container flex flex-wrap items-center justify-between mx-auto">
           <a href="{{ .Site.Params.homepage }}/" class="flex items-center">
               <img src="/docs/images/logo.svg" class="h-6 mr-3 sm:h-9" alt="Flowbite Logo" />
-              <span class="self-center text-xl font-semibold whitespace-nowrap text-white">Flowbite Django</span>
+              
+              {% if user.is_authenticated %}
+                Olá, {{ user.nomeCompleto }}
+              {% else %}
+                <span class="self-center text-xl font-semibold whitespace-nowrap text-white">Flowbite Django</span>
+              {% endif %}
           </a>
           <button data-collapse-toggle="mobile-menu" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="mobile-menu" aria-expanded="false">
             <span class="sr-only">Open main menu</span>
@@ -47,6 +56,13 @@
               <li>
                 <a href="#" class="block py-2 pl-3 pr-4 text-white hover:text-gray-500 md:border-0 md:p-0">Contact</a>
               </li>
+
+              {% if user.is_authenticated %}
+                <li>
+                  <a href="javascript:void(0)" id="logout" logout-url="{% url 'logout' %}" class="block py-2 pl-3 pr-4 text-white hover:text-gray-500 md:border-0 md:p-0">Sair</a>
+                </li>
+              {% endif %}
+
             </ul>
           </div>
         </div>
@@ -54,12 +70,16 @@
     <!-- End of new HTML -->
 
     <div class="m-0 w-full">
+        {% csrf_token %}
         {% block content %}
         {% endblock content %}
     </div>
 
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+    <!-- Scripts Personalizados -->
+     <script src="{% static 'auth_app/scripts/login.js' %}"></script>
 </body>
 
 </html>

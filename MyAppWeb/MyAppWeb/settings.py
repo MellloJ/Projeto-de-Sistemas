@@ -33,9 +33,12 @@ INSTALLED_APPS = [
     'users',
     'auth_app',
   
-    'rest_framework',  # Django REST Framework
-    'rest_framework_simplejwt',  # JWT
     'django_dump_die',
+
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'corsheaders', #permite requisições Flutter
+    "rest_framework_simplejwt.token_blacklist",
 ]
 
 MIDDLEWARE = [
@@ -48,7 +51,21 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django_dump_die.middleware.DumpAndDieMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware', # Para permitir requisições Flutter
 ]
+
+# Configuração CORS para permitir acesso do Flutter
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Altere conforme necessário
+    "http://127.0.0.1:3000",
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
 
 ROOT_URLCONF = 'MyAppWeb.urls'
 
@@ -205,4 +222,10 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'SIGNING_KEY': config('SIGNING_KEY'),
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_BLACKLIST": True,
 }
+
+AUTH_USER_MODEL = 'auth_app.User' 
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'

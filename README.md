@@ -3,16 +3,16 @@
 <table align="center">
     <tr>
         <td>Home</td>
-        <td><a href="\docs\defaults.md">Padrões</a></td>
-        <td><a href="\docs\plan.md">Planejamento</a></td>
-        <td><a href="\docs\us.md">Quem Somos</a></td>
+        <td><a href="/docs/defaults.md">Padrões</a></td>
+        <td><a href="/docs/plan.md">Planejamento</a></td>
+        <td><a href="/docs/us.md">Quem Somos</a></td>
         <td>
             <details style="position: relative;">
                 <summary>Mais</summary>
                 <ul style="position: absolute; background: transparent; border: 1px solid #ccc; padding: 10px; list-style: none; border-radius: 10px">
-                    <li><a href="\docs\contact.md">Contato</a></li>
-                    <li><a href="\docs\sup.md">Suporte</a></li>
-                    <li><a href="\docs\faq.md">FAQ</a></li>
+                    <li><a href="/docs/contact.md">Contato</a></li>
+                    <li><a href="/docs/sup.md">Suporte</a></li>
+                    <li><a href="/docs/faq.md">FAQ</a></li>
                 </ul>
             </details>
         </td>

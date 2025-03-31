@@ -2,7 +2,7 @@
 
 <table align="center">
     <tr>
-        <td><a href="..\README.md">Home</a></td>
+        <td><a href="../README.md">Home</a></td>
         <td><a href="defaults.md">Padrões</a></td>
         <td>Planejamento</td>
         <td><a href="us.md">Quem Somos</a></td>
@@ -88,3 +88,13 @@ Para ver todos os containers existentes, use o comando: `docker ps -a`
 4. Clique em **Exibir todos bancos de dados**, defina o **Nome de usuário** para: **root** e a **Senha** para: **1**
     ![Group 3](https://github.com/user-attachments/assets/c156b91a-f6cb-4641-95ad-6d38adf8eed6)
 
+
+
+## Sprints:
+
+| Sprint | Data de Início | Data de Término | Link                     |
+|--------|----------------|-----------------|--------------------------|
+| 1      | 07/04/2024     | 04/05/2024      | [Detalhes](sprints/sprint1.md)  |
+| 2      | 05/05/2024     | 18/05/2024      | [Detalhes](sprints/sprint2.md)  |
+| 3      | 19/05/2024     | 01/06/2024      | [Detalhes](sprints/sprint3.md)  |
+| 4      | 02/06/2024     | 15/06/2024      | [Detalhes](sprints/sprint4.md)  |

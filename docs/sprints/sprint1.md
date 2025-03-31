@@ -29,6 +29,48 @@
 
 <hr>
 
+## Sprint 01
+
+## Valor:
+
+Entregar funcionalidades básicas de interação de usuário, incluindo cadastro, login e página inicial nas aplicações web e mobile.
+
+## Features:
+
+### **Cadastro de Usuário (Web):**
+**Responsável:** João Pedro Ribeiro
+
+**User stroy:** [Cadastro de Usuário](#cadastro-de-usuário) e [Cadastro de Entregador/Separador](#cadastro-de-entregadorseparador)
+
+**Objetivo:** Implementar funcionalidade para que clientes e entregadores/separadores possam se cadastrar diretamente no site, com validação de dados e envio de documentos obrigatórios.  
+
+### **Login de Usuário (Web):**
+**Responsável:** Jônatas de Sousa Madeira
+
+**User stroy:** [Login de Usuário (Cliente e Entregador/Separador)](#login-de-usuário-cliente-e-entregadorseparador)
+
+**Objetivo:** Desenvolver autenticação segura no site, incluindo suporte a login social (Google) e funcionalidade de recuperação de senha.  
+
+### **Cadastro de Usuário (Mobile):**
+**Responsável:** Arthur Lima Duarte
+
+**User stroy:** [Cadastro de Usuário](#cadastro-de-usuário) e [Cadastro de Entregador/Separador](#cadastro-de-entregadorseparador)
+
+**Objetivo:** Criar funcionalidade no aplicativo móvel para permitir que clientes e entregadores/separadores realizem cadastro, com validação de dados e envio de documentos obrigatórios.  
+
+### **Login de Usuário (Mobile):**
+**Responsável:** Gabriel Fernandes Zamora
+
+**User stroy:** [Login de Usuário (Cliente e Entregador/Separador)](#login-de-usuário-cliente-e-entregadorseparador)
+
+**Objetivo:** mplementar autenticação segura no aplicativo móvel, com suporte a login social (Google) e opção de recuperação de senha.  
+
+### **Página Inicial:**
+**Responsável:** Jessé Eliseu Nunes Da Silva
+
+**User stroy:** [Página Inicial do Sistema (Web)](#página-inicial-do-sistema-web)
+
+**Objetivo:** Criar uma página inicial para o aplicativo, com informações básicas e opções de navegação.
 
 ## User Stories:
 
@@ -97,3 +139,17 @@
 - 🔹 O sistema deve lembrar a sessão do usuário, permitindo login automático em dispositivos confiáveis.  
 - 🔹 Se um usuário for bloqueado ou estiver com documentos pendentes (no caso de entregadores/separadores), o sistema deve exibir uma mensagem informando o motivo.  
 - 🔹 O armazenamento de senhas deve seguir padrões de segurança (hash e criptografia).  
+
+### Página Inicial do Sistema (Web)
+
+**User Story:**  
+"Como um usuário autenticado ou não autenticado, quero poder acessar a URL inicial do site e visualizar informações básicas."
+
+**Critérios de Aceitação:**  
+- ✅ A página inicial deve ser acessível tanto em computadores quanto em dispositivos móveis.  
+- ✅ Deve exibir informações claras para que o usuário possa realizar login e/ou cadastro no sistema.  
+
+**Regras de Negócio:**  
+- 🔹 A página inicial deve ser responsiva, adaptando-se a diferentes tamanhos de tela.  
+- 🔹 Deve conter links ou botões para redirecionar o usuário para as páginas de login e cadastro.  
+- 🔹 Caso o usuário já esteja autenticado, a página inicial deve exibir informações personalizadas, como nome e opções de navegação para funcionalidades disponíveis.  

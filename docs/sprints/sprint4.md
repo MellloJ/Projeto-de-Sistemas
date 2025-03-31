@@ -1,18 +1,8 @@
 <h1 align="center"> Projeto-de-Sistemas | Sprint 04</h1>
 <div align="center">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <a href="sprint3.md" style="text-decoration: none;">
-            <button style="padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                ← Sprint Anterior
-            </button>
-        </a>
-        <strong>De 02/06/2024 à 15/06/2024</strong>
-        <a href="sprint5.md" style="text-decoration: none;">
-            <button style="padding: 10px 20px; background-color: #28A745; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                Próxima Sprint →
-            </button>
-        </a>
-    </div>
+    <a href="sprint3.md" style="margin-right: 20px;">← Sprint Anterior</a>
+    <strong>De 02/06/2024 à 15/06/2024</strong>
+    <a href="sprint5.md" style="margin-left: 20px;">Próxima Sprint →</a>
 </div>
 
 <table align="center">

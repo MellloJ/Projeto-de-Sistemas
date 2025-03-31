@@ -68,7 +68,7 @@ O sistema tem como objetivo conectar clientes e entregadores/separadores para fa
 
 ### **7. Escopo de Exclusão**
 - Integração com redes sociais além de login social (Google) não serão implementadas na primeira versão.
-- Funcionalidades avançadas de relatórios e análises não serão implementada na primeira versão.
+- Funcionalidades avançadas de relatórios e análises não serão implementadas na primeira versão.
 - Não haverá suporte a pagamentos online na primeira versão.
 - O sistema não incluirá funcionalidades de geolocalização na primeira versão.
 - Não haverá suporte a múltiplos idiomas na primeira versão.

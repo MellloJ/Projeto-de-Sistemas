@@ -3,7 +3,7 @@
 <div align="center">
     <br>
     <a href="sprint3.md">← Sprint Anterior </a>&#x2003;
-    <strong>De 02/06/2024 à 15/06/2024</strong>&#x2003;
+    <strong>De 02/06/2024 à 15/06/2024</strong>&#x2003;<br>
     <br>
 </div>
 

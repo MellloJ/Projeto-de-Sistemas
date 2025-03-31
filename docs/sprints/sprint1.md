@@ -40,35 +40,35 @@ Entregar funcionalidades básicas de interação de usuário, incluindo cadastro
 ### **Cadastro de Usuário (Web):**
 **Responsável:** João Pedro Ribeiro
 
-**User stroy:** [Cadastro de Usuário](#cadastro-de-usuário) e [Cadastro de Entregador/Separador](#cadastro-de-entregadorseparador)
+**User story:** [Cadastro de Usuário](#cadastro-de-usuário) e [Cadastro de Entregador/Separador](#cadastro-de-entregadorseparador)
 
 **Objetivo:** Implementar funcionalidade para que clientes e entregadores/separadores possam se cadastrar diretamente no site, com validação de dados e envio de documentos obrigatórios.  
 
 ### **Login de Usuário (Web):**
 **Responsável:** Jônatas de Sousa Madeira
 
-**User stroy:** [Login de Usuário (Cliente e Entregador/Separador)](#login-de-usuário-cliente-e-entregadorseparador)
+**User story:** [Login de Usuário (Cliente e Entregador/Separador)](#login-de-usuário-cliente-e-entregadorseparador)
 
 **Objetivo:** Desenvolver autenticação segura no site, incluindo suporte a login social (Google) e funcionalidade de recuperação de senha.  
 
 ### **Cadastro de Usuário (Mobile):**
 **Responsável:** Arthur Lima Duarte
 
-**User stroy:** [Cadastro de Usuário](#cadastro-de-usuário) e [Cadastro de Entregador/Separador](#cadastro-de-entregadorseparador)
+**User story:** [Cadastro de Usuário](#cadastro-de-usuário) e [Cadastro de Entregador/Separador](#cadastro-de-entregadorseparador)
 
 **Objetivo:** Criar funcionalidade no aplicativo móvel para permitir que clientes e entregadores/separadores realizem cadastro, com validação de dados e envio de documentos obrigatórios.  
 
 ### **Login de Usuário (Mobile):**
 **Responsável:** Gabriel Fernandes Zamora
 
-**User stroy:** [Login de Usuário (Cliente e Entregador/Separador)](#login-de-usuário-cliente-e-entregadorseparador)
+**User story:** [Login de Usuário (Cliente e Entregador/Separador)](#login-de-usuário-cliente-e-entregadorseparador)
 
 **Objetivo:** mplementar autenticação segura no aplicativo móvel, com suporte a login social (Google) e opção de recuperação de senha.  
 
 ### **Página Inicial:**
 **Responsável:** Jessé Eliseu Nunes Da Silva
 
-**User stroy:** [Página Inicial do Sistema (Web)](#página-inicial-do-sistema-web)
+**User story:** [Página Inicial do Sistema (Web)](#página-inicial-do-sistema-web)
 
 **Objetivo:** Criar uma página inicial para o aplicativo, com informações básicas e opções de navegação.
 

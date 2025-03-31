@@ -1,7 +1,8 @@
 <h1 align="center"> Projeto-de-Sistemas | Sprint 04</h1>
-<div style="display: flex; justify-content: space-between; align-items: center;">
-    <a href="sprint3.md">← Sprint Anterior</a>
-    <strong>De 02/06/2024 à 15/06/2024</strong>
+
+<div align="center">
+    <a href="sprint3.md">← Sprint Anterior </a>&#x2003;
+    <strong>De 02/06/2024 à 15/06/2024</strong>&#x2003;
     <a href="sprint5.md">Próxima Sprint →</a>
 </div>
 

@@ -72,6 +72,8 @@ Entregar funcionalidades básicas de interação de usuário, incluindo cadastro
 
 **Objetivo:** Criar uma página inicial para o aplicativo, com informações básicas e opções de navegação.
 
+---
+
 ## User Stories:
 
 ### Cadastro de Usuário

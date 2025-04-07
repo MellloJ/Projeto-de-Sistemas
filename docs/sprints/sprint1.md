@@ -33,7 +33,7 @@
 
 ## Valor:
 
-Entregar funcionalidades básicas de interação de usuário, incluindo cadastro, login e página inicial nas aplicações web e mobile.
+Entregar as funcionalidades essenciais de autenticação e início de uso, permitindo que usuários se cadastrem, façam login e acessem a página inicial nas versões web e mobile da aplicação, viabilizando os primeiros testes de navegação e uso da plataforma.
 
 ## Features:
 

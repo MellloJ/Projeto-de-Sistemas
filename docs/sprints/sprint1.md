@@ -149,7 +149,6 @@ Entregar as funcionalidades essenciais de autenticação e início de uso, permi
 
 **Critérios de Aceitação:**  
 - ✅ A página inicial deve ser acessível tanto em computadores quanto em dispositivos móveis.  
-- ✅ Deve exibir informações claras para que o usuário possa realizar login e/ou cadastro no sistema.  
 
 **Regras de Negócio:**  
 - 🔹 A página inicial deve ser responsiva, adaptando-se a diferentes tamanhos de tela.  

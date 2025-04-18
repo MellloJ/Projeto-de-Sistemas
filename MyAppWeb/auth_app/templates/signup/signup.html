@@ -1,20 +1,20 @@
 {% extends "_base.html" %}
 
-{% block title %}
-    Signup Page
-{% endblock %}
+{% load static %}
+
+{% block color-nav %}orange-400{% endblock %}
 
 {% block content %}
 
 <div>
-    <form method="POST" class="max-w-lg mx-auto"> {% csrf_token %}
+    <form method="post" action="{% url 'criarUsuarioTeste' %}" class="max-w-lg mx-auto"> {% csrf_token %}
         <div class="mb-5">
           <label for="email" class="block mb-2 text-xl font-medium text-gray-900 dark:text-black">Email</label>
-          <input type="email" id="email" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="name@email.com" autofocus required />
+          <input type="email" id="email" name="email" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="name@email.com" autofocus required />
         </div>
         <div class="mb-5">
           <label for="password" class="block mb-2 text-xl font-medium text-gray-900 dark:text-black">Senha</label>
-          <input type="password" id="password" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" required />
+          <input type="password" id="password" name="password" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" required />
         </div>
         <div class="mb-5">
           <label for="repeat-password" class="block mb-2 text-xl font-medium text-gray-900 dark:text-black">Confirmar sua senha</label>
@@ -22,16 +22,16 @@
         </div>
         <div class="mb-5">
             <label class="block mb-2 text-xl font-medium text-gray-900 dark:text-black">CPF</label>
-            <input type="text" id="cpf" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" maxlength="11" size="11" required/>
+            <input type="text" id="cpf" name="cpf" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" maxlength="11" size="11" required/>
         </div>
         <div class="grid md:grid-cols-2 md:gap-6">
             <div class="relative z-0 w-full mb-5 group">
                 <label class="block mb-2 text-xl font-medium text-gray-900 dark:text-black">Nome</label>
-                <input type="text" id="first_name" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="" required />
+                <input type="text" id="first_name" name="first_name" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="" required />
             </div>
             <div class="relative z-0 w-full mb-5 group">
                 <label class="block mb-2 text-xl font-medium text-gray-900 dark:text-black">Sobrenome</label>
-                <input type="text" id="last_name" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="" required />
+                <input type="text" id="last_name" name="last_name" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="" required />
             </div>
           </div>
         <div class="flex items-start mb-5">

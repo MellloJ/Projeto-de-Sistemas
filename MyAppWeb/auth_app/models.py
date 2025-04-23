@@ -19,15 +19,14 @@ class UserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
-class User(AbstractBaseUser):
-
-    email = models.CharField(max_length=30, null=False, unique=True)
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.CharField(max_length=255, null=False, unique=True)
     first_name = models.CharField(max_length=30, null=False)
     last_name = models.CharField(max_length=120, null=False)
     completeName = models.CharField(max_length=150, null=False, unique=True)
     cpf = models.CharField(max_length=11, unique=True)
     phone = models.CharField(max_length=11, null=True, blank=True)
-    password = models.CharField(null=False)
+    password = models.CharField(max_length= 128, null=False)
 
     #username = models.CharField(max_length=150, null=False)
     is_superuser = models.BooleanField(default=False)
@@ -47,16 +46,16 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.email
 
-class Address():
+""" class Address():
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     city = models.TextField()
     state = models.TextField()
     street = models.TextField()
     number = models.CharField(max_length=20)
-    neighborhood = models.CharField(max_length=50)
+    neighborhood = models.TextField()
 
     class Meta:
         db_table = 'addresses'
     
     def __str__(self):
-        return self.street
+        return self.street"""

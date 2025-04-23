@@ -36,7 +36,7 @@
               <img src="/docs/images/logo.svg" class="h-6 mr-3 sm:h-9" alt="Flowbite Logo" />
               
               {% if user.is_authenticated %}
-                Olá, {{ user.nomeCompleto }}
+                Olá, {{ user.first_name }}
               {% else %}
                 <span class="self-center text-xl font-semibold whitespace-nowrap text-white">Flowbite Django</span>
               {% endif %}

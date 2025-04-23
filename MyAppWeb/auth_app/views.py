@@ -3,86 +3,80 @@ from django.views import View
 from auth_app.services.loginUser import loginUser
 from django.urls import reverse
 from django.contrib.auth import logout
+from auth_app.services.signupUser import signupUser
+from .forms import signupUserForm
+from auth_app.services.confirmEmailUser import *
 from auth_app.models import User
 
 # Importando jwt do rest
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.tokens import OutstandingToken, BlacklistedToken
 
-from django.contrib.auth.models import Group, Permission
-from django.utils.timezone import now
-
-class Register(View):
+class signupClient(View):
     def get(self, request):
-         return render(request, 'signup/signup.html')
+         return render(request, 'signup/signup.html', {'form': signupUserForm()})
     
     def post(self, request):
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        cpf = request.POST.get('cpf')
-        phone = request.POST.get('phone')
-        first_name = request.POST.get('first_name', '').strip()
-        last_name = request.POST.get('last_name', '').strip()
-        completeName = (first_name, last_name)
-        completeName = " ".join(completeName)
-
-        is_superuser = False
-        is_active = True
-        is_staff = False
-        date_joined = now()
-        last_login = now()
+        form = signupUserForm(request.POST)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            cpf = form.cleaned_data['cpf']
+            phone = form.cleaned_data['phone']
+            password = request.POST.get('password')
+            email = form.cleaned_data['email']
+        else:
+            context = {
+                'form': form,
+                'errors': form.errors,
+            }
+            return render(request, 'signup/signup.html', context)
 
         # Verifica se o usuário já existe
-        if User.objects.filter(email=email).exists():
+        if signupUser.checkUserExist(email):
             context = {
-                'errors': 'Email já cadastrado'
+                'errors': 'Usuário já existe'
             }
-            return render(request, 'login/index.html', context)
+            return render(request, 'signup/signup.html', context)
 
-        user = User(
-            email=email,
-            password=password,
-            first_name=first_name,
-            last_name=last_name,
-            completeName=completeName,
-            cpf=cpf,
-            phone=phone,
-            is_superuser=is_superuser,
-            is_active=is_active,
-            is_staff=is_staff,
-            date_joined=date_joined,
-            last_login=last_login
+        #return render(request, 'signup/confirm.html')
+        user = signupUser.register(
+                request,
+                email=email,
+                password=password,
+                cpf=cpf,
+                phone=phone,
+                first_name=first_name,
+                last_name=last_name,
+            )
+        
+        sendMail(request, user)
 
-        )
+        return render(request, 'signup/confirm.html', {'email': email, 'completeName': user.completeName})
 
-        user.set_password(password)
-        user.save()
+class ConfirmEmail(View):
+    def get(self, request):
+        token = request.GET.get('token')
+        if token:
+            try:
+                token= AccessToken(token)
+                user_id = token['user_id']
+                purpose = token['purpose']
+                if purpose != 'email_confirmation':
+                    return render(request, 'signup/confirmFail.html', {'error': 'Token inválido ou expirado'})
+                
+                user = User.objects.get(id=user_id)
+                user.is_active = True
+                user.save()
 
-        return redirect(reverse('login'))
-
-"""    class Signup(View):
-        def get(self, request):
-            return render(request, "signup/signup.html")
-
-        def formHandler(request):
-            # if this is a POST request we need to process the form data
-            if request.method == "POST":
-                # create a form instance and populate it with data from the request:
-                form = NameForm(request.POST)
-                # check whether it's valid:
-                if form.is_valid():
-                    # process the data in form.cleaned_data as required
-                    # ...
-                    # redirect to a new URL:
-                    return HttpResponseRedirect("/thanks/")
-
-            # if a GET (or any other method) we'll create a blank form
-            else:
-                form = NameForm()
-
-            return render(request, "name.html", {"form": form}) """
+            except Exception as e:
+                print(f"Erro ao confirmar o email: {e}")
+                return render(request, 'signup/confirmFail.html', {'error': 'Token inválido ou expirado'})
+        else:
+            return render(request, 'signup/confirmFail.html', {'error': 'Token não fornecido'})
+        return render(request, 'signup/confirmed.html')
 
 class Login(View):
     def get(self, request):

@@ -7,10 +7,15 @@
 {% block content %}
 
 <div>
-    <form method="post" action="{% url 'criarUsuarioTeste' %}" class="max-w-lg mx-auto"> {% csrf_token %}
+    <form method="post" action="{% url 'signup' %}" class="max-w-lg mx-auto"> {% csrf_token %}
         <div class="mb-5">
+          {% if errors %}
+            <div class="alert alert-danger" role="alert">
+                {{errors}}
+              </div>
+            {% endif %}
           <label for="email" class="block mb-2 text-xl font-medium text-gray-900 dark:text-black">Email</label>
-          <input type="email" id="email" name="email" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="name@email.com" autofocus required />
+          {{form.email}}
         </div>
         <div class="mb-5">
           <label for="password" class="block mb-2 text-xl font-medium text-gray-900 dark:text-black">Senha</label>
@@ -22,16 +27,20 @@
         </div>
         <div class="mb-5">
             <label class="block mb-2 text-xl font-medium text-gray-900 dark:text-black">CPF</label>
-            <input type="text" id="cpf" name="cpf" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" maxlength="11" size="11" required/>
+            {{form.cpf}}
         </div>
+        <div class="mb-5">
+          <label class="block mb-2 text-xl font-medium text-gray-900 dark:text-black">Phone</label>
+          {{form.phone}}
+      </div>
         <div class="grid md:grid-cols-2 md:gap-6">
             <div class="relative z-0 w-full mb-5 group">
                 <label class="block mb-2 text-xl font-medium text-gray-900 dark:text-black">Nome</label>
-                <input type="text" id="first_name" name="first_name" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="" required />
+                {{form.first_name}}
             </div>
             <div class="relative z-0 w-full mb-5 group">
                 <label class="block mb-2 text-xl font-medium text-gray-900 dark:text-black">Sobrenome</label>
-                <input type="text" id="last_name" name="last_name" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="" required />
+                {{form.last_name}}
             </div>
           </div>
         <div class="flex items-start mb-5">

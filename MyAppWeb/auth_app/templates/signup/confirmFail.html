@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+</head>
+<body>
+    {% if errors %}
+        <div class="alert alert-danger" role="alert">
+            {{errors}}
+        </div>
+    {% endif %}
+    <h1> Email denied!</h1>
+    <button> Return to Signup </button>
+</body>
+</html>

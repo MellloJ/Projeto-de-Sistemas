@@ -10,7 +10,7 @@ from django.urls import reverse
 
 def generateToken(user):
     refresh = RefreshToken.for_user(user)
-    refresh.set_exp(lifetime=timedelta(minutes=40))
+    refresh.set_exp(lifetime=timedelta(hours=1))
     refresh['purpose']= 'email_confirmation'
 
     return str(refresh.access_token)

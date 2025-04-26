@@ -1,16 +1,19 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import Group, Permission
 from django.db import models
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password, **extra_fields):
+    def create_user(self, email, password, groupName, **extra_fields):
         if not email:
             raise ValueError('O email é obrigatório')
         
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
+        group, created = Group.objects.get_or_create(name=groupName)
         user.set_password(password)
         user.save(using=self._db)
+        user.groups.add(group)
         return user
     
     def create_superuser(self, email, password=None, **extra_fields):
@@ -30,7 +33,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     #username = models.CharField(max_length=150, null=False)
     is_superuser = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     last_login = models.DateTimeField(null=False)
     date_joined = models.DateTimeField(null=False)
@@ -46,7 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-""" class Address():
+class Address():
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     city = models.TextField()
     state = models.TextField()
@@ -58,4 +61,4 @@ class User(AbstractBaseUser, PermissionsMixin):
         db_table = 'addresses'
     
     def __str__(self):
-        return self.street"""
+        return self.street

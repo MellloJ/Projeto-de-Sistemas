@@ -1,14 +1,9 @@
 from django import forms
 import re
-from django.core.exceptions import ValidationError
+from auth_app.services.validateUser import validate_cpf
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from .models import *
-
-def calcDigito(digs):
-    s = sum(int(digs[i]) * ((len(digs) + 1) - i) for i in range(len(digs)))
-    res = 11 - s % 11
-    return '0' if res >= 10 else str(res)
 
 class signupUserForm(forms.ModelForm):
     first_name = forms.CharField(
@@ -60,21 +55,10 @@ class signupUserForm(forms.ModelForm):
 
         if not cpf:
             return cpf
-
-        cpf = re.sub(r'[^0-9]', '', cpf)
-
-        if len(cpf) != 11 or cpf == cpf[0] * 11:
-            raise ValidationError("CPF inválido.")
-
-        # Validação dos dígitos verificadores
-
-        d1 = calcDigito(cpf[:9])
-        d2 = calcDigito(cpf[:9] + d1)
-
-        if cpf[-2:] != d1 + d2:
-            raise ValidationError("CPF inválido.")
-
+        else:
+            validate_cpf(self, cpf)
         return cpf
+        
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

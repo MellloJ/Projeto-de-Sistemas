@@ -3,30 +3,44 @@ from django.views import View
 from auth_app.services.loginUser import loginUser
 from django.urls import reverse
 from django.contrib.auth import logout
-from auth_app.services.signupUser import signupUser
+from auth_app.services.signupUser import signupClient
 from .forms import signupUserForm
 from auth_app.services.confirmEmailUser import *
 from auth_app.models import User
 
 # Importando jwt do rest
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import CustomTokenObtainPairSerializer, UserClientSerializer
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.tokens import OutstandingToken, BlacklistedToken
 
-class signupClient(View):
+class Signup(View):
     def get(self, request):
          return render(request, 'signup/signup.html', {'form': signupUserForm()})
     
     def post(self, request):
         form = signupUserForm(request.POST)
         if form.is_valid():
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            cpf = form.cleaned_data['cpf']
-            phone = form.cleaned_data['phone']
-            password = request.POST.get('password')
-            email = form.cleaned_data['email']
+            try:
+                user = signupClient.register(
+                    email=form.cleaned_data['email'],
+                    password=request.POST.get('password'),
+                    first_name=form.cleaned_data['first_name'],
+                    last_name=form.cleaned_data['last_name'],
+                    cpf=form.cleaned_data['cpf'],
+                    phone=form.cleaned_data['phone'],
+                )
+                sendMail(request, user)
+                return render(request, 'signup/confirm.html', {'email': user.email, 'completeName': user.completeName})
+            except ValidationError as e:
+                context = {
+                    'form': form,
+                    'errors': e.messages,
+                }
+                return render(request, 'signup/signup.html', context)
         else:
             context = {
                 'form': form,
@@ -35,26 +49,11 @@ class signupClient(View):
             return render(request, 'signup/signup.html', context)
 
         # Verifica se o usuário já existe
-        if signupUser.checkUserExist(email):
+'''if signupClient.checkUserExist(email):
             context = {
                 'errors': 'Usuário já existe'
             }
-            return render(request, 'signup/signup.html', context)
-
-        #return render(request, 'signup/confirm.html')
-        user = signupUser.register(
-                request,
-                email=email,
-                password=password,
-                cpf=cpf,
-                phone=phone,
-                first_name=first_name,
-                last_name=last_name,
-            )
-        
-        sendMail(request, user)
-
-        return render(request, 'signup/confirm.html', {'email': email, 'completeName': user.completeName})
+            return render(request, 'signup/signup.html', context)'''
 
 class ConfirmEmail(View):
     def get(self, request):
@@ -144,3 +143,25 @@ class Logout(View):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+class UserClientView(APIView):
+    queryset = User.objects.all()
+    serializer_class = UserClientSerializer
+
+    def get(self, request):
+        user = User.objects.get(email=request.user.email)
+        serializer = UserClientSerializer(user)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = UserClientSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({'message': 'Usuário criado com sucesso!', 'user': {
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name
+                }}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

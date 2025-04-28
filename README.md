@@ -48,7 +48,7 @@ Em Breve
 
 - Banco de Dados:
 <p>
-  <a href="https://skillicons.dev"><img src="https://skillicons.dev/icons?i=mysql"/></a>
+  <a href="https://skillicons.dev"><img src="https://skillicons.dev/icons?i=postgres"/></a>
 </p>
 
 - Ferramentas:

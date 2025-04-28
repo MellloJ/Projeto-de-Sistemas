@@ -34,7 +34,7 @@ class Signup(View):
                     cpf=form.cleaned_data['cpf'],
                     phone=form.cleaned_data['phone'],
                 )
-                sendMail(request, user)
+                # sendMail(request, user)
                 return render(request, 'signup/confirm.html', {'email': user.email, 'completeName': user.completeName})
             except ValidationError as e:
                 context = {

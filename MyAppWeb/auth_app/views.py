@@ -126,7 +126,7 @@ class Login(View):
             
 
 class Logout(View):
-     def post(self, request):
+     def get(self, request):
         try:
             tokens = OutstandingToken.objects.filter(user=request.user)
             for token in tokens:

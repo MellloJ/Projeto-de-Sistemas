@@ -3,26 +3,80 @@ from django.views import View
 from auth_app.services.loginUser import loginUser
 from django.urls import reverse
 from django.contrib.auth import logout
+from auth_app.services.signupUser import signupClient
+from .forms import signupUserForm
+from auth_app.services.confirmEmailUser import sendMail
 from auth_app.models import User
 
+# Importando jwt do rest
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import CustomTokenObtainPairSerializer, UserClientSerializer
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.tokens import OutstandingToken, BlacklistedToken
+from django.core.exceptions import ValidationError
 
-# Create your views here.
-
-class Register(View):
+class Signup(View):
     def get(self, request):
-        email = "teste@email.com"
-        password = "123456"
-        nomeCompleto = "Teste da Silva"
+         return render(request, 'signup/signup.html', {'form': signupUserForm()})
+    
+    def post(self, request):
+        form = signupUserForm(request.POST)
+        if form.is_valid():
+            try:
+                user = signupClient.register(
+                    email=form.cleaned_data['email'],
+                    password=request.POST.get('password'),
+                    first_name=form.cleaned_data['first_name'],
+                    last_name=form.cleaned_data['last_name'],
+                    cpf=form.cleaned_data['cpf'],
+                    phone=form.cleaned_data['phone'],
+                )
+                sendMail(request, user)
+                return render(request, 'signup/confirm.html', {'email': user.email, 'completeName': user.completeName})
+            except ValidationError as e:
+                context = {
+                    'form': form,
+                    'errors': e.messages,
+                }
+                return render(request, 'signup/signup.html', context)
+        else:
+            context = {
+                'form': form,
+                'errors': form.errors,
+            }
+            return render(request, 'signup/signup.html', context)
 
-        user = User(email=email, password=password, nomeCompleto=nomeCompleto)
-        user.set_password(password)
-        user.save()
+        # Verifica se o usuário já existe
+'''if signupClient.checkUserExist(email):
+            context = {
+                'errors': 'Usuário já existe'
+            }
+            return render(request, 'signup/signup.html', context)'''
 
-        return redirect(reverse('login'))
+class ConfirmEmail(View):
+    def get(self, request):
+        token = request.GET.get('token')
+        if token:
+            try:
+                token= AccessToken(token)
+                user_id = token['user_id']
+                purpose = token['purpose']
+                if purpose != 'email_confirmation':
+                    return render(request, 'signup/confirmFail.html', {'error': 'Token inválido ou expirado'})
+                
+                user = User.objects.get(id=user_id)
+                user.is_active = True
+                user.save()
+
+            except Exception as e:
+                print(f"Erro ao confirmar o email: {e}")
+                return render(request, 'signup/confirmFail.html', {'error': 'Token inválido ou expirado'})
+        else:
+            return render(request, 'signup/confirmFail.html', {'error': 'Token não fornecido'})
+        return render(request, 'signup/confirmed.html')
 
 class Login(View):
     def get(self, request):
@@ -36,7 +90,7 @@ class Login(View):
         user = loginUser.auth(request, email, password, remember)
 
         if user is not None:
-            login = loginUser.login(request, user)
+            login = loginUser.do_login(request, user)
             
             if login != False:
 
@@ -64,15 +118,15 @@ class Login(View):
                 )
 
                 return response
-            else:
-                context = {
-                    'errors': 'Usuário ou senha incorretos'
-                 }
+        context = {
+            'errors': 'Usuário ou senha incorretos'
+            }
                 
-            return render(request, 'login/index.html', context)
+        return render(request, 'login/index.html', context)
+            
 
 class Logout(View):
-     def post(self, request):
+     def get(self, request):
         try:
             tokens = OutstandingToken.objects.filter(user=request.user)
             for token in tokens:
@@ -90,3 +144,25 @@ class Logout(View):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+class UserClientView(APIView):
+    queryset = User.objects.all()
+    serializer_class = UserClientSerializer
+
+    def get(self, request):
+        user = User.objects.get(email=request.user.email)
+        serializer = UserClientSerializer(user)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = UserClientSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({'message': 'Usuário criado com sucesso!', 'user': {
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name
+                }}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

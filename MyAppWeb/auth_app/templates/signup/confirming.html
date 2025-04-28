@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<body>
+{% if errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ errors }}
+    </div>
+{% endif %}
+  <h2>Olá {{ completeName }}!</h2>
+  <p>Seja bem-vindo(a) à nossa plataforma. Estamos felizes com sua chegada.</p>
+
+  <p>Para confirmar seu e-mail, clique no botão abaixo:</p>
+
+  <a href="{{ link_confirmacao }}"
+     style="background-color:#3b82f6;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">
+    Confirmar E-mail
+  </a>
+
+  <p>Se você não solicitou esse cadastro, pode ignorar este e-mail.</p>
+
+  <br>
+  <small>Equipe do Trazai</small>
+</body>
+</html>

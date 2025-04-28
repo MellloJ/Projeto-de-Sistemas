@@ -22,6 +22,12 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
+MY_APPS = [
+    'core',
+    'users',
+    'auth_app',
+]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,17 +35,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
-    'users',
-    'auth_app',
-  
     'django_dump_die',
-
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders', #permite requisições Flutter
     "rest_framework_simplejwt.token_blacklist",
     "drf_yasg",
+    'jessilver_django_seed',
+] + MY_APPS
+
+SEEDER_APPS = [
+    'auth_app',
 ]
 
 MIDDLEWARE = [

@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block color-nav %}orange-400{% endblock %}
+
+{% block title%}
     <title>Confirmar Email</title>
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
     <h1> Por favor confirme o seu email nos próximos 40 minutos</h1>
-</body>
-</html>
+{% endblock %}

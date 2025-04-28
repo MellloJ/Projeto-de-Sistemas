@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import Group, Permission
 from django.db import models
+from django.conf import settings
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password, groupName, **extra_fields):
@@ -48,6 +49,25 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+class DeliverUser(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE,
+        related_name='deliver_user_profile'
+    )
+
+    comprovante_residencia = models.FileField(null=False)
+    rg_photo = models.FileField(null=False)
+    photo = models.FileField(null=False)
+    cpf = models.CharField(max_length=11, null=False, unique=True)
+    is_deliver = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = 'deliver_users'
+
+    def __str__(self):
+        return f"Entregador: {self.user.email}"
 
 class Address():
     user = models.ForeignKey(User, on_delete=models.CASCADE)

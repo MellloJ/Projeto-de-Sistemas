@@ -1,12 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sucess</title>
-</head>
-<body>
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block color-nav %}orange-400{% endblock %}
+
+{% block title %}
+    <title>Cadastro Realizado</title>
+{% endblock %}
+
+{% block content %}
     <h1> Email confirmed!</h1>
-    <button> Return to login </button>
-</body>
-</html>
+    <a href="{% url 'login' %}" id="login-link" class="text-my-green-color hover:underline">Faça login</a>
+{% endblock%}

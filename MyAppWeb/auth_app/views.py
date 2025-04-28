@@ -7,6 +7,7 @@ from auth_app.services.signupUser import signupClient
 from .forms import signupUserForm
 from auth_app.services.confirmEmailUser import sendMail
 from auth_app.models import User
+from core.consts import CATEGORIAS_ALIMENTOS
 
 # Importando jwt do rest
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -35,7 +36,12 @@ class Signup(View):
                     phone=form.cleaned_data['phone'],
                 )
                 # sendMail(request, user)
-                return render(request, 'signup/confirm.html', {'email': user.email, 'completeName': user.completeName})
+                context = {
+                    'title': 'Traz Aí | Home',
+                    'categories': CATEGORIAS_ALIMENTOS,
+                }
+                return render(request, "index.html",context)
+                # return render(request, 'signup/confirm.html', {'email': user.email, 'completeName': user.completeName})
             except ValidationError as e:
                 context = {
                     'form': form,

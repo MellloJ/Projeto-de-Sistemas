@@ -1,0 +1,69 @@
+<!-- templates/index.html -->
+
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block title %} <title> {{title}} </title> {% endblock title %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'src/core/css/styles.css' %}">
+{% endblock head %}
+
+{% block navbar %}
+  {% include "navbar.html" %}
+{% endblock navbar %}
+
+{% block content %}
+  <div class=" md:px-0 grid grid-cols-7 w-full gap-4 m-0 mx-auto pt-4 px-4 h-auto">
+    <div class=" lg:col-span-2 g:block md:col-span-2 md:block sm:hidden hidden w-full relative grid grid-rows-2">
+      <img id="left_img" class="svg_img_color" src="{% static 'src/core/img/Left_back.svg' %}" alt="">
+      <div class="absolute top-0 left-0 flex flex-col justify-center align-items-start w-full gap-[3rem] pt-4">
+        {% include "index/moto.html" %}
+        {% include "index/carrinho.html" %}
+      </div>
+    </div>
+    <div class=" lg:col-span-3 md:col-span-3 sm:col-span-7 col-span-7 w-full grid grid-rows-3">
+      <div class="row-span-1">
+        <div class="flex flex-col justify-center items-center h-full text-center">
+          <p class="text-black">Cansado de ter que sair de casa?</p>
+          <h1 class="text-4xl font-bold text-black main-color">Vem pro Traz Aí</h1>
+          <p class="text-black">Toda compra na sua porta!!!</p>
+        </div>
+      </div>
+      <div class="row-span-2">
+        <div class="grid grid-rows-2 h-full text-center ">
+          <div class="row-span-1 flex flex-col justify-start">
+            <form>
+              <div class="relative mb-6 mx-15">
+                <div class="absolute inset-y-0 start-0 flex items-center px-3.5 pointer-events-none main-bg-color py-2 rounded-l-lg">
+                  <i class="bi bi-search text-white"></i>
+                </div>
+                <input type="text" id="input-group-1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[var(--base-color)] focus:border-[var(--base-color)] block w-full ps-15 p-2.5" placeholder="O que você procura?" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              </div>
+            </form>
+            <div class="flex flex-col items-center">
+              <div class="flex flex-row flex-wrap justify-center">
+                {% for category in categories %}
+                  <button type="button" class=" px-8  text-gray-900 bg-white focus:outline-none hover:bg-gray-100 focus:ring-3 focus:ring-[var(--base-color)] font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 shadow-xl">{{category}}</button>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class=" lg:col-span-2 g:block md:col-span-2 md:block sm:hidden hidden w-full  relative grid grid-rows-2">
+      <img id="right_img" class="svg_img_color" src="{% static 'src/core/img/Right_back.svg' %}" alt="">
+      <div class="absolute top-0 left-0 flex flex-col justify-center align-items-start w-full gap-[4rem] pt-4">
+        {% include "index/celular.html" %}
+        {% include "index/carro.html" %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block scripts %}
+  <script src="{% static 'src/core/js/scripts.js' %}"></script>
+{% endblock scripts %}

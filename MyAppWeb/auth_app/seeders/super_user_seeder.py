@@ -10,12 +10,12 @@ class SuperUserSeeder(BaseSeeder):
         User = get_user_model()
         if not User.objects.filter(is_superuser=True).exists():
             User.objects.create_superuser(
-                username='admin',
-                nomeCompleto='Admin User',
+                groupName='client',
+                completeName='Admin User',
                 email='admin@example.com',
                 password='123456789',
                 first_name='Admin',
-                last_name='User'
+                last_name='User',
             )
             self.succes(f'Super User created')
         else:

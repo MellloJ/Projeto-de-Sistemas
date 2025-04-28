@@ -70,7 +70,11 @@ class Login(View):
                  }
                 
             return render(request, 'login/index.html', context)
-
+        else:
+            context = {
+                'errors': 'Usuário ou senha incorretos'
+             }
+            return render(request, 'login/index.html', context)
 class Logout(View):
      def post(self, request):
         try:

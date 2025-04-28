@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.contrib.auth import logout
 from auth_app.services.signupUser import signupClient
 from .forms import signupUserForm
-from auth_app.services.confirmEmailUser import *
+from auth_app.services.confirmEmailUser import sendMail
 from auth_app.models import User
 
 # Importando jwt do rest
@@ -16,6 +16,7 @@ from rest_framework import status
 from .serializers import CustomTokenObtainPairSerializer, UserClientSerializer
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.tokens import OutstandingToken, BlacklistedToken
+from django.core.exceptions import ValidationError
 
 class Signup(View):
     def get(self, request):

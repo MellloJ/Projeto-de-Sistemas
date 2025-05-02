@@ -8,14 +8,16 @@
 
 {% block head %}
   <link rel="stylesheet" href="{% static 'src/produtos/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'src/core/css/styles.css' %}">
 {% endblock head %}
 
 {% block navbar %}
   {% include "navbar.html" %}
 {% endblock navbar %}
 
-{% block content %}
-{% endblock content %}
+{% block sidebar %}
+  {% include "sidebar.html" %}
+{% endblock sidebar %}
 
 {% block scripts %}
   <script src="{% static 'src/produtos/js/scripts.js' %}"></script>

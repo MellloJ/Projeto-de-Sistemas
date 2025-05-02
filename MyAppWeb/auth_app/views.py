@@ -35,7 +35,7 @@ class Signup(View):
                     cpf=form.cleaned_data['cpf'],
                     phone=form.cleaned_data['phone'],
                 )
-                # sendMail(request, user)
+                sendMail(request, user)
                 context = {
                     'title': 'Traz Aí | Home',
                     'categories': CATEGORIAS_ALIMENTOS,
@@ -56,11 +56,13 @@ class Signup(View):
             return render(request, 'signup/signup.html', context)
 
         # Verifica se o usuário já existe
-'''if signupClient.checkUserExist(email):
+        '''
+        if signupClient.checkUserExist(email):
             context = {
                 'errors': 'Usuário já existe'
             }
-            return render(request, 'signup/signup.html', context)'''
+            return render(request, 'signup/signup.html', context)
+        '''
 
 class ConfirmEmail(View):
     def get(self, request):
@@ -103,7 +105,7 @@ class Login(View):
                 refresh = RefreshToken.for_user(user)
                 access_token = str(refresh.access_token)
 
-                response = redirect(reverse('index'))
+                response = redirect(reverse('home'))
 
                 response.set_cookie(
                     key="access_token",
@@ -140,7 +142,7 @@ class Logout(View):
         except Exception as e:
             print(f"Erro ao invalidar tokens: {e}")
 
-        response = redirect('index')
+        response = redirect('home')
         response.delete_cookie("access_token")
         response.delete_cookie("refresh_token")
 

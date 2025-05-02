@@ -1,0 +1,22 @@
+<!-- templates/produtos_index.html -->
+
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block title %} <title> {{title}} </title> {% endblock title %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'src/produtos/css/styles.css' %}">
+{% endblock head %}
+
+{% block navbar %}
+  {% include "navbar.html" %}
+{% endblock navbar %}
+
+{% block content %}
+{% endblock content %}
+
+{% block scripts %}
+  <script src="{% static 'src/produtos/js/scripts.js' %}"></script>
+{% endblock scripts %}

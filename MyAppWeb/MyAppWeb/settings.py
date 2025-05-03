@@ -26,6 +26,7 @@ MY_APPS = [
     'core',
     'users',
     'auth_app',
+    'produtos',
 ]
 
 INSTALLED_APPS = [
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
 
 SEEDER_APPS = [
     'auth_app',
+    'produtos',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +86,7 @@ TEMPLATES = [
             BASE_DIR / 'core' / 'templates',
             BASE_DIR / 'users' / 'templates',
             BASE_DIR / 'auth_app' / 'templates',
+            BASE_DIR / 'produtos' / 'templates',
             # Adicione outros diretórios de templates conforme necessário
         ],
         'APP_DIRS': True,

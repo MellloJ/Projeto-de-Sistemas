@@ -7,4 +7,5 @@ urlpatterns = [
     path('', include('auth_app.urls')),
     path('produtos/', include('produtos.urls')),
     path('admin/', admin.site.urls),
+    path("unicorn/", include("django_unicorn.urls")),
 ]

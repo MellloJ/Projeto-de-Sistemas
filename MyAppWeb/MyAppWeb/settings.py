@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "drf_yasg",
     'jessilver_django_seed',
+    "django_unicorn",
 ] + MY_APPS
 
 SEEDER_APPS = [
@@ -229,3 +230,7 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = 'auth_app.User' 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
+
+# # Media files (Uploaded files)
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = BASE_DIR / 'media'

@@ -1,6 +1,63 @@
 from jessilver_django_seed.seeders.BaseSeeder import BaseSeeder
-from produtos.models import Produtos
+from produtos.models import *
 import random
+
+
+class CategoriasSeeder(BaseSeeder):
+    @property
+    def seeder_name(self):
+        return 'CategoriasSeeder'
+
+    def seed(self):
+        try:
+            categorias_data = [
+                {
+                    'nome': 'Grãos',
+                    'descricao': 'Categoria de grãos',
+                    'imagem': 'produtos/categorias/graos.svg'
+                },
+                {
+                    'nome': 'Carnes',
+                    'descricao': 'Categoria de carnes',
+                    'imagem': 'produtos/categorias/carnes.svg'
+                },
+                {
+                    'nome': 'Enlatados',
+                    'descricao': 'Categoria de alimentos enlatados',
+                    'imagem': 'produtos/categorias/enlatados.svg'
+                },
+                {
+                    'nome': 'Bebidas',
+                    'descricao': 'Categoria de bebidas',
+                    'imagem': 'produtos/categorias/bebidas.svg'
+                },
+                {
+                    'nome': 'Hortifuti',
+                    'descricao': 'Categoria de hortifuti',
+                    'imagem': 'produtos/categorias/hortifuti.svg'
+                },
+                {
+                    'nome': 'Doces',
+                    'descricao': 'Categoria de doces',
+                    'imagem': 'produtos/categorias/doces.svg'
+                },
+                {
+                    'nome': 'Laticínios',
+                    'descricao': 'Categoria de laticínios',
+                    'imagem': 'produtos/categorias/laticinios.svg'
+                },
+                {
+                    'nome': 'Temperos',
+                    'descricao': 'Categoria de temperos',
+                    'imagem': 'produtos/categorias/temperos.svg'
+                },
+            ]
+            for categoria in categorias_data:
+                Categorias.objects.create(**categoria) 
+            self.succes('Categorias seeded successfully')
+        except Exception as e:
+            self.error(f'Error seeding categorias: {e}')
+            raise e
 
 class ProdutosSeeder(BaseSeeder):
     @property
@@ -13,7 +70,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Maçã Gala',
                     'descricao': 'Maçã Gala fresca e suculenta',
-                    'categoria': 'Frutas',
+                    'categoria': Categorias.objects.get(nome='Hortifuti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 3.99,
                     'qtd_estoque': 200,
@@ -25,7 +82,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Maçã Fuji',
                     'descricao': 'Maçã Fuji doce e crocante',
-                    'categoria': 'Frutas',
+                    'categoria': Categorias.objects.get(nome='Hortifuti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 4.99,
                     'qtd_estoque': 150,
@@ -37,7 +94,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Maçã Verde',
                     'descricao': 'Maçã Verde ácida e refrescante',
-                    'categoria': 'Frutas',
+                    'categoria': Categorias.objects.get(nome='Hortifuti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 5.49,
                     'qtd_estoque': 120,
@@ -49,7 +106,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Banana Prata',
                     'descricao': 'Banana Prata madura e saborosa',
-                    'categoria': 'Frutas',
+                    'categoria': Categorias.objects.get(nome='Hortifuti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 2.99,
                     'qtd_estoque': 300,
@@ -61,7 +118,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Laranja Pera',
                     'descricao': 'Laranja Pera doce e suculenta',
-                    'categoria': 'Frutas',
+                    'categoria': Categorias.objects.get(nome='Hortifuti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 3.49,
                     'qtd_estoque': 250,
@@ -73,7 +130,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Abacaxi Pérola',
                     'descricao': 'Abacaxi Pérola doce e refrescante',
-                    'categoria': 'Frutas',
+                    'categoria': Categorias.objects.get(nome='Hortifuti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 6.99,
                     'qtd_estoque': 100,
@@ -85,7 +142,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Manga Palmer',
                     'descricao': 'Manga Palmer doce e suculenta',
-                    'categoria': 'Frutas',
+                    'categoria': Categorias.objects.get(nome='Hortifuti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 4.49,
                     'qtd_estoque': 180,
@@ -97,7 +154,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Uva Thompson',
                     'descricao': 'Uva Thompson sem sementes e doce',
-                    'categoria': 'Frutas',
+                    'categoria': Categorias.objects.get(nome='Hortifuti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 7.99,
                     'qtd_estoque': 90,
@@ -109,7 +166,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Melancia',
                     'descricao': 'Melancia fresca e suculenta',
-                    'categoria': 'Frutas',
+                    'categoria': Categorias.objects.get(nome='Hortifuti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 12.99,
                     'qtd_estoque': 50,

@@ -1,10 +1,21 @@
 from django.db import models
 from django.conf import settings
 
+class Categorias(models.Model):
+    nome = models.TextField()
+    descricao = models.TextField()
+    imagem = models.ImageField(upload_to='produtos/categorias/', blank=True, null=True)
+
+    class Meta:
+        db_table = 'categorias'
+    
+    def __str__(self):
+        return self.nome
+    
 class Produtos(models.Model):
     nome = models.TextField()
     descricao = models.TextField()
-    categoria = models.TextField()
+    categoria = models.ForeignKey('Categorias', on_delete=models.SET_NULL, null=True, related_name='produtos')
     marca = models.TextField()
     preco_unitario = models.DecimalField(max_digits=10, decimal_places=2)
     qtd_estoque = models.IntegerField()

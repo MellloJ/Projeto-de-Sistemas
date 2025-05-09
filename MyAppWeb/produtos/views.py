@@ -1,24 +1,37 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import FileResponse, Http404
 from django.shortcuts import render
+from django.urls import reverse
 from django.views import View
 from produtos.models import *
 
 class VerProdutos(View):
     def get(self, request):
+
+        breadcrumbs = [
+            # {'name': 'Produtos', 'url': reverse('produtos')},
+            {'name': 'Produtos'},
+        ]
+
         context = {
             'title': 'Traz Aí | Produtos',
             'produtos' : Produtos.objects.all(),
             'categories' : Categorias.objects.all(),
-
+            'breadcrumbs' : breadcrumbs,
         }
         return render(request, "produtos_index.html",context)
 
 class VerCategorias(View):
     def get(self, request):
+
+        breadcrumbs = [
+            {'name': 'Categorias'},
+        ]
+
         context = {
             'title': 'Traz Aí | Categorias',
             'categorias': Categorias.objects.all(),
+            'breadcrumbs' :breadcrumbs,
         }
         return render(request, "categorias_index.html",context)
 

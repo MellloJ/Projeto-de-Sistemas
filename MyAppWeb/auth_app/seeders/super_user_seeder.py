@@ -16,6 +16,7 @@ class SuperUserSeeder(BaseSeeder):
                 password='123456789',
                 first_name='Admin',
                 last_name='User',
+                is_active=True,
             )
             self.succes(f'Super User created')
         else:

@@ -7,8 +7,10 @@ django-appconf==1.1.0
 django-cors-headers==4.7.0
 django-dump-die==0.1.7
 django-unicorn==0.62.0
+django_components==0.139.1
 djangorestframework==3.15.2
 djangorestframework_simplejwt==5.4.0
+djc_core_html_parser==1.0.2
 drf-yasg==1.21.10
 inflection==0.5.1
 jessilver_django_seed==1.0.2

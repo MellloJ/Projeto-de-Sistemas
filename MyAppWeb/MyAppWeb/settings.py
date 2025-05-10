@@ -44,12 +44,19 @@ INSTALLED_APPS = [
     "drf_yasg",
     'jessilver_django_seed',
     "django_unicorn",
+    'django_components',
 ] + MY_APPS
 
 SEEDER_APPS = [
     'auth_app',
     'produtos',
 ]
+
+DJANGO_COMPONENTS = {
+    "components": {
+        "app": "core.components",
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

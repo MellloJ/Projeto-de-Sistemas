@@ -39,7 +39,7 @@
         {% for categoria in categorias %}
         <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm">
             <a href="#">
-              {% if producategoriato.imagem %}
+              {% if categoria.imagem %}
                 <img class="object-contain rounded-t-lg p-4" src="{{ categoria.imagem.url }}" alt="" />
               {% else %}
                 <img class="object-contain rounded-t-lg p-4" src="{% static '/src/produtos/img/empty.svg' %}" alt="" />

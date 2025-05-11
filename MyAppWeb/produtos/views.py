@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from produtos.models import *
+from pathlib import Path
 
 class ProdutosView(View):
     def get(self, request):
@@ -64,8 +65,16 @@ class CategoriasView(View):
 class ImagensProdutosView(View):
     def get(self, request, arquivo):
         try:
-            veiculo = Produtos.objects.get(imagem='produtos/imagens/{}'.format(arquivo))
-            return FileResponse(veiculo.imagem)
+            try:
+                produto = Produtos.objects.get(imagem='produtos/imagens/{}'.format(arquivo))
+                file_path = Path(produto.imagem.path)
+                if file_path.is_file():
+                    return FileResponse(file_path.open('rb'))
+                else:
+                    empty_image_path = Path('static/src/produtos/img/empty.svg')
+                    return FileResponse(empty_image_path.open('rb'))
+            except ObjectDoesNotExist:
+                raise Http404('Arquivo não encontrado.')
         except ObjectDoesNotExist:
             raise Http404('Arquivo não encontrado.')
         except Exception as exeption:
@@ -74,8 +83,16 @@ class ImagensProdutosView(View):
 class ImagensCategoriasView(View):
     def get(self, request, arquivo):
         try:
-            categoria = Categorias.objects.get(imagem='produtos/categorias/{}'.format(arquivo))
-            return FileResponse(categoria.imagem)
+            try:
+                categoria = Categorias.objects.get(imagem='produtos/categorias/{}'.format(arquivo))
+                file_path = Path(categoria.imagem.path)
+                if file_path.is_file():
+                    return FileResponse(file_path.open('rb'))
+                else:
+                    empty_image_path = Path('static/src/categorias/img/empty.svg')
+                    return FileResponse(empty_image_path.open('rb'))
+            except ObjectDoesNotExist:
+                raise Http404('Arquivo não encontrado.')
         except ObjectDoesNotExist:
             raise Http404('Arquivo não encontrado.')
         except Exception as exeption:

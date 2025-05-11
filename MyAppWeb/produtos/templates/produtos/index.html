@@ -4,13 +4,17 @@
 
 {% load static %}
 
+{% load dump_die %}
+
+{% load unicorn %}
+
 {% load component_tags %}
 
 {% block title %} <title> {{title}} </title> {% endblock title %}
 
 {% block head %}
   <link rel="stylesheet" href="{% static 'src/produtos/css/styles.css' %}">
-  <link rel="stylesheet" href="{% static 'src/core/css/styles.css' %}">
+  {% unicorn_scripts %}
 {% endblock head %}
 
 {% block navbar %}
@@ -22,6 +26,7 @@
 {% endblock sidebar %}
 
 {% block content %}
+{% csrf_token %}
 <section class="bg-gray-50 py-8 antialiased p-4 md:ml-64 h-auto pt-20">
   <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
     <!-- Heading & Filters -->
@@ -34,6 +39,12 @@
           </svg>
           Novo Produto
         </button>
+        <button type="button" id="edit-mode-toggle" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
+          <svg class="-ms-0.5 me-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.779 17.779 4.36 19.918 6.5 13.5m4.279 4.279 8.364-8.643a3.027 3.027 0 0 0-2.14-5.165 3.03 3.03 0 0 0-2.14.886L6.5 13.5m4.279 4.279L6.499 13.5m2.14 2.14 6.213-6.504M12.75 7.04 17 11.28"/>
+          </svg>
+          Editar
+        </button>
       </div>
       <div class="flex items-center space-x-4">
         <button data-modal-toggle="{{ filterModal.id }}" data-modal-target="{{ filterModal.id }}" type="button" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 sm:w-auto">
@@ -45,7 +56,7 @@
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7" />
           </svg>
         </button>
-        <button id="sortDropdownButton1" data-dropdown-toggle="dropdownSort1" type="button" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 sm:w-auto">
+        <!-- <button id="sortDropdownButton1" data-dropdown-toggle="dropdownSort1" type="button" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 sm:w-auto">
           <svg class="-ms-0.5 me-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M7 4l3 3M7 4 4 7m9-3h6l-6 6h6m-6.5 10 3.5-7 3.5 7M14 18h4" />
           </svg>
@@ -53,7 +64,7 @@
           <svg class="-me-0.5 ms-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7" />
           </svg>
-        </button>
+        </button> -->
         <div id="dropdownSort1" class="z-50 hidden w-40 divide-y divide-gray-100 rounded-lg bg-white shadow" data-popper-placement="bottom">
           <ul class="p-2 text-left text-sm font-medium text-gray-500" aria-labelledby="sortDropdownButton">
             <li>
@@ -78,94 +89,8 @@
         </div>
       </div>
     </div>
-    <div class="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 xl:grid-cols-4">
-      {% for produto in produtos %}
-        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-          <div class="h-56 w-full">
-            <a href="#">
-              {% if produto.imagem %}
-                <img class="mx-auto h-full object-contain text-gray-300" src="{{ produto.imagem.url }}" alt="" />
-              {% else %}
-                <img class="mx-auto h-full object-contain text-gray-300" src="{% static '/src/produtos/img/empty.svg' %}" alt="" />
-              {% endif %}
-            </a>
-          </div>
-          <div class="pt-6">
-            <div class="mb-4 flex items-center justify-end gap-4">
-              {% comment %}
-              <span class="me-2 rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800"> Up to 35% off </span>
-              {% endcomment %} 
-
-              <div class="flex items-center justify-end gap-1">
-                <button type="button" data-tooltip-target="tooltip-quick-look" class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900">
-                  <span class="sr-only"> Quick look </span>
-                  <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z" />
-                    <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                  </svg>
-                </button>
-                <div id="tooltip-quick-look" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300" data-popper-placement="top">
-                  Quick look
-                  <div class="tooltip-arrow" data-popper-arrow=""></div>
-                </div>
-
-                <button type="button" data-tooltip-target="tooltip-add-to-favorites" class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900">
-                  <span class="sr-only"> Add to Favorites </span>
-                  <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6C6.5 1 1 8 5.8 13l6.2 7 6.2-7C23 8 17.5 1 12 6Z" />
-                  </svg>
-                </button>
-                <div id="tooltip-add-to-favorites" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300" data-popper-placement="top">
-                  Add to favorites
-                  <div class="tooltip-arrow" data-popper-arrow=""></div>
-                </div>
-              </div>
-            </div>
-
-            <a href="#" class="text-lg font-semibold leading-tight text-gray-900 hover:underline">{{ produto.nome }}</a>
-
-            <div class="mt-2 flex items-center gap-2">
-              
-              {% include "stars.html" %}
-
-              <p class="text-sm font-medium text-gray-900">{{ produto.avaliacao|floatformat:1 }}</p>
-              <p class="text-sm font-medium text-gray-500">({{ produto.qtd_avaliacoes }})</p>
-            </div>
-
-            {% comment %}
-              <ul class="mt-2 flex items-center gap-4">
-                <li class="flex items-center gap-2"></li>
-                <svg class="h-4 w-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"></svg>
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
-                </svg>
-                <p class="text-sm font-medium text-gray-500">Fast Delivery</p>
-                </li>
-
-                <li class="flex items-center gap-2">
-                <svg class="h-4 w-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M8 7V6c0-.6.4-1 1-1h11c.6 0 1 .4 1 1v7c0 .6-.4 1-1 1h-1M3 18v-7c0-.6.4-1 1-1h11c.6 0 1 .4 1 1v7c0 .6-.4 1-1 1H4a1 1 0 0 1-1-1Zm8-3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
-                </svg>
-                <p class="text-sm font-medium text-gray-500">Best Price</p>
-                </li>
-              </ul>
-            {% endcomment %} 
-
-            <div class="mt-2 flex flex-col gap-2">
-              <div>
-                <span class="text-2xl font-extrabold  text-gray-900">R$ {{produto.preco_unitario}}</span>
-                <span class="text-sm font-medium text-gray-500">unidade</span>
-              </div>
-              <!-- <span class="text-sm font-medium text-gray-500 line-through">R$ {{produto.preco_unitario}}</span> -->
-              <button type="button" class="inline-flex w-full items-center justify-center text-center rounded-lg bg-orange-400 hover:bg-orange-500 text-white px-5 py-2.5 text-sm font-medium hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300">
-                <svg class="-ms-2 me-2 h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6" />
-                </svg>
-                Adicionar no Carrinho
-              </button>
-            </div>
-          </div>
-        </div>
-      {% endfor %}
+    <div>
+      {% unicorn 'produtos_unicorn' id='produtos_unicorn'%}
     </div>
     <div class="w-full text-center">
       <button type="button" class="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100">Show more</button>
@@ -175,380 +100,49 @@
   <!-- Filter modal -->
   {% component "formModal" formModal=filterModal %}
     {% fill "modal_body" %}
-      <div class="mb-4 border-b border-gray-200">
-        <ul class="-mb-px flex flex-wrap text-center text-sm font-medium" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
-          <li class="mr-1" role="presentation">
-            <button class="inline-block pb-2 pr-1" id="brand-tab" data-tabs-target="#brand" type="button" role="tab" aria-controls="profile" aria-selected="false">Brand</button>
-          </li>
-          <li class="mr-1" role="presentation">
-            <button class="inline-block px-2 pb-2 hover:border-gray-300 hover:text-gray-600" id="advanced-filers-tab" data-tabs-target="#advanced-filters" type="button" role="tab" aria-controls="advanced-filters" aria-selected="false">Advanced Filters</button>
-          </li>
-        </ul>
-      </div>
-      <div id="myTabContent">
-        <div class="grid grid-cols-2 gap-4 md:grid-cols-3" id="brand" role="tabpanel" aria-labelledby="brand-tab">
-          <div class="space-y-2">
-            <h5 class="text-lg font-medium uppercase text-black">A</h5>
-
-            <div class="flex items-center">
-              <input id="apple" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="apple" class="ml-2 text-sm font-medium text-gray-900"> Apple (56) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="asus" type="checkbox" value="" checked class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="asus" class="ml-2 text-sm font-medium text-gray-900"> Asus (97) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="acer" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="acer" class="ml-2 text-sm font-medium text-gray-900"> Acer (234) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="allview" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="allview" class="ml-2 text-sm font-medium text-gray-900"> Allview (45) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="atari" type="checkbox" value="" checked class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="asus" class="ml-2 text-sm font-medium text-gray-900"> Atari (176) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="amd" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="amd" class="ml-2 text-sm font-medium text-gray-900"> AMD (49) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="aruba" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="aruba" class="ml-2 text-sm font-medium text-gray-900"> Aruba (16) </label>
-            </div>
+      <input type="hidden" id="filter_url" value="{% url 'filter' %}">
+      <div class="space-y-4" id="advanced-filters">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="preco-min" class="block text-sm font-medium text-gray-900"> Preço Mínimo </label>
+            <input name='preco-min' id="preco-min" type="range" min="0" max="100" value="0" step="1" class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200" />
           </div>
 
-          <div class="space-y-2">
-            <h5 class="text-lg font-medium uppercase text-black">B</h5>
-
-            <div class="flex items-center">
-              <input id="beats" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="beats" class="ml-2 text-sm font-medium text-gray-900"> Beats (56) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="bose" type="checkbox" value="" checked class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="bose" class="ml-2 text-sm font-medium text-gray-900"> Bose (97) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="benq" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="benq" class="ml-2 text-sm font-medium text-gray-900"> BenQ (45) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="bosch" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="bosch" class="ml-2 text-sm font-medium text-gray-900"> Bosch (176) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="brother" type="checkbox" value="" checked class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="brother" class="ml-2 text-sm font-medium text-gray-900"> Brother (176) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="biostar" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="biostar" class="ml-2 text-sm font-medium text-gray-900"> Biostar (49) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="braun" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="braun" class="ml-2 text-sm font-medium text-gray-900"> Braun (16) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="blaupunkt" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="blaupunkt" class="ml-2 text-sm font-medium text-gray-900"> Blaupunkt (45) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="benq2" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="benq2" class="ml-2 text-sm font-medium text-gray-900"> BenQ (23) </label>
-            </div>
+          <div>
+            <label for="preco-max" class="block text-sm font-medium text-gray-900"> Preço Máximo </label>
+            <input name='preco-max' id="preco-max" type="range" min="0" max="100" value="100" step="1" class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200" />
           </div>
-
-          <div class="space-y-2">
-            <h5 class="text-lg font-medium uppercase text-black">C</h5>
-
-            <div class="flex items-center">
-              <input id="canon" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="canon" class="ml-2 text-sm font-medium text-gray-900"> Canon (49) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="cisco" type="checkbox" value="" checked class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="cisco" class="ml-2 text-sm font-medium text-gray-900"> Cisco (97) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="cowon" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="cowon" class="ml-2 text-sm font-medium text-gray-900"> Cowon (234) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="clevo" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="clevo" class="ml-2 text-sm font-medium text-gray-900"> Clevo (45) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="corsair" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="corsair" class="ml-2 text-sm font-medium text-gray-900"> Corsair (15) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="csl" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="csl" class="ml-2 text-sm font-medium text-gray-900"> Canon (49) </label>
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <h5 class="text-lg font-medium uppercase text-black">D</h5>
-
-            <div class="flex items-center">
-              <input id="dell" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="dell" class="ml-2 text-sm font-medium text-gray-900"> Dell (56) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="dogfish" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="dogfish" class="ml-2 text-sm font-medium text-gray-900"> Dogfish (24) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="dyson" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="dyson" class="ml-2 text-sm font-medium text-gray-900"> Dyson (234) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="dobe" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="dobe" class="ml-2 text-sm font-medium text-gray-900"> Dobe (5) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="digitus" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="digitus" class="ml-2 text-sm font-medium text-gray-900"> Digitus (1) </label>
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <h5 class="text-lg font-medium uppercase text-black">E</h5>
-
-            <div class="flex items-center">
-              <input id="emetec" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="emetec" class="ml-2 text-sm font-medium text-gray-900"> Emetec (56) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="extreme" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="extreme" class="ml-2 text-sm font-medium text-gray-900"> Extreme (10) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="elgato" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="elgato" class="ml-2 text-sm font-medium text-gray-900"> Elgato (234) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="emerson" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="emerson" class="ml-2 text-sm font-medium text-gray-900"> Emerson (45) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="emi" type="checkbox" value="" checked class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="emi" class="ml-2 text-sm font-medium text-gray-900"> EMI (176) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="fugoo" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="fugoo" class="ml-2 text-sm font-medium text-gray-900"> Fugoo (49) </label>
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <h5 class="text-lg font-medium uppercase text-black">F</h5>
-
-            <div class="flex items-center">
-              <input id="fujitsu" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="fujitsu" class="ml-2 text-sm font-medium text-gray-900"> Fujitsu (97) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="fitbit" type="checkbox" value="" checked class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="fitbit" class="ml-2 text-sm font-medium text-gray-900"> Fitbit (56) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="foxconn" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="foxconn" class="ml-2 text-sm font-medium text-gray-900"> Foxconn (234) </label>
-            </div>
-
-            <div class="flex items-center">
-              <input id="floston" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-              <label for="floston" class="ml-2 text-sm font-medium text-gray-900"> Floston (45) </label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="space-y-4" id="advanced-filters" role="tabpanel" aria-labelledby="advanced-filters-tab">
-        <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label for="min-price" class="block text-sm font-medium text-gray-900"> Min Price </label>
-              <input id="min-price" type="range" min="0" max="7000" value="300" step="1" class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200" />
-            </div>
-
-            <div>
-              <label for="max-price" class="block text-sm font-medium text-gray-900"> Max Price </label>
-              <input id="max-price" type="range" min="0" max="7000" value="3500" step="1" class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200" />
-            </div>
 
             <div class="col-span-2 flex items-center justify-between space-x-2">
-              <input type="number" id="min-price-input" value="300" min="0" max="7000" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 " placeholder="" required />
-
-              <div class="shrink-0 text-sm font-medium">to</div>
-
-              <input type="number" id="max-price-input" value="3500" min="0" max="7000" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500" placeholder="" required />
+            <div class="relative w-full">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">R$</span>
+              <input type="number" id="preco-min-input" value="0" min="0" max="100" class="block w-full pl-10 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500" placeholder="" required />
             </div>
-          </div>
-
-          <div class="space-y-3">
-            <div>
-              <label for="min-delivery-time" class="block text-sm font-medium text-gray-900"> Min Delivery Time (Days) </label>
-
-              <input id="min-delivery-time" type="range" min="3" max="50" value="30" step="1" class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200" />
+            <div class="shrink-0 text-sm font-medium">até</div>
+            <div class="relative w-full">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">R$</span>
+              <input type="number" id="preco-max-input" value="100" min="0" max="100" class="block w-full pl-10 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500" placeholder="" required />
+            </div>
             </div>
 
-            <input type="number" id="min-delivery-time-input" value="30" min="3" max="50" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 " placeholder="" required />
-          </div>
         </div>
-
         <div>
-          <h6 class="mb-2 text-sm font-medium text-black">Condition</h6>
-
-          <ul class="flex w-full items-center rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-900">
-            <li class="w-full border-r border-gray-200">
-              <div class="flex items-center pl-3">
-                <input id="condition-all" type="radio" value="" name="list-radio" checked class="h-4 w-4 border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-                <label for="condition-all" class="ml-2 w-full py-3 text-sm font-medium text-gray-900"> All </label>
-              </div>
-            </li>
-            <li class="w-full border-r border-gray-200">
-              <div class="flex items-center pl-3">
-                <input id="condition-new" type="radio" value="" name="list-radio" class="h-4 w-4 border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-                <label for="condition-new" class="ml-2 w-full py-3 text-sm font-medium text-gray-900"> New </label>
-              </div>
-            </li>
-            <li class="w-full">
-              <div class="flex items-center pl-3">
-                <input id="condition-used" type="radio" value="" name="list-radio" class="h-4 w-4 border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-                <label for="condition-used" class="ml-2 w-full py-3 text-sm font-medium text-gray-900"> Used </label>
-              </div>
-            </li>
-          </ul>
+          <label for="categoria" class="block mb-2 text-sm font-medium text-gray-900">Categoria</label>
+          <select id="categoria" name="categoria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+          <option value="" selected>Selecione a categoria</option>
+          {% for categoria in categorias %}
+          <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+          {% endfor %}
+          </select>
         </div>
 
         <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
           <div>
-            <h6 class="mb-2 text-sm font-medium text-black">Colour</h6>
-            <div class="space-y-2">
-              <div class="flex items-center">
-                <input id="blue" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-                <label for="blue" class="ml-2 flex items-center text-sm font-medium text-gray-900">
-                  <div class="mr-2 h-3.5 w-3.5 rounded-full bg-primary-600"></div>
-                  Blue
-                </label>
-              </div>
-
-              <div class="flex items-center">
-                <input id="gray" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-                <label for="gray" class="ml-2 flex items-center text-sm font-medium text-gray-900">
-                  <div class="mr-2 h-3.5 w-3.5 rounded-full bg-gray-400"></div>
-                  Gray
-                </label>
-              </div>
-
-              <div class="flex items-center">
-                <input id="green" type="checkbox" value="" checked class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-                <label for="green" class="ml-2 flex items-center text-sm font-medium text-gray-900">
-                  <div class="mr-2 h-3.5 w-3.5 rounded-full bg-green-400"></div>
-                  Green
-                </label>
-              </div>
-
-              <div class="flex items-center">
-                <input id="pink" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-                <label for="pink" class="ml-2 flex items-center text-sm font-medium text-gray-900">
-                  <div class="mr-2 h-3.5 w-3.5 rounded-full bg-pink-400"></div>
-                  Pink
-                </label>
-              </div>
-
-              <div class="flex items-center">
-                <input id="red" type="checkbox" value="" checked class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-                <label for="red" class="ml-2 flex items-center text-sm font-medium text-gray-900">
-                  <div class="mr-2 h-3.5 w-3.5 rounded-full bg-red-500"></div>
-                  Red
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div>
             <h6 class="mb-2 text-sm font-medium text-black">Rating</h6>
             <div class="space-y-2">
+
               <div class="flex items-center">
-                <input id="five-stars" type="radio" value="" name="rating" class="h-4 w-4 border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
+                <input id="five-stars" type="radio" value="5" name="rating" class="h-4 w-4 border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
                 <label for="five-stars" class="ml-2 flex items-center">
                   <svg aria-hidden="true" class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <title>First star</title>
@@ -574,7 +168,7 @@
               </div>
 
               <div class="flex items-center">
-                <input id="four-stars" type="radio" value="" name="rating" class="h-4 w-4 border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
+                <input id="four-stars" type="radio" value="4" name="rating" class="h-4 w-4 border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
                 <label for="four-stars" class="ml-2 flex items-center">
                   <svg aria-hidden="true" class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <title>First star</title>
@@ -600,7 +194,7 @@
               </div>
 
               <div class="flex items-center">
-                <input id="three-stars" type="radio" value="" name="rating" checked class="h-4 w-4 border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
+                <input id="three-stars" type="radio" value="3" name="rating" class="h-4 w-4 border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
                 <label for="three-stars" class="ml-2 flex items-center">
                   <svg aria-hidden="true" class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <title>First star</title>
@@ -626,7 +220,7 @@
               </div>
 
               <div class="flex items-center">
-                <input id="two-stars" type="radio" value="" name="rating" class="h-4 w-4 border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
+                <input id="two-stars" type="radio" value="2" name="rating" class="h-4 w-4 border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
                 <label for="two-stars" class="ml-2 flex items-center">
                   <svg aria-hidden="true" class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <title>First star</title>
@@ -652,7 +246,7 @@
               </div>
 
               <div class="flex items-center">
-                <input id="one-star" type="radio" value="" name="rating" class="h-4 w-4 border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
+                <input id="one-star" type="radio" value="1" name="rating" class="h-4 w-4 border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
                 <label for="one-star" class="ml-2 flex items-center">
                   <svg aria-hidden="true" class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <title>First star</title>
@@ -676,94 +270,23 @@
                   </svg>
                 </label>
               </div>
+
+              <div class="flex items-center">
+                <input id="zero-star" type="radio" checked value="0" name="rating" class="h-4 w-4 border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
+                <label for="zero-star" class="ml-2 flex items-center">
+                  Nenhum
+                </label>
+              </div>
+
             </div>
           </div>
-
-          <div>
-            <h6 class="mb-2 text-sm font-medium text-black">Weight</h6>
-
-            <div class="space-y-2">
-              <div class="flex items-center">
-                <input id="under-1-kg" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-                <label for="under-1-kg" class="ml-2 text-sm font-medium text-gray-900"> Under 1 kg </label>
-              </div>
-
-              <div class="flex items-center">
-                <input id="1-1-5-kg" type="checkbox" value="" checked class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-                <label for="1-1-5-kg" class="ml-2 text-sm font-medium text-gray-900"> 1-1,5 kg </label>
-              </div>
-
-              <div class="flex items-center">
-                <input id="1-5-2-kg" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-                <label for="1-5-2-kg" class="ml-2 text-sm font-medium text-gray-900"> 1,5-2 kg </label>
-              </div>
-
-              <div class="flex items-center">
-                <input id="2-5-3-kg" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-                <label for="2-5-3-kg" class="ml-2 text-sm font-medium text-gray-900"> 2,5-3 kg </label>
-              </div>
-
-              <div class="flex items-center">
-                <input id="over-3-kg" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500" />
-
-                <label for="over-3-kg" class="ml-2 text-sm font-medium text-gray-900"> Over 3 kg </label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <h6 class="mb-2 text-sm font-medium text-black">Delivery type</h6>
-
-          <ul class="grid grid-cols-2 gap-4">
-            <li>
-              <input type="radio" id="delivery-usa" name="delivery" value="delivery-usa" class="peer hidden" checked />
-              <label for="delivery-usa" class="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-600 peer-checked:text-primary-600 md:p-5">
-                <div class="block">
-                  <div class="w-full text-lg font-semibold">USA</div>
-                  <div class="w-full">Delivery only for USA</div>
-                </div>
-              </label>
-            </li>
-            <li>
-              <input type="radio" id="delivery-europe" name="delivery" value="delivery-europe" class="peer hidden" />
-              <label for="delivery-europe" class="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-600 peer-checked:text-primary-600 md:p-5">
-                <div class="block">
-                  <div class="w-full text-lg font-semibold">Europe</div>
-                  <div class="w-full">Delivery only for USA</div>
-                </div>
-              </label>
-            </li>
-            <li>
-              <input type="radio" id="delivery-asia" name="delivery" value="delivery-asia" class="peer hidden" checked />
-              <label for="delivery-asia" class="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-600 peer-checked:text-primary-600 md:p-5">
-                <div class="block">
-                  <div class="w-full text-lg font-semibold">Asia</div>
-                  <div class="w-full">Delivery only for Asia</div>
-                </div>
-              </label>
-            </li>
-            <li>
-              <input type="radio" id="delivery-australia" name="delivery" value="delivery-australia" class="peer hidden" />
-              <label for="delivery-australia" class="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-primary-600 peer-checked:text-primary-600 md:p-5">
-                <div class="block">
-                  <div class="w-full text-lg font-semibold">Australia</div>
-                  <div class="w-full">Delivery only for Australia</div>
-                </div>
-              </label>
-            </li>
-          </ul>
         </div>
       </div>
     {% endfill %}
     {% fill "modal_footer" %}
     <div class="flex items-center justify-center space-x-4 w-full px-4">
-      <button type="submit" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
-        Salvar
+      <button type="submit" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto" data-modal-toggle="{{ filterModal.id }}">
+        Aplicar
       </button>
       <button type="reset" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-gray-200 hover:bg-gray-300 px-3 py-2 text-sm font-medium text-gray-600 focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
         Restaurar
@@ -781,12 +304,12 @@
             <div class="sm:col-span-2">
               <label for="nome" class="block mb-2 text-sm font-medium text-gray-900">Nome</label>
               <input type="text" name="nome" id="nome" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite o nome do produto" required>
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500 hidden" id="nome-error"><span class="font-medium">Erro:</span> Nome é obrigatório.</p>
+              <p class="mt-2 text-sm text-red-600 hidden" id="nome-error"><span class="font-medium">Erro:</span> Nome é obrigatório.</p>
             </div>
             <div class="sm:col-span-2">
               <label for="descricao" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
               <textarea id="descricao" name="descricao" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500" placeholder="Digite a descrição do produto" required></textarea>
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500 hidden" id="descricao-error"><span class="font-medium">Erro:</span> Descrição é obrigatória.</p>
+              <p class="mt-2 text-sm text-red-600 hidden" id="descricao-error"><span class="font-medium">Erro:</span> Descrição é obrigatória.</p>
             </div>
             <div>
               <label for="categoria" class="block mb-2 text-sm font-medium text-gray-900">Categoria</label>
@@ -796,32 +319,32 @@
               <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
               {% endfor %}
               </select>
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500 hidden" id="categoria-error"><span class="font-medium">Erro:</span> Categoria é obrigatória.</p>
+              <p class="mt-2 text-sm text-red-600 hidden" id="categoria-error"><span class="font-medium">Erro:</span> Categoria é obrigatória.</p>
             </div>
             <div>
               <label for="marca" class="block mb-2 text-sm font-medium text-gray-900">Marca</label>
               <input type="text" name="marca" id="marca" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite a marca do produto" required>
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500 hidden" id="marca-error"><span class="font-medium">Erro:</span> Marca é obrigatória.</p>
+              <p class="mt-2 text-sm text-red-600 hidden" id="marca-error"><span class="font-medium">Erro:</span> Marca é obrigatória.</p>
             </div>
             <div>
               <label for="preco_unitario" class="block mb-2 text-sm font-medium text-gray-900">Preço Unitário</label>
               <input type="number" name="preco_unitario" id="preco_unitario" step="0.01" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite o preço unitário" required>
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500 hidden" id="preco_unitario-error"><span class="font-medium">Erro:</span> Preço unitário é obrigatório.</p>
+              <p class="mt-2 text-sm text-red-600 hidden" id="preco_unitario-error"><span class="font-medium">Erro:</span> Preço unitário é obrigatório.</p>
             </div>
             <div>
               <label for="qtd_estoque" class="block mb-2 text-sm font-medium text-gray-900">Quantidade em Estoque</label>
               <input type="number" name="qtd_estoque" id="qtd_estoque" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite a quantidade em estoque" required oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500 hidden" id="qtd_estoque-error"><span class="font-medium">Erro:</span> Quantidade em estoque é obrigatória.</p>
+              <p class="mt-2 text-sm text-red-600 hidden" id="qtd_estoque-error"><span class="font-medium">Erro:</span> Quantidade em estoque é obrigatória.</p>
             </div>
             <div>
               <label for="codigo_barras" class="block mb-2 text-sm font-medium text-gray-900">Código de Barras</label>
               <input type="text" name="codigo_barras" id="codigo_barras" maxlength="13" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite o código de barras" required>
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500 hidden" id="codigo_barras-error"><span class="font-medium">Erro:</span> Código de barras é obrigatório.</p>
+              <p class="mt-2 text-sm text-red-600 hidden" id="codigo_barras-error"><span class="font-medium">Erro:</span> Código de barras é obrigatório.</p>
             </div>
             <div>
               <label for="imagem" class="block mb-2 text-sm font-medium text-gray-900">Imagem</label>
               <input type="file" name="imagem" id="imagem" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" required>
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500 hidden" id="imagem-error"><span class="font-medium">Erro:</span> Imagem é obrigatória.</p>
+              <p class="mt-2 text-sm text-red-600 hidden" id="imagem-error"><span class="font-medium">Erro:</span> Imagem é obrigatória.</p>
             </div>
           </div>
         </div>
@@ -829,7 +352,7 @@
     {% endfill %}
     {% fill "modal_footer" %}
       <div class="flex items-center justify-center space-x-4 w-full px-4">
-        <button type="submit" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
+        <button type="submit" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto" data-modal-toggle="{{ createModal.id }}">
           Salvar
         </button>
         <button type="reset" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-gray-200 hover:bg-gray-300 px-3 py-2 text-sm font-medium text-gray-600 focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
@@ -838,11 +361,10 @@
       </div>
     {% endfill %}
   {% endcomponent %}
-
-  
 </section>
 {% endblock content %}
 
 {% block scripts %}
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script src="{% static 'src/produtos/js/scripts.js' %}"></script>
 {% endblock scripts %}

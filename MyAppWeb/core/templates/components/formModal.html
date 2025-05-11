@@ -1,6 +1,10 @@
 {% load component_tags %}
 <!-- filepath: core/templates/components/formModal.html -->
+{% if form.wire %}
+<form wire:submit.prevent="{{ form.wire }}" method="{{ form.method }}" id="{{ form.id }}" tabindex="-1" aria-hidden="true" class="fixed left-0 right-0 top-0 z-50 hidden h-modal w-full overflow-y-auto overflow-x-hidden p-4 md:inset-0 md:h-full" data-multi="{{ form.multi }}" enctype="multipart/form-data">
+{% else %}
 <form action="{{ form.action }}" method="{{ form.method }}" id="{{ form.id }}" tabindex="-1" aria-hidden="true" class="fixed left-0 right-0 top-0 z-50 hidden h-modal w-full overflow-y-auto overflow-x-hidden p-4 md:inset-0 md:h-full" data-multi="{{ form.multi }}" enctype="multipart/form-data">
+{% endif %}
   {% csrf_token %}
   <div class="relative h-full w-full max-w-xl">
     <!-- Modal content -->

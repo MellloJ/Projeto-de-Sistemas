@@ -32,9 +32,9 @@ class CategoriasSeeder(BaseSeeder):
                     'imagem': 'produtos/categorias/bebidas.svg'
                 },
                 {
-                    'nome': 'Hortifuti',
-                    'descricao': 'Categoria de hortifuti',
-                    'imagem': 'produtos/categorias/hortifuti.svg'
+                    'nome': 'Hortifruti',
+                    'descricao': 'Categoria de hortifruti',
+                    'imagem': 'produtos/categorias/hortifruti.svg'
                 },
                 {
                     'nome': 'Doces',

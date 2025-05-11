@@ -1,7 +1,13 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django_unicorn.components import UnicornView
 from produtos.models import *
+import unicodedata
 import json
+from django.db.models.functions import Lower
+from django.db.models import Func
+
+class Unaccent(Func):
+    function = 'unaccent'
 
 class ProdutosUnicornView(UnicornView):
     pesquisa = None
@@ -34,10 +40,14 @@ class ProdutosUnicornView(UnicornView):
         produtos = Produtos.objects.all()
         self.produtos = produtos.order_by('-avaliacao')
 
+    def remove_accents(self, input_str):
+        nfkd_form = unicodedata.normalize('NFKD', input_str)
+        return ''.join([char for char in nfkd_form if not unicodedata.combining(char)])
+
     def mount(self):
         request = self.request
-        self.categoria = request.GET.get('c')  # Exemplo: ?c=6
-        self.pesquisa = request.GET.get('q')  # Exemplo: ?q=produto
+        self.categoria = request.GET.get('c')
+        self.pesquisa = request.GET.get('p')
         produtos = Produtos.objects.all()
 
         print("Categoria:", self.categoria)
@@ -51,9 +61,22 @@ class ProdutosUnicornView(UnicornView):
                 produtos = produtos.none()
 
         if self.pesquisa:
-            produtos = produtos.filter(nome__icontains=self.pesquisa)
+            try:
+                # Normalize the search query
+                pesquisa_normalizada = self.remove_accents(self.pesquisa.lower())
 
-        self.produtos = produtos.order_by('-avaliacao')
+                # Annotate and normalize the database field
+                produtos = produtos.annotate(
+                    nome_normalizado=Unaccent(Lower('nome'))
+                ).filter(
+                    nome_normalizado__icontains=pesquisa_normalizada
+                )
+            except Exception as e:
+                print("Error during search filtering:", e)
+                produtos = produtos.none()
+
+        produtos = produtos.order_by('-avaliacao')
+        self.produtos = produtos
             
     def filter(self, data):
         try:
@@ -82,3 +105,5 @@ class ProdutosUnicornView(UnicornView):
         self.produtos = produtos.order_by('-avaliacao')
         self.call("loadProdutosView")
         self.call("loadProdutosEdit")
+
+# CREATE EXTENSION IF NOT EXISTS unaccent;

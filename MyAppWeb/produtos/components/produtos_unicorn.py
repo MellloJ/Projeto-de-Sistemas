@@ -2,34 +2,59 @@ from django.core.exceptions import ObjectDoesNotExist
 from django_unicorn.components import UnicornView
 from produtos.models import *
 import json
+import base64
+from django.core.files.base import ContentFile
 
 class ProdutosUnicornView(UnicornView):
-    produtos = Produtos.objects.all()
-    categoria: int = None
-    pesquisa: str = None
-
+    pesquisa = None
+    produtos = None
+    categoria = None
     categoria = None
     preco_min = None
     preco_max = None
     categoria = None
 
-    def mount(self):
+    editModal  = {
+        'wire' : "edit",
+        'action': '#',
+        'method': 'post',
+        'id': 'editModal',
+        'title': 'Editar Produto',
+    }
 
+    viewModal  = {
+        'wire' : "edit",
+        'action': '#',
+        'method': 'get',
+        'id': 'viewModal',
+        'title': 'Vizualizar Produto',
+    }
+
+    categorias = Categorias.objects.all()
+
+
+    def recarregar(self):
+        produtos = Produtos.objects.all()
+        self.produtos = produtos.order_by('-avaliacao')
+        print("recarregar")
+
+    def mount(self):
         request = self.request
         self.categoria = request.GET.get('c')  # Exemplo: ?c=6
         self.pesquisa = request.GET.get('q')  # Exemplo: ?q=produto
+        produtos = Produtos.objects.all()
 
         if self.categoria:
             try:
                 categoria = Categorias.objects.get(id=self.categoria)
-                self.produtos = Produtos.objects.filter(categoria=categoria)
+                produtos.filter(categoria=categoria)
             except ObjectDoesNotExist:
-                self.produtos = Produtos.objects.none()
-        else:
-            self.produtos = Produtos.objects.all()
+                produtos.none()
 
         if self.pesquisa:
-            self.produtos = self.produtos.filter(nome__icontains=self.pesquisa)
+            self.produtos = produtos.filter(nome__icontains=self.pesquisa)
+
+        self.produtos = produtos.order_by('-avaliacao')
             
     def filter(self, data):
         try:
@@ -55,5 +80,4 @@ class ProdutosUnicornView(UnicornView):
         if rating and rating != '0':
             produtos = produtos.filter(avaliacao__gte=float(rating), avaliacao__lt=float(rating) + 1)
         
-        self.produtos = produtos
-
+        self.produtos = produtos.order_by('-avaliacao')

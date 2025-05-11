@@ -83,10 +83,10 @@ $('#edit-mode-toggle').on('click', function () {
     editMode = !editMode;
     if (editMode) {
         $(this).removeClass('bg-orange-400').addClass('bg-orange-500');
-        $('.produtos-card').addClass('ring-4 ring-orange-300');
+        $('.produtos-card').addClass('ring-4 ring-orange-300').find('img').addClass('cursor-pointer');
     } else{
         $(this).removeClass('bg-orange-500').addClass('bg-orange-400');
-        $('.produtos-card').removeClass('ring-4 ring-orange-300');
+        $('.produtos-card').removeClass('ring-4 ring-orange-300').find('img').removeClass('cursor-pointer');
     }
 });
 
@@ -96,6 +96,35 @@ $('.edit-item-btn').on('click', function () {
         const itemId = $(this).data('id');
         editar(itemId);
     }
+});
+
+$('.vizualizar-produtos').on('click', function () {
+    const form = $('#viewModal');
+    const modal = new Modal(document.getElementById('viewModal'));
+    const itemId = $(this).data('id');
+
+    $.ajax({
+        url: `/produtos/api/editar/${itemId}`,
+        method: 'GET',
+        success: function(data) {
+            form.find('#nome').val(data.nome);
+            form.find('#descricao').val(data.descricao);
+            form.find('#categoria').val(data.categoria);
+            form.find('#marca').val(data.marca);
+            form.find('#preco_unitario').val(data.preco_unitario);
+            form.find('#qtd_estoque').val(data.qtd_estoque);
+            form.find('#codigo_barras').val(data.codigo_barras);
+        },
+        error: function(xhr, status, error) {
+            console.error('Erro ao buscar os dados do item:', error);
+        }
+    });
+
+    modal.show();
+
+    form.find('[data-modal-toggle="viewModal"]').off('click').on('click', function () {
+        modal.hide();
+    });
 });
 
 function editar(itemId) {
@@ -129,32 +158,21 @@ function editar(itemId) {
     form.off('submit').on('submit', function (e) {
         e.preventDefault();
 
-        const formData = {
-            nome: form.find('#nome').val(),
-            descricao: form.find('#descricao').val(),
-            categoria: form.find('#categoria').val(),
-            marca: form.find('#marca').val(),
-            preco_unitario: form.find('#preco_unitario').val(),
-            qtd_estoque: form.find('#qtd_estoque').val(),
-            codigo_barras: form.find('#codigo_barras').val()
-        };
+        const formData = new FormData()
 
-        // const accessToken = document.cookie
-        //     .split('; ')
-        //     .find(row => row.startsWith('access_token='))
-        //     ?.split('=')[1];
+        formData.append('id', itemId);
+        formData.append('nome', form.find('#nome').val());
+        formData.append('descricao', form.find('#descricao').val());
+        formData.append('categoria', form.find('#categoria').val());
+        formData.append('marca', form.find('#marca').val());
+        formData.append('preco_unitario', form.find('#preco_unitario').val());
+        formData.append('qtd_estoque', form.find('#qtd_estoque').val());
+        formData.append('codigo_barras', form.find('#codigo_barras').val());
 
-        // if (!accessToken) {
-        //     console.error('Token de autenticação não encontrado. Faça login para continuar.');
-        //     return;
-        // }
-
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        const accessToken = document.cookie
-
-        console.log('Access Token:', accessToken);
-        console.log('CSRF Token:', csrfToken);
-       
+        const imagem = form.find('#imagem').prop('files')[0];
+        if (imagem) {
+            formData.append('imagem', imagem);
+        }
 
         $.ajax({
             url: `/produtos/api/editar/${itemId}`,
@@ -162,23 +180,22 @@ function editar(itemId) {
             headers: {
                 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
             },
-            xhrFields: {
-                withCredentials: true  // Envia o cookie automaticamente
-            },
+            processData: false, // Prevent jQuery from processing the data
+            contentType: false, // Prevent jQuery from setting the content type
             data: formData,
             success: function() {
                 modal.hide();
-                Unicorn.call('produtos_unicorn', 'filter', 'reset');
+                Unicorn.call('produtos_unicorn', 'recarregar');
+                $('#edit-mode-toggle').trigger('click');
             },
             error: function(xhr, error) {
-            if (xhr.status === 401) {
-                console.error('Não autorizado. Verifique o token de autenticação.');
-            } else {
-                console.error('Erro ao editar o item:', error);
-            }
+                if (xhr.status === 401) {
+                    console.error('Não autorizado. Verifique o token de autenticação.');
+                } else {
+                    console.error('Erro ao editar o item:', error);
+                }
             }
         });
     });
 }
-
 // end

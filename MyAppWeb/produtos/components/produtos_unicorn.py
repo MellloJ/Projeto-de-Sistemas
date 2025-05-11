@@ -32,7 +32,6 @@ class ProdutosUnicornView(UnicornView):
 
     categorias = Categorias.objects.all()
 
-
     def recarregar(self):
         produtos = Produtos.objects.all()
         self.produtos = produtos.order_by('-avaliacao')
@@ -81,3 +80,4 @@ class ProdutosUnicornView(UnicornView):
             produtos = produtos.filter(avaliacao__gte=float(rating), avaliacao__lt=float(rating) + 1)
         
         self.produtos = produtos.order_by('-avaliacao')
+        self.call("loadProdutosView")

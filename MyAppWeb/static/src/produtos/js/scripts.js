@@ -58,10 +58,9 @@ form.on('submit', function(e) {
         rating: rating
     };
 
-    console.log('Dados do filtro:', JSON.stringify(data));
-
     Unicorn.call('produtos_unicorn', 'filter', JSON.stringify(data));
 });
+
 // end
 
 // Botoes de categoria do index
@@ -96,35 +95,6 @@ $('.edit-item-btn').on('click', function () {
         const itemId = $(this).data('id');
         editar(itemId);
     }
-});
-
-$('.vizualizar-produtos').on('click', function () {
-    const form = $('#viewModal');
-    const modal = new Modal(document.getElementById('viewModal'));
-    const itemId = $(this).data('id');
-
-    $.ajax({
-        url: `/produtos/api/editar/${itemId}`,
-        method: 'GET',
-        success: function(data) {
-            form.find('#nome').val(data.nome);
-            form.find('#descricao').val(data.descricao);
-            form.find('#categoria').val(data.categoria);
-            form.find('#marca').val(data.marca);
-            form.find('#preco_unitario').val(data.preco_unitario);
-            form.find('#qtd_estoque').val(data.qtd_estoque);
-            form.find('#codigo_barras').val(data.codigo_barras);
-        },
-        error: function(xhr, status, error) {
-            console.error('Erro ao buscar os dados do item:', error);
-        }
-    });
-
-    modal.show();
-
-    form.find('[data-modal-toggle="viewModal"]').off('click').on('click', function () {
-        modal.hide();
-    });
 });
 
 function editar(itemId) {
@@ -199,3 +169,36 @@ function editar(itemId) {
     });
 }
 // end
+
+function loadProdutosView() {
+    $('.vizualizar-produtos').off('click').on('click', function () {
+        const form = $('#viewModal');
+        const modal = new Modal(document.getElementById('viewModal'));
+        const itemId = $(this).data('id');
+
+        console.log('ID do item:', itemId);
+
+        $.ajax({
+            url: `/produtos/api/editar/${itemId}`,
+            method: 'GET',
+            success: function(data) {
+                form.find('#nome').val(data.nome);
+                form.find('#descricao').val(data.descricao);
+                form.find('#categoria').val(data.categoria);
+                form.find('#marca').val(data.marca);
+                form.find('#preco_unitario').val(data.preco_unitario);
+                form.find('#qtd_estoque').val(data.qtd_estoque);
+                form.find('#codigo_barras').val(data.codigo_barras);
+            },
+            error: function(xhr, status, error) {
+                console.error('Erro ao buscar os dados do item:', error);
+            }
+        });
+
+        modal.show();
+
+        form.find('[data-modal-toggle="viewModal"]').off('click').on('click', function () {
+            modal.hide();
+        });
+    });
+}

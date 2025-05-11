@@ -220,11 +220,11 @@ function loadProdutosEdit() {
 });
 }
 
-$('#index-pesquisa').on('submit', function (e) {
+$('#index-pesquisa, #navbar-pesquisa, #sidebar-pesquisa').on('submit', function (e) {
     e.preventDefault();
 
     const action = $('#url-produtos').val();
-    const pesquisa = $(this).find('#input-sh').val().trim(); 
+    const pesquisa = $(this).find('input[type="text"]').val().trim();
 
     const url = new URL(action, window.location.origin);
 

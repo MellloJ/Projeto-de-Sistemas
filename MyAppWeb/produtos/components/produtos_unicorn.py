@@ -2,8 +2,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django_unicorn.components import UnicornView
 from produtos.models import *
 import json
-import base64
-from django.core.files.base import ContentFile
 
 class ProdutosUnicornView(UnicornView):
     pesquisa = None
@@ -35,7 +33,6 @@ class ProdutosUnicornView(UnicornView):
     def recarregar(self):
         produtos = Produtos.objects.all()
         self.produtos = produtos.order_by('-avaliacao')
-        print("recarregar")
 
     def mount(self):
         request = self.request
@@ -43,15 +40,18 @@ class ProdutosUnicornView(UnicornView):
         self.pesquisa = request.GET.get('q')  # Exemplo: ?q=produto
         produtos = Produtos.objects.all()
 
+        print("Categoria:", self.categoria)
+        print("Pesquisa:", self.pesquisa)
+
         if self.categoria:
             try:
                 categoria = Categorias.objects.get(id=self.categoria)
-                produtos.filter(categoria=categoria)
+                produtos = produtos.filter(categoria=categoria)
             except ObjectDoesNotExist:
-                produtos.none()
+                produtos = produtos.none()
 
         if self.pesquisa:
-            self.produtos = produtos.filter(nome__icontains=self.pesquisa)
+            produtos = produtos.filter(nome__icontains=self.pesquisa)
 
         self.produtos = produtos.order_by('-avaliacao')
             
@@ -81,3 +81,4 @@ class ProdutosUnicornView(UnicornView):
         
         self.produtos = produtos.order_by('-avaliacao')
         self.call("loadProdutosView")
+        self.call("loadProdutosEdit")

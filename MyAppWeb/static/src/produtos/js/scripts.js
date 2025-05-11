@@ -168,6 +168,7 @@ function editar(itemId) {
         });
     });
 }
+
 // end
 
 function loadProdutosView() {
@@ -201,4 +202,13 @@ function loadProdutosView() {
             modal.hide();
         });
     });
+}
+
+function loadProdutosEdit() {
+    $('.edit-item-btn').off('click').on('click', function () {
+    if (editMode) {
+        const itemId = $(this).data('id');
+        editar(itemId);
+    }
+});
 }

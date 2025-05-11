@@ -1,8 +1,10 @@
+import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import FileResponse, Http404
+from django.shortcuts import render, redirect
 from django_dump_die.middleware import dd
 from produtos.forms import ProdutosForm
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.urls import reverse
 from django.views import View
 from produtos.models import *
@@ -28,9 +30,11 @@ class ProdutosView(View):
             'title': 'Criar Produto',
         }
 
+        produtos = Produtos.objects.all()
+
         context = {
             'title': 'Traz Aí | Produtos',
-            'produtos' : Produtos.objects.all(),
+            'produtos' : produtos,
             'categorias' : Categorias.objects.all(),
             'breadcrumbs' : breadcrumbs,
             'filterModal' : filterModal,
@@ -97,3 +101,32 @@ class ImagensCategoriasView(View):
             raise Http404('Arquivo não encontrado.')
         except Exception as exeption:
             raise exeption
+        
+class FilterView(View):
+    def get(self, request):
+        filter = request.GET.dict()
+
+        produtos = Produtos.objects.all()
+
+        if filter.get('categoria'):
+            try:
+                produtos = produtos.filter(categoria__id=filter.get('categoria'))
+            except ObjectDoesNotExist:
+                pass
+
+        if filter.get('preco-min') and filter.get('preco-max'):
+            try:
+                produtos = produtos.filter(preco_unitario__gte=filter.get('preco-min'), preco_unitario__lte=filter.get('preco-max'))
+            except ObjectDoesNotExist:
+                pass
+
+        if filter.get('rating') and filter.get('rating') != '0':
+            try:
+                float_filter = float(filter.get('rating'))
+                produtos = produtos.filter(avaliacao__gte=float_filter, avaliacao__lt=float_filter + 1)
+            except ValueError:
+                pass
+
+        produtos_data = list(produtos.values())
+
+        return JsonResponse({'produtos': produtos_data})

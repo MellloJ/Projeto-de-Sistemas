@@ -11,12 +11,14 @@ from produtos.models import *
 from pathlib import Path
 
 class ProdutosView(View):
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
+        
         breadcrumbs = [
             {'name': 'Produtos'},
         ]
 
         filterModal = {
+            'wire' : 'filter',
             'action': '#',
             'method': 'get',
             'id': 'filterModal',
@@ -24,22 +26,19 @@ class ProdutosView(View):
         }
 
         createModal  = {
+            'wire' : 'false',
             'action': reverse('produtos'),
             'method': 'post',
             'id': 'createModal',
             'title': 'Criar Produto',
         }
 
-        produtos = Produtos.objects.all()
-
         context = {
             'title': 'Traz Aí | Produtos',
-            'produtos' : produtos,
             'categorias' : Categorias.objects.all(),
             'breadcrumbs' : breadcrumbs,
             'filterModal' : filterModal,
             'createModal' : createModal,
-
         }
 
         return render(request, "produtos/index.html",context)

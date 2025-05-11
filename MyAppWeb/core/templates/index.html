@@ -35,12 +35,13 @@
       <div class="row-span-2">
         <div class="grid grid-rows-2 h-full text-center ">
           <div class="row-span-1 flex flex-col justify-start">
-            <form>
+            <form id="index-pesquisa" action="#" method="get" class="flex flex-col justify-center items-center h-full">
+              <input type="hidden" id="url-produtos" value="{% url 'produtos' %}">
               <div class="relative mb-6 mx-15">
                 <div class="absolute inset-y-0 start-0 flex items-center px-3.5 pointer-events-none main-bg-color py-2 rounded-l-lg">
                   <i class="bi bi-search text-white"></i>
                 </div>
-                <input type="text" id="input-group-1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[var(--base-color)] focus:border-[var(--base-color)] block w-full ps-15 p-2.5" placeholder="O que você procura?" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                <input type="text" id="input-sh" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[var(--base-color)] focus:border-[var(--base-color)] block w-full ps-15 p-2.5" placeholder="O que você procura?" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
               </div>
             </form>
             <div class="flex flex-col items-center">
@@ -69,4 +70,5 @@
 
 {% block scripts %}
   <script src="{% static 'src/core/js/scripts.js' %}"></script>
+  <script src="{% static 'src/produtos/js/scripts.js' %}"></script>
 {% endblock scripts %}

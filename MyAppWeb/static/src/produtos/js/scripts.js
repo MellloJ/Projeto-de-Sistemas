@@ -89,6 +89,13 @@ $('#edit-mode-toggle').on('click', function () {
     }
 });
 
+function resetEditMode() {
+    editMode = false;
+    $('#edit-mode-toggle').removeClass('bg-orange-500')
+    $('#edit-mode-toggle').addClass('bg-orange-400');
+    $('.produtos-card').removeClass('ring-4 ring-orange-300').find('img').removeClass('cursor-pointer');
+}
+
 
 $('.edit-item-btn').on('click', function () {
     if (editMode) {
@@ -156,7 +163,7 @@ function editar(itemId) {
             success: function() {
                 modal.hide();
                 Unicorn.call('produtos_unicorn', 'recarregar');
-                $('#edit-mode-toggle').trigger('click');
+                resetEditMode();
             },
             error: function(xhr, error) {
                 if (xhr.status === 401) {
@@ -212,3 +219,28 @@ function loadProdutosEdit() {
     }
 });
 }
+
+$('#index-pesquisa').on('submit', function (e) {
+    e.preventDefault();
+
+    const action = $('#url-produtos').val();
+    const pesquisa = $(this).find('#input-sh').val().trim(); 
+
+    const url = new URL(action, window.location.origin);
+
+    if (pesquisa) {
+        url.searchParams.set('p', pesquisa);
+    } else {
+        url.searchParams.delete('p'); 
+    }
+
+    console.log('Ação final do formulário:', url.toString());
+
+    const tempLink = $('<a>')
+        .attr('href', url.toString())
+        .css('display', 'none');
+
+    $('body').append(tempLink);
+    tempLink[0].click();
+    tempLink.remove();
+});

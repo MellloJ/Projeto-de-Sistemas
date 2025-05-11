@@ -132,7 +132,6 @@ class Login(View):
                 
         return render(request, 'login/index.html', context)
             
-
 class Logout(View):
      def get(self, request):
         try:

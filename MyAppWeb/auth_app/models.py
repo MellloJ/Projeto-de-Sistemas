@@ -69,7 +69,7 @@ class DeliverUser(models.Model):
     def __str__(self):
         return f"Entregador: {self.user.email}"
 
-class Address():
+class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     city = models.TextField()
     state = models.TextField()

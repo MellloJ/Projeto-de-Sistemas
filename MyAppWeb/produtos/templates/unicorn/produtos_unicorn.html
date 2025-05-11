@@ -1,9 +1,9 @@
 {% load static %}
-<div class="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 xl:grid-cols-4">
+<div class="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-4 xl:grid-cols-5">
       {% for produto in produtos %}
-        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-          <div class="h-56 w-full">
-            <a href="#">
+        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm produtos-card">
+          <div class="h-30 w-full">
+            <a type="button" class="edit-item-btn" data-id="{{ produto.id }}">
               {% if produto.imagem %}
                 <img class="mx-auto h-full object-contain text-gray-300" src="{{ produto.imagem.url }}" alt="" />
               {% else %}
@@ -14,18 +14,18 @@
           <div class="pt-6">
             <div class="flex justify-between items-center">
               <span class="rounded bg-primary-100 py-0.5 font-medium text-primary-800"> {{ produto.nome }}</span>
-              <div class="flex items-center justify-between gap-1">
-                <button type="button" data-tooltip-target="tooltip-add-to-favorites" class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900">
-                  <span class="sr-only"> Add to Favorites </span>
-                  <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6C6.5 1 1 8 5.8 13l6.2 7 6.2-7C23 8 17.5 1 12 6Z" />
+              <!-- <div class="flex items-center justify-between gap-1">
+                <button type="button" data-tooltip-target="tooltip-edit-{{ produto.nome }}" class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900">
+                  <span class="sr-only"> Editar </span>
+                  <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.779 17.779 4.36 19.918 6.5 13.5m4.279 4.279 8.364-8.643a3.027 3.027 0 0 0-2.14-5.165 3.03 3.03 0 0 0-2.14.886L6.5 13.5m4.279 4.279L6.499 13.5m2.14 2.14 6.213-6.504M12.75 7.04 17 11.28"/>
                   </svg>
                 </button>
-                <div id="tooltip-add-to-favorites" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300" data-popper-placement="top">
-                  Add to favorites
+                <div id="tooltip-edit-{{ produto.nome }}" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300" data-popper-placement="top">
+                  Editar
                   <div class="tooltip-arrow" data-popper-arrow=""></div>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="flex items-center gap-2">
               {% include "stars.html" %}

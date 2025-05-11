@@ -8,13 +8,16 @@ class ProdutosUnicornView(UnicornView):
     categoria: int = None
     pesquisa: str = None
 
+    categoria = None
+    preco_min = None
+    preco_max = None
+    categoria = None
+
     def mount(self):
 
         request = self.request
         self.categoria = request.GET.get('c')  # Exemplo: ?c=6
         self.pesquisa = request.GET.get('q')  # Exemplo: ?q=produto
-
-
 
         if self.categoria:
             try:

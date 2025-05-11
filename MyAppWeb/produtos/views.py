@@ -33,12 +33,21 @@ class ProdutosView(View):
             'title': 'Criar Produto',
         }
 
+        editModal  = {
+            'wire' : 'false',
+            'action': '#',
+            'method': 'post',
+            'id': 'editModal',
+            'title': 'Editar Produto',
+        }
+
         context = {
             'title': 'Traz Aí | Produtos',
             'categorias' : Categorias.objects.all(),
             'breadcrumbs' : breadcrumbs,
             'filterModal' : filterModal,
             'createModal' : createModal,
+            'editModal' : editModal,
         }
 
         return render(request, "produtos/index.html",context)

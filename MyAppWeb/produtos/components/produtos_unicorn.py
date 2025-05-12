@@ -59,9 +59,6 @@ class ProdutosUnicornView(UnicornView):
         self.pesquisa = request.GET.get('p')
         produtos = Produtos.objects.all()
 
-        print("Categoria:", self.categoria)
-        print("Pesquisa:", self.pesquisa)
-
         if self.categoria:
             try:
                 categoria = Categorias.objects.get(id=self.categoria)

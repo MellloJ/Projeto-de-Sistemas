@@ -46,10 +46,12 @@ var form = $('#filterModal');
 form.on('submit', function(e) {
     e.preventDefault();
 
-    var categoria = $('#categoria').val();
-    var preco_min = $('#preco-min').val();
-    var preco_max = $('#preco-max').val();
-    var rating = $('input[name="rating"]:checked').val();
+    
+
+    var categoria = $(this).find('#categoria').val()
+    var preco_min = $(this).find('#preco-min').val();
+    var preco_max = $(this).find('#preco-max').val();
+    var rating = $(this).find('input[name="rating"]:checked').val();
 
     var data = {
         categoria: categoria,
@@ -182,8 +184,6 @@ function loadProdutosView() {
         const modal = new Modal(document.getElementById('viewProdutos'));
         const itemId = $(this).data('id');
 
-        console.log('ID do item:', itemId);
-
         $.ajax({
             url: `/produtos/api/editar/${itemId}`,
             method: 'GET',
@@ -233,8 +233,6 @@ $('#index-pesquisa, #navbar-pesquisa, #sidebar-pesquisa').on('submit', function 
         url.searchParams.delete('p'); 
     }
 
-    console.log('Ação final do formulário:', url.toString());
-
     const tempLink = $('<a>')
         .attr('href', url.toString())
         .css('display', 'none');
@@ -247,8 +245,6 @@ $('#index-pesquisa, #navbar-pesquisa, #sidebar-pesquisa').on('submit', function 
 
 $("#createProdutos").on('submit', function (e) {
     e.preventDefault();
-    console.log('Formulário enviado!');
-
     const formData = new FormData()
 
     formData.append('nome', $(this).find('#nome').val());
@@ -263,8 +259,6 @@ $("#createProdutos").on('submit', function (e) {
     if (imagem) {
         formData.append('imagem', imagem);
     }
-
-    console.log('Dados do formulário:', formData);
 
     $.ajax({
         url: "/produtos/api/produtos/",
@@ -292,8 +286,6 @@ $("#createProdutos").on('submit', function (e) {
 
 $('#delete-button').on('click', function () {
 
-    console.log('Botão de deletar clicado!');
-
     let itemId = $(this).attr('delete-id');
     let modal = new Modal(document.getElementById('editProdutos'));
     let formData = new FormData()
@@ -313,7 +305,6 @@ $('#delete-button').on('click', function () {
             modal.hide();
             Unicorn.call('produtos_unicorn', 'recarregar');
             resetEditMode();
-            console.log('Item deletado com sucesso!');
         },
         error: function(xhr, error) {
             if (xhr.status === 401) {
@@ -331,8 +322,6 @@ document.addEventListener('keydown', function (event) {
     // Verifica se Ctrl (ou Cmd no Mac) e a tecla "E" foram pressionados
     if ((event.ctrlKey || event.metaKey) && event.key === 'e') {
         event.preventDefault();
-
-        console.log('Atalho Ctrl+E pressionado!');
         executarAcao();
     }
 });

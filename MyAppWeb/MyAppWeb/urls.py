@@ -8,7 +8,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title="Traz Aí API's",
         default_version="v1",
-        description="Documentação das API'",
+        description="Documentação das API's para gerenciamento de pedidos, usuários, produtos, e autenticação.",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="suporte@exemplo.com"),
         license=openapi.License(name="MIT License"),
@@ -17,14 +17,16 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
-
 urlpatterns = [
     path('', include('core.urls')),
     path('', include('users.urls')),
     path('', include('auth_app.urls')),
     path('produtos/', include('produtos.urls')),
+    path('pedidos/', include('pedidos.urls')),
     path('admin/', admin.site.urls),
     path("unicorn/", include("django_unicorn.urls")),
+
+    # Documentação Swagger e ReDoc
     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
 ]

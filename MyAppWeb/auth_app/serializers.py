@@ -1,6 +1,6 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
-from .models import User # as Client
+from .models import User, Supermarket # as Client
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -23,3 +23,14 @@ class UserClientSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         from auth_app.services.signupUser import signupClient
         return signupClient.register(**validated_data)
+
+class MarketSeriallizer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = Supermarket
+        fields = ('name', 'cnpj', 'phone', 'email', 'password')
+    
+    def create(self, validated_data):
+        from auth_app.services.signupUser import signupMarket
+        return signupMarket.register(**validated_data)

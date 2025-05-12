@@ -3,10 +3,10 @@ from django.views import View
 from auth_app.services.loginUser import loginUser
 from django.urls import reverse
 from django.contrib.auth import logout
-from auth_app.services.signupUser import signupClient
-from .forms import signupUserForm
+from auth_app.services.signupUser import signupClient, signupMarket
+from .forms import signupUserForm, createMarketForm
 from auth_app.services.confirmEmailUser import sendMail
-from auth_app.models import User
+from auth_app.models import User, Supermarket
 from core.consts import CATEGORIAS_ALIMENTOS
 
 # Importando jwt do rest
@@ -14,10 +14,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import CustomTokenObtainPairSerializer, UserClientSerializer
+from .serializers import CustomTokenObtainPairSerializer, UserClientSerializer, MarketSeriallizer
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.tokens import OutstandingToken, BlacklistedToken
-from django.core.exceptions import ValidationError
 
 class Signup(View):
     def get(self, request):
@@ -26,15 +25,21 @@ class Signup(View):
     def post(self, request):
         form = signupUserForm(request.POST)
         if form.is_valid():
-            try:
-                user = signupClient.register(
-                    email=form.cleaned_data['email'],
-                    password=request.POST.get('password'),
-                    first_name=form.cleaned_data['first_name'],
-                    last_name=form.cleaned_data['last_name'],
-                    cpf=form.cleaned_data['cpf'],
-                    phone=form.cleaned_data['phone'],
-                )
+            user, message = signupClient.register(
+                email=form.cleaned_data['email'],
+                password=request.POST.get('password'),
+                first_name=form.cleaned_data['first_name'],
+                last_name=form.cleaned_data['last_name'],
+                cpf=form.cleaned_data['cpf'],
+                phone=form.cleaned_data['phone'],
+            )
+            if user is None:
+                context = {
+                    'form': form,
+                    'errors': message,
+                }
+                return render(request, 'signup/signup.html', context)
+            else:
                 sendMail(request, user)
                 context = {
                     'title': 'Traz Aí | Home',
@@ -42,27 +47,12 @@ class Signup(View):
                 }
                 return render(request, "index.html",context)
                 # return render(request, 'signup/confirm.html', {'email': user.email, 'completeName': user.completeName})
-            except ValidationError as e:
-                context = {
-                    'form': form,
-                    'errors': e.messages,
-                }
-                return render(request, 'signup/signup.html', context)
         else:
             context = {
                 'form': form,
                 'errors': form.errors,
             }
             return render(request, 'signup/signup.html', context)
-
-        # Verifica se o usuário já existe
-        '''
-        if signupClient.checkUserExist(email):
-            context = {
-                'errors': 'Usuário já existe'
-            }
-            return render(request, 'signup/signup.html', context)
-        '''
 
 class ConfirmEmail(View):
     def get(self, request):
@@ -98,6 +88,12 @@ class Login(View):
         user = loginUser.auth(request, email, password, remember)
 
         if user is not None:
+            if user.is_active == False:
+                context = {
+                    'errors': 'Email do usuário não confirmado'
+                }
+                return render(request, 'login/index.html', context)
+
             login = loginUser.do_login(request, user)
             
             if login != False:
@@ -126,13 +122,13 @@ class Login(View):
                 )
 
                 return response
+
         context = {
             'errors': 'Usuário ou senha incorretos'
             }
                 
         return render(request, 'login/index.html', context)
             
-
 class Logout(View):
      def get(self, request):
         try:
@@ -150,6 +146,39 @@ class Logout(View):
 
         return response
 
+class CreateMarket(View):
+    def get(self, request):
+        return render(request, 'market/create.html', {'form': createMarketForm()})
+    def post(self, request):
+        form = createMarketForm(request.POST)
+        if form.is_valid():
+            market, message = signupMarket.register(
+                name=form.cleaned_data['name'],
+                cnpj=form.cleaned_data['cnpj'],
+                password=request.POST.get('password'),
+                phone=form.cleaned_data['phone'],
+                email=form.cleaned_data['email']
+            )
+            if market is None:
+                context = {
+                    'form': form,
+                    'errors': message,
+                }
+                return render(request, 'market/create.html', context)
+            else:
+                # sendMail(request, market)
+                context = {
+                    'title': 'Traz Aí | Home',
+                    'categories': CATEGORIAS_ALIMENTOS,
+                }
+                return render(request, "index.html",context)
+        else:
+            context = {
+                'form': form,
+                'errors': form.errors,
+            }
+            return render(request, 'market/create.html', context)
+
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
@@ -166,11 +195,47 @@ class UserClientView(APIView):
         serializer = UserClientSerializer(data=request.data)
         
         if serializer.is_valid():
-            user = serializer.save()
-            return Response({'message': 'Usuário criado com sucesso!', 'user': {
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name': user.last_name
-                }}, status=status.HTTP_201_CREATED)
-        else:
-            return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                user, message = serializer.save()
+            except Exception as e:
+                return Response({'errors': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+            if user:
+                return Response({
+                    'message': message,
+                    'user': {
+                        'email': user.email,
+                        'first_name': user.first_name,
+                        'last_name': user.last_name
+                    }
+                }, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'errors': message}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+class SupermarketView(APIView):
+    queryset = Supermarket.objects.all()
+    serializer_class = MarketSeriallizer
+
+    def post(self, request):
+        serializer = MarketSeriallizer(data=request.data)
+        
+        if serializer.is_valid():
+            try:
+                market, message = serializer.save()
+            except Exception as e:
+                return Response({'errors': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+            if market is not None:
+                return Response({
+                    'user': {
+                        'messsage' : message,
+                        'email': market.email,
+                        'name': market.name,
+                    }
+                }, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'errors': message}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

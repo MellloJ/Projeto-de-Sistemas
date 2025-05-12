@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth_app', '0004_alter_user_is_active'),
+        ('auth_app', '0001_initial'),
     ]
 
     operations = [
@@ -26,8 +26,5 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'deliver_users',
             },
-        ),
-        migrations.DeleteModel(
-            name='Address',
         ),
     ]

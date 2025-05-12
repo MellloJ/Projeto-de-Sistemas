@@ -111,6 +111,7 @@ function editar(itemId) {
         url: `/produtos/api/editar/${itemId}`,
         method: 'GET',
         success: function(data) {
+            form.find('#delete-button').attr('delete-id', itemId);
             form.find('#nome').val(data.nome);
             form.find('#descricao').val(data.descricao);
             form.find('#categoria').val(data.categoria);
@@ -288,3 +289,54 @@ $("#createProdutos").on('submit', function (e) {
         }
     });
 })
+
+$('#delete-button').on('click', function () {
+
+    console.log('Botão de deletar clicado!');
+
+    let itemId = $(this).attr('delete-id');
+    let modal = new Modal(document.getElementById('editProdutos'));
+    let formData = new FormData()
+
+    formData.append('id', itemId);
+
+    $.ajax({
+        url: `/produtos/api/editar/${itemId}`,
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        processData: false, // Prevent jQuery from processing the data
+        contentType: false, // Prevent jQuery from setting the content type
+        data: formData,
+        success: function() {
+            modal.hide();
+            Unicorn.call('produtos_unicorn', 'recarregar');
+            resetEditMode();
+            console.log('Item deletado com sucesso!');
+        },
+        error: function(xhr, error) {
+            if (xhr.status === 401) {
+                console.error('Não autorizado. Verifique o token de autenticação.');
+            } else {
+                console.error('Erro ao deletar o item:', error);
+            }
+        }
+    });
+    modal.hide();   
+});
+
+// Detecta o atalho Ctrl+E
+document.addEventListener('keydown', function (event) {
+    // Verifica se Ctrl (ou Cmd no Mac) e a tecla "E" foram pressionados
+    if ((event.ctrlKey || event.metaKey) && event.key === 'e') {
+        event.preventDefault();
+
+        console.log('Atalho Ctrl+E pressionado!');
+        executarAcao();
+    }
+});
+
+function executarAcao() {
+    $('#edit-mode-toggle').trigger('click');
+}   

@@ -1,0 +1,57 @@
+<!-- templates/categorias/index.html -->
+
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block title %} <title> {{title}} </title> {% endblock title %}
+
+{% load unicorn %}
+
+{% load component_tags %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'src/produtos/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'src/core/css/styles.css' %}">
+{% endblock head %}
+
+{% block navbar %}
+  {% include "navbar.html" %}
+{% endblock navbar %}
+
+{% block sidebar %}
+  {% include "sidebar.html" %}
+{% endblock sidebar %}
+
+{% block content %}
+<section class="bg-gray-50 py-8 antialiased p-4 md:ml-64 h-auto pt-20">
+  <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+    <!-- Heading -->
+     <div class="mb-4 items-center justify-between space-y-4 sm:flex sm:space-y-0 md:mb-8">
+      {% include "components/breadcrumb.html" with breadcrumbs=breadcrumbs %}
+      <div class="flex items-center justify-end space-x-4 w-full px-4">
+        <button data-modal-toggle="createCategorias" data-modal-target="createCategorias" type="button" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
+          <svg class="-ms-0.5 me-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          </svg>
+          Nova Categoria
+        </button>
+        <button type="button" id="edit-mode-toggle" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
+          <svg class="-ms-0.5 me-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.779 17.779 4.36 19.918 6.5 13.5m4.279 4.279 8.364-8.643a3.027 3.027 0 0 0-2.14-5.165 3.03 3.03 0 0 0-2.14.886L6.5 13.5m4.279 4.279L6.499 13.5m2.14 2.14 6.213-6.504M12.75 7.04 17 11.28"/>
+          </svg>
+          Editar
+        </button>
+      </div>
+    </div>
+    {% unicorn 'categorias_unicorn' id='categorias_unicorn' %}
+    <div class="w-full text-center">
+      <button type="button" class="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100">Show more</button>
+    </div>
+  </div>
+</section>
+{% endblock content %}
+
+{% block scripts %}
+  <script src="{% static 'src/produtos/js/scripts.js' %}"></script>
+{% endblock scripts %}

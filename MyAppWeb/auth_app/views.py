@@ -3,10 +3,10 @@ from django.views import View
 from auth_app.services.loginUser import loginUser
 from django.urls import reverse
 from django.contrib.auth import logout
-from auth_app.services.signupUser import signupClient, signupMarket
-from .forms import signupUserForm, createMarketForm
+from auth_app.services.signupUser import signupClient
+from .forms import signupUserForm
 from auth_app.services.confirmEmailUser import sendMail
-from auth_app.models import User, Supermarket
+from auth_app.models import User
 from core.consts import CATEGORIAS_ALIMENTOS
 
 # Importando jwt do rest
@@ -14,7 +14,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import CustomTokenObtainPairSerializer, UserClientSerializer, MarketSeriallizer
+from .serializers import CustomTokenObtainPairSerializer, UserClientSerializer
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.tokens import OutstandingToken, BlacklistedToken
 
@@ -146,39 +146,6 @@ class Logout(View):
 
         return response
 
-class CreateMarket(View):
-    def get(self, request):
-        return render(request, 'market/create.html', {'form': createMarketForm()})
-    def post(self, request):
-        form = createMarketForm(request.POST)
-        if form.is_valid():
-            market, message = signupMarket.register(
-                name=form.cleaned_data['name'],
-                cnpj=form.cleaned_data['cnpj'],
-                password=request.POST.get('password'),
-                phone=form.cleaned_data['phone'],
-                email=form.cleaned_data['email']
-            )
-            if market is None:
-                context = {
-                    'form': form,
-                    'errors': message,
-                }
-                return render(request, 'market/create.html', context)
-            else:
-                # sendMail(request, market)
-                context = {
-                    'title': 'Traz Aí | Home',
-                    'categories': CATEGORIAS_ALIMENTOS,
-                }
-                return render(request, "index.html",context)
-        else:
-            context = {
-                'form': form,
-                'errors': form.errors,
-            }
-            return render(request, 'market/create.html', context)
-
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
@@ -207,32 +174,6 @@ class UserClientView(APIView):
                         'email': user.email,
                         'first_name': user.first_name,
                         'last_name': user.last_name
-                    }
-                }, status=status.HTTP_201_CREATED)
-            else:
-                return Response({'errors': message}, status=status.HTTP_400_BAD_REQUEST)
-
-        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-
-class SupermarketView(APIView):
-    queryset = Supermarket.objects.all()
-    serializer_class = MarketSeriallizer
-
-    def post(self, request):
-        serializer = MarketSeriallizer(data=request.data)
-        
-        if serializer.is_valid():
-            try:
-                market, message = serializer.save()
-            except Exception as e:
-                return Response({'errors': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-            if market is not None:
-                return Response({
-                    'user': {
-                        'messsage' : message,
-                        'email': market.email,
-                        'name': market.name,
                     }
                 }, status=status.HTTP_201_CREATED)
             else:

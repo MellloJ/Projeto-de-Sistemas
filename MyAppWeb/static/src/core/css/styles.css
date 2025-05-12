@@ -9,6 +9,10 @@
     background-color: var(--base-color) !important;
 }
 
+.main-bg-color:hover{
+    background-color: var(--base-color-dark) !important;
+}
+
 .main-bg-color-dark{
     background-color: var(--base-color-dark) !important;
 }

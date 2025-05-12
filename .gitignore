@@ -4,3 +4,4 @@ CACHE/
 .env
 debug.log
 migrations/
+imagens/

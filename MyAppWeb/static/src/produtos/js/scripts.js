@@ -243,3 +243,48 @@ $('#index-pesquisa, #navbar-pesquisa, #sidebar-pesquisa').on('submit', function 
     tempLink.remove();
 });
 // end
+
+$("#createProdutos").on('submit', function (e) {
+    e.preventDefault();
+    console.log('Formulário enviado!');
+
+    const formData = new FormData()
+
+    formData.append('nome', $(this).find('#nome').val());
+    formData.append('descricao', $(this).find('#descricao').val());
+    formData.append('categoria', $(this).find('#categoria').val());
+    formData.append('marca', $(this).find('#marca').val());
+    formData.append('preco_unitario', $(this).find('#preco_unitario').val());
+    formData.append('qtd_estoque', $(this).find('#qtd_estoque').val());
+    formData.append('codigo_barras', $(this).find('#codigo_barras').val());
+
+    const imagem = $(this).find('#imagem').prop('files')[0];
+    if (imagem) {
+        formData.append('imagem', imagem);
+    }
+
+    console.log('Dados do formulário:', formData);
+
+    $.ajax({
+        url: "/produtos/api/produtos/",
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function() {
+            $(this)[0].reset();
+            Unicorn.call('produtos_unicorn', 'recarregar');
+            resetEditMode();
+        },
+        error: function(xhr, error) {
+            if (xhr.status === 401) {
+                console.error('Não autorizado. Verifique o token de autenticação.');
+            } else {
+                console.error('Erro ao criar o item:', error);
+            }
+        }
+    });
+})

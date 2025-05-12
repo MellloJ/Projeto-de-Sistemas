@@ -37,7 +37,7 @@ class ProdutosUnicornView(UnicornView):
 
     createProdutos  = {
         'wire' : False,
-        'action': reverse('produtos'),
+        'action': '#',
         'method': 'post',
         'id': 'createProdutos',
         'title': 'Criar Produto',

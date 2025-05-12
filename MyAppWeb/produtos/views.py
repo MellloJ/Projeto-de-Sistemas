@@ -33,14 +33,6 @@ class ProdutosView(View):
         }
 
         return render(request, "produtos/index.html",context)
-    
-    def post(self, request):
-        form = ProdutosForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('produtos')
-        else:
-            return redirect('produtos')
 
 class CategoriasView(View):
     def get(self, request):

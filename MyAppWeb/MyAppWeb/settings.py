@@ -28,6 +28,7 @@ MY_APPS = [
     'auth_app',
     'produtos',
     'pedidos',
+    'market',
 ]
 
 INSTALLED_APPS = [

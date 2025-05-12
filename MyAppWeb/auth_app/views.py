@@ -17,7 +17,6 @@ from rest_framework import status
 from .serializers import CustomTokenObtainPairSerializer, UserClientSerializer
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.tokens import OutstandingToken, BlacklistedToken
-from django.core.exceptions import ValidationError
 
 class Signup(View):
     def get(self, request):
@@ -26,15 +25,21 @@ class Signup(View):
     def post(self, request):
         form = signupUserForm(request.POST)
         if form.is_valid():
-            try:
-                user = signupClient.register(
-                    email=form.cleaned_data['email'],
-                    password=request.POST.get('password'),
-                    first_name=form.cleaned_data['first_name'],
-                    last_name=form.cleaned_data['last_name'],
-                    cpf=form.cleaned_data['cpf'],
-                    phone=form.cleaned_data['phone'],
-                )
+            user, message = signupClient.register(
+                email=form.cleaned_data['email'],
+                password=request.POST.get('password'),
+                first_name=form.cleaned_data['first_name'],
+                last_name=form.cleaned_data['last_name'],
+                cpf=form.cleaned_data['cpf'],
+                phone=form.cleaned_data['phone'],
+            )
+            if user is None:
+                context = {
+                    'form': form,
+                    'errors': message,
+                }
+                return render(request, 'signup/signup.html', context)
+            else:
                 sendMail(request, user)
                 context = {
                     'title': 'Traz Aí | Home',
@@ -42,27 +47,12 @@ class Signup(View):
                 }
                 return render(request, "index.html",context)
                 # return render(request, 'signup/confirm.html', {'email': user.email, 'completeName': user.completeName})
-            except ValidationError as e:
-                context = {
-                    'form': form,
-                    'errors': e.messages,
-                }
-                return render(request, 'signup/signup.html', context)
         else:
             context = {
                 'form': form,
                 'errors': form.errors,
             }
             return render(request, 'signup/signup.html', context)
-
-        # Verifica se o usuário já existe
-        '''
-        if signupClient.checkUserExist(email):
-            context = {
-                'errors': 'Usuário já existe'
-            }
-            return render(request, 'signup/signup.html', context)
-        '''
 
 class ConfirmEmail(View):
     def get(self, request):
@@ -98,6 +88,12 @@ class Login(View):
         user = loginUser.auth(request, email, password, remember)
 
         if user is not None:
+            if user.is_active == False:
+                context = {
+                    'errors': 'Email do usuário não confirmado'
+                }
+                return render(request, 'login/index.html', context)
+
             login = loginUser.do_login(request, user)
             
             if login != False:
@@ -126,6 +122,7 @@ class Login(View):
                 )
 
                 return response
+
         context = {
             'errors': 'Usuário ou senha incorretos'
             }
@@ -165,11 +162,21 @@ class UserClientView(APIView):
         serializer = UserClientSerializer(data=request.data)
         
         if serializer.is_valid():
-            user = serializer.save()
-            return Response({'message': 'Usuário criado com sucesso!', 'user': {
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name': user.last_name
-                }}, status=status.HTTP_201_CREATED)
-        else:
-            return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                user, message = serializer.save()
+            except Exception as e:
+                return Response({'errors': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+            if user:
+                return Response({
+                    'message': message,
+                    'user': {
+                        'email': user.email,
+                        'first_name': user.first_name,
+                        'last_name': user.last_name
+                    }
+                }, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'errors': message}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

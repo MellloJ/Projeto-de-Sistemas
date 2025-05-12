@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 from django.conf import settings
 
@@ -24,7 +26,7 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.CharField(max_length=255, null=False, unique=True)
+    email = models.EmailField(max_length=255, null=False, unique=True)
     first_name = models.CharField(max_length=30, null=False)
     last_name = models.CharField(max_length=120, null=False)
     completeName = models.CharField(max_length=150, null=False, unique=True)
@@ -36,8 +38,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    last_login = models.DateTimeField(null=True)
-    date_joined = models.DateTimeField(null=True)
+    last_login = models.DateTimeField(null=False)
+    date_joined = models.DateTimeField(null=False)
 
     objects = UserManager()
 
@@ -77,8 +79,13 @@ class Address(models.Model):
     number = models.CharField(max_length=20)
     neighborhood = models.TextField()
 
+    # Relacionamento genérico
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, default=1)
+    object_id = models.PositiveIntegerField(default=1)
+    related_object = GenericForeignKey('content_type', 'object_id')
+    
     class Meta:
         db_table = 'addresses'
     
     def __str__(self):
-        return self.street
+        return f"{self.street}, {self.number}"

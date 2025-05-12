@@ -72,7 +72,6 @@ $('.index-categoria-button').on('click', function() {
 
     Unicorn.call('produtos_unicorn', 'filter', JSON.stringify(data));
 })
-
 // end
 
 // Modo de edição
@@ -82,10 +81,10 @@ $('#edit-mode-toggle').on('click', function () {
     editMode = !editMode;
     if (editMode) {
         $(this).removeClass('bg-orange-400').addClass('bg-orange-500');
-        $('.produtos-card').addClass('ring-4 ring-orange-300').find('img').addClass('cursor-pointer');
+        $('.produtos-card, .categoria-card').addClass('ring-4 ring-orange-300').find('img').addClass('cursor-pointer');
     } else{
         $(this).removeClass('bg-orange-500').addClass('bg-orange-400');
-        $('.produtos-card').removeClass('ring-4 ring-orange-300').find('img').removeClass('cursor-pointer');
+        $('.produtos-card, .categoria-card').removeClass('ring-4 ring-orange-300').find('img').removeClass('cursor-pointer');
     }
 });
 
@@ -95,7 +94,6 @@ function resetEditMode() {
     $('#edit-mode-toggle').addClass('bg-orange-400');
     $('.produtos-card').removeClass('ring-4 ring-orange-300').find('img').removeClass('cursor-pointer');
 }
-
 
 $('.edit-item-btn').on('click', function () {
     if (editMode) {
@@ -175,7 +173,6 @@ function editar(itemId) {
         });
     });
 }
-
 // end
 
 function loadProdutosView() {
@@ -220,6 +217,7 @@ function loadProdutosEdit() {
 });
 }
 
+// barra de pesquisa
 $('#index-pesquisa, #navbar-pesquisa, #sidebar-pesquisa').on('submit', function (e) {
     e.preventDefault();
 
@@ -244,3 +242,4 @@ $('#index-pesquisa, #navbar-pesquisa, #sidebar-pesquisa').on('submit', function 
     tempLink[0].click();
     tempLink.remove();
 });
+// end

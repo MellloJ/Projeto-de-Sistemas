@@ -77,6 +77,9 @@ class ProdutosUnicornView(UnicornView):
 
         produtos = produtos.order_by('-avaliacao')
         self.produtos = produtos
+
+        self.call("loadProdutosView")
+        self.call("loadProdutosEdit")
             
     def filter(self, data):
         try:

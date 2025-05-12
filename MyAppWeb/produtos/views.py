@@ -101,7 +101,7 @@ class ImagensCategoriasView(View):
                 if file_path.is_file():
                     return FileResponse(file_path.open('rb'))
                 else:
-                    empty_image_path = Path('static/src/categorias/img/empty.svg')
+                    empty_image_path = Path('static/src/produtos/img/empty.svg')
                     return FileResponse(empty_image_path.open('rb'))
             except ObjectDoesNotExist:
                 raise Http404('Arquivo não encontrado.')

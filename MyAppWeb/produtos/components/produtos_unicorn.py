@@ -118,4 +118,22 @@ class ProdutosUnicornView(UnicornView):
         self.call("loadProdutosView")
         self.call("loadProdutosEdit")
 
+    def ordenar(self, criterio):
+        try:
+            criterio_data = json.loads(criterio)
+        except json.JSONDecodeError as e:
+            print("Error decoding JSON:", e)
+            return
+
+        order = criterio_data.get("order")
+        print("Criterio de ordenação:", order)
+
+        if order == 'relevancia':
+            self.produtos = self.produtos.order_by('-avaliacao')
+        elif order == 'preco':
+            self.produtos = self.produtos.order_by('preco_unitario')
+        
+        self.call("loadProdutosView")
+        self.call("loadProdutosEdit")
+
 # CREATE EXTENSION IF NOT EXISTS unaccent;

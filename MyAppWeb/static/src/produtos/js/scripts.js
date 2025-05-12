@@ -340,3 +340,8 @@ document.addEventListener('keydown', function (event) {
 function executarAcao() {
     $('#edit-mode-toggle').trigger('click');
 }   
+
+$('.ordenar-button').on('click', function() {
+    const order = $(this).val();
+    Unicorn.call('produtos_unicorn', 'ordenar', JSON.stringify({order}));
+});

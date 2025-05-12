@@ -3,3 +3,4 @@ venv/
 CACHE/
 .env
 debug.log
+migrations/

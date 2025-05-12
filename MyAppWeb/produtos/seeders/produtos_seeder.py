@@ -70,7 +70,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Maçã Gala',
                     'descricao': 'Maçã Gala fresca e suculenta',
-                    'categoria': Categorias.objects.get(nome='Hortifuti'),
+                    'categoria': Categorias.objects.get(nome='Hortifruti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 3.99,
                     'qtd_estoque': 200,
@@ -82,7 +82,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Maçã Fuji',
                     'descricao': 'Maçã Fuji doce e crocante',
-                    'categoria': Categorias.objects.get(nome='Hortifuti'),
+                    'categoria': Categorias.objects.get(nome='Hortifruti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 4.99,
                     'qtd_estoque': 150,
@@ -94,7 +94,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Maçã Verde',
                     'descricao': 'Maçã Verde ácida e refrescante',
-                    'categoria': Categorias.objects.get(nome='Hortifuti'),
+                    'categoria': Categorias.objects.get(nome='Hortifruti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 5.49,
                     'qtd_estoque': 120,
@@ -106,7 +106,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Banana Prata',
                     'descricao': 'Banana Prata madura e saborosa',
-                    'categoria': Categorias.objects.get(nome='Hortifuti'),
+                    'categoria': Categorias.objects.get(nome='Hortifruti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 2.99,
                     'qtd_estoque': 300,
@@ -118,7 +118,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Laranja Pera',
                     'descricao': 'Laranja Pera doce e suculenta',
-                    'categoria': Categorias.objects.get(nome='Hortifuti'),
+                    'categoria': Categorias.objects.get(nome='Hortifruti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 3.49,
                     'qtd_estoque': 250,
@@ -130,7 +130,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Abacaxi Pérola',
                     'descricao': 'Abacaxi Pérola doce e refrescante',
-                    'categoria': Categorias.objects.get(nome='Hortifuti'),
+                    'categoria': Categorias.objects.get(nome='Hortifruti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 6.99,
                     'qtd_estoque': 100,
@@ -142,7 +142,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Manga Palmer',
                     'descricao': 'Manga Palmer doce e suculenta',
-                    'categoria': Categorias.objects.get(nome='Hortifuti'),
+                    'categoria': Categorias.objects.get(nome='Hortifruti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 4.49,
                     'qtd_estoque': 180,
@@ -154,7 +154,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Uva Thompson',
                     'descricao': 'Uva Thompson sem sementes e doce',
-                    'categoria': Categorias.objects.get(nome='Hortifuti'),
+                    'categoria': Categorias.objects.get(nome='Hortifruti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 7.99,
                     'qtd_estoque': 90,
@@ -166,7 +166,7 @@ class ProdutosSeeder(BaseSeeder):
                 {
                     'nome': 'Melancia',
                     'descricao': 'Melancia fresca e suculenta',
-                    'categoria': Categorias.objects.get(nome='Hortifuti'),
+                    'categoria': Categorias.objects.get(nome='Hortifruti'),
                     'marca': 'Natureza Pura',
                     'preco_unitario': 12.99,
                     'qtd_estoque': 50,

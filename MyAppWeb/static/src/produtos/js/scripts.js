@@ -104,8 +104,8 @@ $('.edit-item-btn').on('click', function () {
 
 function editar(itemId) {
 
-    const form = $('#editModal');
-    const modal = new Modal(document.getElementById('editModal'));
+    const form = $('#editProdutos');
+    const modal = new Modal(document.getElementById('editProdutos'));
 
     $.ajax({
         url: `/produtos/api/editar/${itemId}`,
@@ -126,7 +126,7 @@ function editar(itemId) {
 
     modal.show();
 
-    form.find('[data-modal-toggle="editModal"]').off('click').on('click', function () {
+    form.find('[data-modal-toggle="editProdutos"]').off('click').on('click', function () {
         modal.hide();
     });
 
@@ -177,8 +177,8 @@ function editar(itemId) {
 
 function loadProdutosView() {
     $('.vizualizar-produtos').off('click').on('click', function () {
-        const form = $('#viewModal');
-        const modal = new Modal(document.getElementById('viewModal'));
+        const form = $('#viewProdutos');
+        const modal = new Modal(document.getElementById('viewProdutos'));
         const itemId = $(this).data('id');
 
         console.log('ID do item:', itemId);
@@ -202,7 +202,7 @@ function loadProdutosView() {
 
         modal.show();
 
-        form.find('[data-modal-toggle="viewModal"]').off('click').on('click', function () {
+        form.find('[data-modal-toggle="viewProdutos"]').off('click').on('click', function () {
             modal.hide();
         });
     });

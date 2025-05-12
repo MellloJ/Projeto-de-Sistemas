@@ -25,29 +25,11 @@ class ProdutosView(View):
             'title': 'Filtro',
         }
 
-        createModal  = {
-            'wire' : False,
-            'action': reverse('produtos'),
-            'method': 'post',
-            'id': 'createModal',
-            'title': 'Criar Produto',
-        }
-
-        # editModal  = {
-        #     'wire' : 'false',
-        #     'action': '#',
-        #     'method': 'post',
-        #     'id': 'editModal',
-        #     'title': 'Editar Produto',
-        # }
-
         context = {
             'title': 'Traz Aí | Produtos',
             'categorias' : Categorias.objects.all(),
             'breadcrumbs' : breadcrumbs,
             'filterModal' : filterModal,
-            'createModal' : createModal,
-            # 'editModal' : editModal,
         }
 
         return render(request, "produtos/index.html",context)

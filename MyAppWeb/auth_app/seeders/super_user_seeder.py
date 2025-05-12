@@ -1,5 +1,6 @@
 from jessilver_django_seed.seeders.BaseSeeder import BaseSeeder
 from django.contrib.auth import get_user_model
+from django.utils.timezone import now
 
 class SuperUserSeeder(BaseSeeder):
     @property
@@ -17,6 +18,8 @@ class SuperUserSeeder(BaseSeeder):
                 first_name='Admin',
                 last_name='User',
                 is_active=True,
+                last_login=now(),
+                date_joined=now()
             )
             self.succes(f'Super User created')
         else:

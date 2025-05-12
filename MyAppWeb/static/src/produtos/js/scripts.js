@@ -46,10 +46,12 @@ var form = $('#filterModal');
 form.on('submit', function(e) {
     e.preventDefault();
 
-    var categoria = $('#categoria').val();
-    var preco_min = $('#preco-min').val();
-    var preco_max = $('#preco-max').val();
-    var rating = $('input[name="rating"]:checked').val();
+    
+
+    var categoria = $(this).find('#categoria').val()
+    var preco_min = $(this).find('#preco-min').val();
+    var preco_max = $(this).find('#preco-max').val();
+    var rating = $(this).find('input[name="rating"]:checked').val();
 
     var data = {
         categoria: categoria,
@@ -57,6 +59,8 @@ form.on('submit', function(e) {
         preco_max: preco_max,
         rating: rating
     };
+
+    console.log('Dados do filtro:', data);
 
     Unicorn.call('produtos_unicorn', 'filter', JSON.stringify(data));
 });

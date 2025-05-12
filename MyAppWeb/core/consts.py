@@ -16,3 +16,7 @@ CATEGORIAS_ALIMENTOS = [
     "Congelados",
     "Frios",
 ]
+
+CATEGORIAS_ALIMENTOS_CHOICES = [
+    (categoria, categoria) for categoria in CATEGORIAS_ALIMENTOS
+]

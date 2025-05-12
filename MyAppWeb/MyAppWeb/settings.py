@@ -26,6 +26,9 @@ MY_APPS = [
     'core',
     'users',
     'auth_app',
+    'produtos',
+    'pedidos',
+    'market',
 ]
 
 INSTALLED_APPS = [
@@ -42,11 +45,20 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "drf_yasg",
     'jessilver_django_seed',
+    "django_unicorn",
+    'django_components',
 ] + MY_APPS
 
 SEEDER_APPS = [
     'auth_app',
+    'produtos',
 ]
+
+DJANGO_COMPONENTS = {
+    "components": {
+        "app": "core.components",
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -84,6 +96,7 @@ TEMPLATES = [
             BASE_DIR / 'core' / 'templates',
             BASE_DIR / 'users' / 'templates',
             BASE_DIR / 'auth_app' / 'templates',
+            BASE_DIR / 'produtos' / 'templates',
             # Adicione outros diretórios de templates conforme necessário
         ],
         'APP_DIRS': True,
@@ -226,3 +239,7 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = 'auth_app.User' 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
+
+# # Media files (Uploaded files)
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = BASE_DIR / 'media'

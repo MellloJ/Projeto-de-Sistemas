@@ -72,7 +72,6 @@ $('.index-categoria-button').on('click', function() {
 
     Unicorn.call('produtos_unicorn', 'filter', JSON.stringify(data));
 })
-
 // end
 
 // Modo de edição
@@ -82,10 +81,10 @@ $('#edit-mode-toggle').on('click', function () {
     editMode = !editMode;
     if (editMode) {
         $(this).removeClass('bg-orange-400').addClass('bg-orange-500');
-        $('.produtos-card').addClass('ring-4 ring-orange-300').find('img').addClass('cursor-pointer');
+        $('.produtos-card, .categoria-card').addClass('ring-4 ring-orange-300').find('img').addClass('cursor-pointer');
     } else{
         $(this).removeClass('bg-orange-500').addClass('bg-orange-400');
-        $('.produtos-card').removeClass('ring-4 ring-orange-300').find('img').removeClass('cursor-pointer');
+        $('.produtos-card, .categoria-card').removeClass('ring-4 ring-orange-300').find('img').removeClass('cursor-pointer');
     }
 });
 
@@ -96,7 +95,6 @@ function resetEditMode() {
     $('.produtos-card').removeClass('ring-4 ring-orange-300').find('img').removeClass('cursor-pointer');
 }
 
-
 $('.edit-item-btn').on('click', function () {
     if (editMode) {
         const itemId = $(this).data('id');
@@ -106,13 +104,14 @@ $('.edit-item-btn').on('click', function () {
 
 function editar(itemId) {
 
-    const form = $('#editModal');
-    const modal = new Modal(document.getElementById('editModal'));
+    const form = $('#editProdutos');
+    const modal = new Modal(document.getElementById('editProdutos'));
 
     $.ajax({
         url: `/produtos/api/editar/${itemId}`,
         method: 'GET',
         success: function(data) {
+            form.find('#delete-button').attr('delete-id', itemId);
             form.find('#nome').val(data.nome);
             form.find('#descricao').val(data.descricao);
             form.find('#categoria').val(data.categoria);
@@ -128,7 +127,7 @@ function editar(itemId) {
 
     modal.show();
 
-    form.find('[data-modal-toggle="editModal"]').off('click').on('click', function () {
+    form.find('[data-modal-toggle="editProdutos"]').off('click').on('click', function () {
         modal.hide();
     });
 
@@ -175,13 +174,12 @@ function editar(itemId) {
         });
     });
 }
-
 // end
 
 function loadProdutosView() {
     $('.vizualizar-produtos').off('click').on('click', function () {
-        const form = $('#viewModal');
-        const modal = new Modal(document.getElementById('viewModal'));
+        const form = $('#viewProdutos');
+        const modal = new Modal(document.getElementById('viewProdutos'));
         const itemId = $(this).data('id');
 
         console.log('ID do item:', itemId);
@@ -205,7 +203,7 @@ function loadProdutosView() {
 
         modal.show();
 
-        form.find('[data-modal-toggle="viewModal"]').off('click').on('click', function () {
+        form.find('[data-modal-toggle="viewProdutos"]').off('click').on('click', function () {
             modal.hide();
         });
     });
@@ -220,6 +218,7 @@ function loadProdutosEdit() {
 });
 }
 
+// barra de pesquisa
 $('#index-pesquisa, #navbar-pesquisa, #sidebar-pesquisa').on('submit', function (e) {
     e.preventDefault();
 
@@ -243,4 +242,106 @@ $('#index-pesquisa, #navbar-pesquisa, #sidebar-pesquisa').on('submit', function 
     $('body').append(tempLink);
     tempLink[0].click();
     tempLink.remove();
+});
+// end
+
+$("#createProdutos").on('submit', function (e) {
+    e.preventDefault();
+    console.log('Formulário enviado!');
+
+    const formData = new FormData()
+
+    formData.append('nome', $(this).find('#nome').val());
+    formData.append('descricao', $(this).find('#descricao').val());
+    formData.append('categoria', $(this).find('#categoria').val());
+    formData.append('marca', $(this).find('#marca').val());
+    formData.append('preco_unitario', $(this).find('#preco_unitario').val());
+    formData.append('qtd_estoque', $(this).find('#qtd_estoque').val());
+    formData.append('codigo_barras', $(this).find('#codigo_barras').val());
+
+    const imagem = $(this).find('#imagem').prop('files')[0];
+    if (imagem) {
+        formData.append('imagem', imagem);
+    }
+
+    console.log('Dados do formulário:', formData);
+
+    $.ajax({
+        url: "/produtos/api/produtos/",
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function() {
+            $(this)[0].reset();
+            Unicorn.call('produtos_unicorn', 'recarregar');
+            resetEditMode();
+        },
+        error: function(xhr, error) {
+            if (xhr.status === 401) {
+                console.error('Não autorizado. Verifique o token de autenticação.');
+            } else {
+                console.error('Erro ao criar o item:', error);
+            }
+        }
+    });
+})
+
+$('#delete-button').on('click', function () {
+
+    console.log('Botão de deletar clicado!');
+
+    let itemId = $(this).attr('delete-id');
+    let modal = new Modal(document.getElementById('editProdutos'));
+    let formData = new FormData()
+
+    formData.append('id', itemId);
+
+    $.ajax({
+        url: `/produtos/api/editar/${itemId}`,
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        processData: false, // Prevent jQuery from processing the data
+        contentType: false, // Prevent jQuery from setting the content type
+        data: formData,
+        success: function() {
+            modal.hide();
+            Unicorn.call('produtos_unicorn', 'recarregar');
+            resetEditMode();
+            console.log('Item deletado com sucesso!');
+        },
+        error: function(xhr, error) {
+            if (xhr.status === 401) {
+                console.error('Não autorizado. Verifique o token de autenticação.');
+            } else {
+                console.error('Erro ao deletar o item:', error);
+            }
+        }
+    });
+    modal.hide();   
+});
+
+// Detecta o atalho Ctrl+E
+document.addEventListener('keydown', function (event) {
+    // Verifica se Ctrl (ou Cmd no Mac) e a tecla "E" foram pressionados
+    if ((event.ctrlKey || event.metaKey) && event.key === 'e') {
+        event.preventDefault();
+
+        console.log('Atalho Ctrl+E pressionado!');
+        executarAcao();
+    }
+});
+
+function executarAcao() {
+    $('#edit-mode-toggle').trigger('click');
+}   
+
+$('.ordenar-button').on('click', function() {
+    const order = $(this).val();
+    Unicorn.call('produtos_unicorn', 'ordenar', JSON.stringify({order}));
 });

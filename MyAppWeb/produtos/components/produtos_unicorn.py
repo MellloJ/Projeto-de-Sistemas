@@ -1,10 +1,11 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django_unicorn.components import UnicornView
+from django.db.models.functions import Lower
+from django.db.models import Func
+from django.urls import reverse
 from produtos.models import *
 import unicodedata
 import json
-from django.db.models.functions import Lower
-from django.db.models import Func
 
 class Unaccent(Func):
     function = 'unaccent'
@@ -18,20 +19,28 @@ class ProdutosUnicornView(UnicornView):
     preco_max = None
     categoria = None
 
-    editModal  = {
+    editProdutos  = {
         'wire' : "edit",
         'action': '#',
         'method': 'post',
-        'id': 'editModal',
+        'id': 'editProdutos',
         'title': 'Editar Produto',
     }
 
-    viewModal  = {
-        'wire' : "edit",
+    viewProdutos  = {
+        'wire' : False,
         'action': '#',
         'method': 'get',
-        'id': 'viewModal',
+        'id': 'viewProdutos',
         'title': 'Vizualizar Produto',
+    }
+
+    createProdutos  = {
+        'wire' : False,
+        'action': '#',
+        'method': 'post',
+        'id': 'createProdutos',
+        'title': 'Criar Produto',
     }
 
     categorias = Categorias.objects.all()
@@ -77,6 +86,9 @@ class ProdutosUnicornView(UnicornView):
 
         produtos = produtos.order_by('-avaliacao')
         self.produtos = produtos
+
+        self.call("loadProdutosView")
+        self.call("loadProdutosEdit")
             
     def filter(self, data):
         try:
@@ -103,6 +115,24 @@ class ProdutosUnicornView(UnicornView):
             produtos = produtos.filter(avaliacao__gte=float(rating), avaliacao__lt=float(rating) + 1)
         
         self.produtos = produtos.order_by('-avaliacao')
+        self.call("loadProdutosView")
+        self.call("loadProdutosEdit")
+
+    def ordenar(self, criterio):
+        try:
+            criterio_data = json.loads(criterio)
+        except json.JSONDecodeError as e:
+            print("Error decoding JSON:", e)
+            return
+
+        order = criterio_data.get("order")
+        print("Criterio de ordenação:", order)
+
+        if order == 'relevancia':
+            self.produtos = self.produtos.order_by('-avaliacao')
+        elif order == 'preco':
+            self.produtos = self.produtos.order_by('preco_unitario')
+        
         self.call("loadProdutosView")
         self.call("loadProdutosEdit")
 

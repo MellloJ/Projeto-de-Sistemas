@@ -33,7 +33,7 @@
     <div class="mb-4 items-center justify-between space-y-4 sm:flex sm:space-y-0 md:mb-8">
       {% include "components/breadcrumb.html" with breadcrumbs=breadcrumbs %}
       <div class="flex items-center justify-end space-x-4 w-full px-4">
-        <button data-modal-toggle="{{ createModal.id }}" data-modal-target="{{ createModal.id }}" type="button" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
+        <button data-modal-toggle="createProdutos" data-modal-target="createProdutos" type="button" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
           <svg class="-ms-0.5 me-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
           </svg>
@@ -56,7 +56,7 @@
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7" />
           </svg>
         </button>
-        <!-- <button id="sortDropdownButton1" data-dropdown-toggle="dropdownSort1" type="button" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 sm:w-auto">
+        <button id="sortDropdownButton1" data-dropdown-toggle="dropdownSort1" type="button" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 sm:w-auto">
           <svg class="-ms-0.5 me-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M7 4l3 3M7 4 4 7m9-3h6l-6 6h6m-6.5 10 3.5-7 3.5 7M14 18h4" />
           </svg>
@@ -64,29 +64,8 @@
           <svg class="-me-0.5 ms-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7" />
           </svg>
-        </button> -->
-        <div id="dropdownSort1" class="z-50 hidden w-40 divide-y divide-gray-100 rounded-lg bg-white shadow" data-popper-placement="bottom">
-          <ul class="p-2 text-left text-sm font-medium text-gray-500" aria-labelledby="sortDropdownButton">
-            <li>
-              <a href="#" class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900"> The most popular </a>
-            </li>
-            <li>
-              <a href="#" class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900"> Newest </a>
-            </li>
-            <li>
-              <a href="#" class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900"> Increasing price </a>
-            </li>
-            <li>
-              <a href="#" class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900"> Decreasing price </a>
-            </li>
-            <li>
-              <a href="#" class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900"> No. reviews </a>
-            </li>
-            <li>
-              <a href="#" class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900"> Discount % </a>
-            </li>
-          </ul>
-        </div>
+        </button>
+        <!-- Dropdown menu -->
       </div>
     </div>
     <div>
@@ -292,73 +271,6 @@
         Restaurar
       </button>
     </div>
-    {% endfill %}
-  {% endcomponent %}
-
-  <!-- Criar Produtos modal -->
-   {% component "formModal" formModal=createModal %}
-    {% fill "modal_body" %}
-      <section class="bg-white">
-        <div class="pb-4 px-4 mx-auto max-w-2xl lg:pb-8">
-          <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-            <div class="sm:col-span-2">
-              <label for="nome" class="block mb-2 text-sm font-medium text-gray-900">Nome</label>
-              <input type="text" name="nome" id="nome" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite o nome do produto" required>
-              <p class="mt-2 text-sm text-red-600 hidden" id="nome-error"><span class="font-medium">Erro:</span> Nome é obrigatório.</p>
-            </div>
-            <div class="sm:col-span-2">
-              <label for="descricao" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
-              <textarea id="descricao" name="descricao" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500" placeholder="Digite a descrição do produto" required></textarea>
-              <p class="mt-2 text-sm text-red-600 hidden" id="descricao-error"><span class="font-medium">Erro:</span> Descrição é obrigatória.</p>
-            </div>
-            <div>
-              <label for="categoria" class="block mb-2 text-sm font-medium text-gray-900">Categoria</label>
-              <select id="categoria" name="categoria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" required>
-              <option value="" selected>Selecione a categoria</option>
-              {% for categoria in categorias %}
-              <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-              {% endfor %}
-              </select>
-              <p class="mt-2 text-sm text-red-600 hidden" id="categoria-error"><span class="font-medium">Erro:</span> Categoria é obrigatória.</p>
-            </div>
-            <div>
-              <label for="marca" class="block mb-2 text-sm font-medium text-gray-900">Marca</label>
-              <input type="text" name="marca" id="marca" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite a marca do produto" required>
-              <p class="mt-2 text-sm text-red-600 hidden" id="marca-error"><span class="font-medium">Erro:</span> Marca é obrigatória.</p>
-            </div>
-            <div>
-              <label for="preco_unitario" class="block mb-2 text-sm font-medium text-gray-900">Preço Unitário</label>
-              <input type="number" name="preco_unitario" id="preco_unitario" step="0.01" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite o preço unitário" required>
-              <p class="mt-2 text-sm text-red-600 hidden" id="preco_unitario-error"><span class="font-medium">Erro:</span> Preço unitário é obrigatório.</p>
-            </div>
-            <div>
-              <label for="qtd_estoque" class="block mb-2 text-sm font-medium text-gray-900">Quantidade em Estoque</label>
-              <input type="number" name="qtd_estoque" id="qtd_estoque" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite a quantidade em estoque" required oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-              <p class="mt-2 text-sm text-red-600 hidden" id="qtd_estoque-error"><span class="font-medium">Erro:</span> Quantidade em estoque é obrigatória.</p>
-            </div>
-            <div>
-              <label for="codigo_barras" class="block mb-2 text-sm font-medium text-gray-900">Código de Barras</label>
-              <input type="text" name="codigo_barras" id="codigo_barras" maxlength="13" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite o código de barras" required>
-              <p class="mt-2 text-sm text-red-600 hidden" id="codigo_barras-error"><span class="font-medium">Erro:</span> Código de barras é obrigatório.</p>
-            </div>
-            <div>
-              <label for="imagem" class="block mb-2 text-sm font-medium text-gray-900">Imagem</label>
-              <input type="file" name="imagem" id="imagem" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" required>
-              <p class="mt-2 text-sm text-red-600 hidden" id="imagem-error"><span class="font-medium">Erro:</span> Imagem é obrigatória.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    {% endfill %}
-    {% fill "modal_footer" %}
-      <div class="flex items-center justify-center space-x-4 w-full px-4">
-        <button type="submit" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto" data-modal-toggle="{{ createModal.id }}">
-          Salvar
-        </button>
-        <button type="reset" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-gray-200 hover:bg-gray-300 px-3 py-2 text-sm font-medium text-gray-600 focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
-          Restaurar
-        </button>
-      </div>
     {% endfill %}
   {% endcomponent %}
 </section>

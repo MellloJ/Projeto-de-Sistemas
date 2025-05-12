@@ -25,40 +25,14 @@ class ProdutosView(View):
             'title': 'Filtro',
         }
 
-        createModal  = {
-            'wire' : False,
-            'action': reverse('produtos'),
-            'method': 'post',
-            'id': 'createModal',
-            'title': 'Criar Produto',
-        }
-
-        # editModal  = {
-        #     'wire' : 'false',
-        #     'action': '#',
-        #     'method': 'post',
-        #     'id': 'editModal',
-        #     'title': 'Editar Produto',
-        # }
-
         context = {
             'title': 'Traz Aí | Produtos',
             'categorias' : Categorias.objects.all(),
             'breadcrumbs' : breadcrumbs,
             'filterModal' : filterModal,
-            'createModal' : createModal,
-            # 'editModal' : editModal,
         }
 
         return render(request, "produtos/index.html",context)
-    
-    def post(self, request):
-        form = ProdutosForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('produtos')
-        else:
-            return redirect('produtos')
 
 class CategoriasView(View):
     def get(self, request):
@@ -101,7 +75,7 @@ class ImagensCategoriasView(View):
                 if file_path.is_file():
                     return FileResponse(file_path.open('rb'))
                 else:
-                    empty_image_path = Path('static/src/categorias/img/empty.svg')
+                    empty_image_path = Path('static/src/produtos/img/empty.svg')
                     return FileResponse(empty_image_path.open('rb'))
             except ObjectDoesNotExist:
                 raise Http404('Arquivo não encontrado.')

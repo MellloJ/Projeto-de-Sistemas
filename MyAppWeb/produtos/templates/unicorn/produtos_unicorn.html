@@ -67,6 +67,9 @@
     </div>
   {% endfor %}
 
+  <div data-modal-toggle="{{ editProdutos.id }}" data-modal-target="{{ editProdutos.id }}" ></div>
+  <div data-modal-toggle="{{ viewProdutos.id }}" data-modal-target="{{ viewProdutos.id }}" ></div>
+
   <!-- Editar Produtos modal -->
   {% component "formModal" formModal=editProdutos %}
     {% fill "modal_body" %}

@@ -4,8 +4,6 @@ var preco_max = $('#preco-max');
 var preco_min_input = $('#preco-min-input');
 var preco_max_input = $('#preco-max-input');
 
-var form = $('#filterModal');
-
 var editMode = false;
 
 // addEventListener
@@ -67,7 +65,7 @@ $('#delete-button').on('click', function () {
     formData.append('id', itemId);
 
     $.ajax({
-        url: `/produtos/api/editar/${itemId}`,
+        url: `/produtos/api/editar/produto/${itemId}`,
         method: 'DELETE',
         headers: {
             'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
@@ -126,11 +124,8 @@ preco_max_input.on('change', function() {
 
 // on submit
 
-form.on('submit', function(e) {
+$('#filterModal').on('submit', function(e) {
     e.preventDefault();
-
-    
-
     var categoria = $(this).find('#categoria').val()
     var preco_min = $(this).find('#preco-min').val();
     var preco_max = $(this).find('#preco-max').val();
@@ -196,8 +191,46 @@ $("#createProdutos").on('submit', function (e) {
         contentType: false,
         data: formData,
         success: function() {
-            $(this)[0].reset();
+            e.target.reset();
             Unicorn.call('produtos_unicorn', 'recarregar');
+            resetEditMode();
+        },
+        error: function(xhr, error) {
+            if (xhr.status === 401) {
+                console.error('Não autorizado. Verifique o token de autenticação.');
+            } else {
+                console.error('Erro ao criar o item:', error);
+            }
+        }
+    });
+})
+
+$("#createCategorias").on('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData()
+
+    formData.append('nome', $(this).find('#nome').val());
+    formData.append('descricao', $(this).find('#descricao').val());
+
+    const imagem = $(this).find('#imagem').prop('files')[0];
+    if (imagem) {
+        formData.append('imagem', imagem);
+    }
+
+    console.log(formData);
+
+    $.ajax({
+        url: "/produtos/api/categorias/",
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function() {
+            e.target.reset();
+            Unicorn.call('categorias_unicorn', 'recarregar');
             resetEditMode();
         },
         error: function(xhr, error) {
@@ -225,7 +258,7 @@ function editar(itemId) {
     const modal = new Modal(document.getElementById('editProdutos'));
 
     $.ajax({
-        url: `/produtos/api/editar/${itemId}`,
+        url: `/produtos/api/editar/produto/${itemId}`,
         method: 'GET',
         success: function(data) {
             form.find('#delete-button').attr('delete-id', itemId);
@@ -268,7 +301,7 @@ function editar(itemId) {
         }
 
         $.ajax({
-            url: `/produtos/api/editar/${itemId}`,
+            url: `/produtos/api/editar/produto/${itemId}`,
             method: 'PUT',
             headers: {
                 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
@@ -299,7 +332,7 @@ function loadProdutosView() {
         const itemId = $(this).data('id');
 
         $.ajax({
-            url: `/produtos/api/editar/${itemId}`,
+            url: `/produtos/api/editar/produto/${itemId}`,
             method: 'GET',
             success: function(data) {
                 form.find('#nome').val(data.nome);

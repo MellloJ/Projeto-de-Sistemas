@@ -7,11 +7,15 @@ class CategoriasUnicornView(UnicornView):
 
     createCategorias = {
         'wire': False,
-        'action': reverse('categorias'),
+        'action': '#',
         'method': 'post',
         'id': 'createCategorias',
         'title': 'Criar Categoria',
     }
+
+    def recarregar(self):
+        categorias = Categorias.objects.all()
+        self.categorias = categorias.order_by('nome')
 
     def mount(self):
         categorias = Categorias.objects.all()

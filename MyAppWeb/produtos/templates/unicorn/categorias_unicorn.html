@@ -23,23 +23,25 @@
     {% fill "modal_body" %}
       <section class="bg-white">
         <div class="pb-4 px-4 mx-auto max-w-2xl lg:pb-8">
-        <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-          <div class="sm:col-span-2">
-            <label for="nome" class="block mb-2 text-sm font-medium text-gray-900">Nome</label>
-            <input type="text" name="nome" id="nome" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite o nome da categoria" required>
-            <p class="mt-2 text-sm text-red-600 hidden" id="nome-error"><span class="font-medium">Erro:</span> Nome é obrigatório.</p>
-          </div>
-          <div class="sm:col-span-2">
-            <label for="descricao" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
-            <textarea id="descricao" name="descricao" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500" placeholder="Digite a descrição da categoria" required></textarea>
-            <p class="mt-2 text-sm text-red-600 hidden" id="descricao-error"><span class="font-medium">Erro:</span> Descrição é obrigatória.</p>
-          </div>
-          <div>
-            <label for="imagem" class="block mb-2 text-sm font-medium text-gray-900">Imagem</label>
-            <input type="file" name="imagem" id="imagem" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" required>
-            <p class="mt-2 text-sm text-red-600 hidden" id="imagem-error"><span class="font-medium">Erro:</span> Imagem é obrigatória.</p>
+          <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+            <div class="sm:col-span-2">
+              <label for="nome" class="block mb-2 text-sm font-medium text-gray-900">Nome</label>
+              <input type="text" name="nome" id="nome" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite o nome da categoria" required>
+              <p class="mt-2 text-sm text-red-600 hidden" id="nome-error"><span class="font-medium">Erro:</span> Nome é obrigatório.</p>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="descricao" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
+              <textarea id="descricao" name="descricao" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500" placeholder="Digite a descrição da categoria" required></textarea>
+              <p class="mt-2 text-sm text-red-600 hidden" id="descricao-error"><span class="font-medium">Erro:</span> Descrição é obrigatória.</p>
+            </div>
+            <div>
+              <label for="imagem" class="block mb-2 text-sm font-medium text-gray-900">Imagem</label>
+              <input type="file" name="imagem" id="imagem" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" required>
+              <p class="mt-2 text-sm text-red-600 hidden" id="imagem-error"><span class="font-medium">Erro:</span> Imagem é obrigatória.</p>
+            </div>
           </div>
         </div>
+      </section>
     {% endfill %}
     {% fill "modal_footer" %}
       <div class="flex items-center justify-center space-x-4 w-full px-4">

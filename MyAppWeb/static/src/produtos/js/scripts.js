@@ -1,10 +1,97 @@
-// Troca o valor do campo de input para o campo de range
-
 var preco_min = $('#preco-min');
 var preco_max = $('#preco-max');
 
 var preco_min_input = $('#preco-min-input');
 var preco_max_input = $('#preco-max-input');
+
+var form = $('#filterModal');
+
+var editMode = false;
+
+// addEventListener
+
+document.addEventListener('keydown', function (event) {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'e') {
+        event.preventDefault();
+        toogleEditMode();
+    }
+});
+
+document.addEventListener('keydown', function (event) {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'a') {
+        event.preventDefault();
+        toogleCreate();
+    }
+});
+
+// on click
+
+$('.index-categoria-button').on('click', function() {
+    var categoria = $(this).data('categoria');
+    var data = {
+        categoria: categoria
+    };
+
+    Unicorn.call('produtos_unicorn', 'filter', JSON.stringify(data));
+})
+
+$('#edit-mode-toggle').on('click', function () {
+    editMode = !editMode;
+    if (editMode) {
+        $(this).removeClass('bg-orange-400').addClass('bg-orange-500');
+        $('.produtos-card, .categoria-card').addClass('ring-4 ring-orange-300').find('img').addClass('cursor-pointer');
+    } else{
+        $(this).removeClass('bg-orange-500').addClass('bg-orange-400');
+        $('.produtos-card, .categoria-card').removeClass('ring-4 ring-orange-300').find('img').removeClass('cursor-pointer');
+    }
+});
+
+$('.edit-item-btn').on('click', function () {
+    if (editMode) {
+        const itemId = $(this).data('id');
+        editar(itemId);
+    }
+});
+
+$('.ordenar-button').on('click', function() {
+    const order = $(this).val();
+    Unicorn.call('produtos_unicorn', 'ordenar', JSON.stringify({order}));
+});
+
+$('#delete-button').on('click', function () {
+
+    let itemId = $(this).attr('delete-id');
+    let modal = new Modal(document.getElementById('editProdutos'));
+    let formData = new FormData()
+
+    formData.append('id', itemId);
+
+    $.ajax({
+        url: `/produtos/api/editar/${itemId}`,
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        processData: false, // Prevent jQuery from processing the data
+        contentType: false, // Prevent jQuery from setting the content type
+        data: formData,
+        success: function() {
+            modal.hide();
+            Unicorn.call('produtos_unicorn', 'recarregar');
+            resetEditMode();
+        },
+        error: function(xhr, error) {
+            if (xhr.status === 401) {
+                console.error('Não autorizado. Verifique o token de autenticação.');
+            } else {
+                console.error('Erro ao deletar o item:', error);
+            }
+        }
+    });
+    modal.hide();   
+});
+
+// on change
 
 preco_min.on('change', function() {
     preco_min_input.val($(this).val());
@@ -29,7 +116,6 @@ preco_min_input.on('change', function() {
     }
 });
 
-
 preco_max.on('change', function() {
     preco_max_input.val($(this).val());
 });
@@ -38,10 +124,7 @@ preco_max_input.on('change', function() {
     preco_max.val($(this).val());
 });
 
-// end
-
-// Filtro da tela de produtos
-var form = $('#filterModal');
+// on submit
 
 form.on('submit', function(e) {
     e.preventDefault();
@@ -63,32 +146,71 @@ form.on('submit', function(e) {
     Unicorn.call('produtos_unicorn', 'filter', JSON.stringify(data));
 });
 
-// end
+$('#index-pesquisa, #navbar-pesquisa, #sidebar-pesquisa').on('submit', function (e) {
+    e.preventDefault();
 
-// Botoes de categoria do index
-$('.index-categoria-button').on('click', function() {
-    var categoria = $(this).data('categoria');
-    var data = {
-        categoria: categoria
-    };
+    const action = $('#url-produtos').val();
+    const pesquisa = $(this).find('input[type="text"]').val().trim();
 
-    Unicorn.call('produtos_unicorn', 'filter', JSON.stringify(data));
-})
-// end
+    const url = new URL(action, window.location.origin);
 
-// Modo de edição
-let editMode = false;
-
-$('#edit-mode-toggle').on('click', function () {
-    editMode = !editMode;
-    if (editMode) {
-        $(this).removeClass('bg-orange-400').addClass('bg-orange-500');
-        $('.produtos-card, .categoria-card').addClass('ring-4 ring-orange-300').find('img').addClass('cursor-pointer');
-    } else{
-        $(this).removeClass('bg-orange-500').addClass('bg-orange-400');
-        $('.produtos-card, .categoria-card').removeClass('ring-4 ring-orange-300').find('img').removeClass('cursor-pointer');
+    if (pesquisa) {
+        url.searchParams.set('p', pesquisa);
+    } else {
+        url.searchParams.delete('p'); 
     }
+
+    const tempLink = $('<a>')
+        .attr('href', url.toString())
+        .css('display', 'none');
+
+    $('body').append(tempLink);
+    tempLink[0].click();
+    tempLink.remove();
 });
+
+$("#createProdutos").on('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData()
+
+    formData.append('nome', $(this).find('#nome').val());
+    formData.append('descricao', $(this).find('#descricao').val());
+    formData.append('categoria', $(this).find('#categoria').val());
+    formData.append('marca', $(this).find('#marca').val());
+    formData.append('preco_unitario', $(this).find('#preco_unitario').val());
+    formData.append('qtd_estoque', $(this).find('#qtd_estoque').val());
+    formData.append('codigo_barras', $(this).find('#codigo_barras').val());
+
+    const imagem = $(this).find('#imagem').prop('files')[0];
+    if (imagem) {
+        formData.append('imagem', imagem);
+    }
+
+    $.ajax({
+        url: "/produtos/api/produtos/",
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function() {
+            $(this)[0].reset();
+            Unicorn.call('produtos_unicorn', 'recarregar');
+            resetEditMode();
+        },
+        error: function(xhr, error) {
+            if (xhr.status === 401) {
+                console.error('Não autorizado. Verifique o token de autenticação.');
+            } else {
+                console.error('Erro ao criar o item:', error);
+            }
+        }
+    });
+})
+
+// functions
 
 function resetEditMode() {
     editMode = false;
@@ -96,13 +218,6 @@ function resetEditMode() {
     $('#edit-mode-toggle').addClass('bg-orange-400');
     $('.produtos-card').removeClass('ring-4 ring-orange-300').find('img').removeClass('cursor-pointer');
 }
-
-$('.edit-item-btn').on('click', function () {
-    if (editMode) {
-        const itemId = $(this).data('id');
-        editar(itemId);
-    }
-});
 
 function editar(itemId) {
 
@@ -176,7 +291,6 @@ function editar(itemId) {
         });
     });
 }
-// end
 
 function loadProdutosView() {
     $('.vizualizar-produtos').off('click').on('click', function () {
@@ -218,119 +332,10 @@ function loadProdutosEdit() {
 });
 }
 
-// barra de pesquisa
-$('#index-pesquisa, #navbar-pesquisa, #sidebar-pesquisa').on('submit', function (e) {
-    e.preventDefault();
-
-    const action = $('#url-produtos').val();
-    const pesquisa = $(this).find('input[type="text"]').val().trim();
-
-    const url = new URL(action, window.location.origin);
-
-    if (pesquisa) {
-        url.searchParams.set('p', pesquisa);
-    } else {
-        url.searchParams.delete('p'); 
-    }
-
-    const tempLink = $('<a>')
-        .attr('href', url.toString())
-        .css('display', 'none');
-
-    $('body').append(tempLink);
-    tempLink[0].click();
-    tempLink.remove();
-});
-// end
-
-$("#createProdutos").on('submit', function (e) {
-    e.preventDefault();
-    const formData = new FormData()
-
-    formData.append('nome', $(this).find('#nome').val());
-    formData.append('descricao', $(this).find('#descricao').val());
-    formData.append('categoria', $(this).find('#categoria').val());
-    formData.append('marca', $(this).find('#marca').val());
-    formData.append('preco_unitario', $(this).find('#preco_unitario').val());
-    formData.append('qtd_estoque', $(this).find('#qtd_estoque').val());
-    formData.append('codigo_barras', $(this).find('#codigo_barras').val());
-
-    const imagem = $(this).find('#imagem').prop('files')[0];
-    if (imagem) {
-        formData.append('imagem', imagem);
-    }
-
-    $.ajax({
-        url: "/produtos/api/produtos/",
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-        },
-        processData: false,
-        contentType: false,
-        data: formData,
-        success: function() {
-            $(this)[0].reset();
-            Unicorn.call('produtos_unicorn', 'recarregar');
-            resetEditMode();
-        },
-        error: function(xhr, error) {
-            if (xhr.status === 401) {
-                console.error('Não autorizado. Verifique o token de autenticação.');
-            } else {
-                console.error('Erro ao criar o item:', error);
-            }
-        }
-    });
-})
-
-$('#delete-button').on('click', function () {
-
-    let itemId = $(this).attr('delete-id');
-    let modal = new Modal(document.getElementById('editProdutos'));
-    let formData = new FormData()
-
-    formData.append('id', itemId);
-
-    $.ajax({
-        url: `/produtos/api/editar/${itemId}`,
-        method: 'DELETE',
-        headers: {
-            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-        },
-        processData: false, // Prevent jQuery from processing the data
-        contentType: false, // Prevent jQuery from setting the content type
-        data: formData,
-        success: function() {
-            modal.hide();
-            Unicorn.call('produtos_unicorn', 'recarregar');
-            resetEditMode();
-        },
-        error: function(xhr, error) {
-            if (xhr.status === 401) {
-                console.error('Não autorizado. Verifique o token de autenticação.');
-            } else {
-                console.error('Erro ao deletar o item:', error);
-            }
-        }
-    });
-    modal.hide();   
-});
-
-// Detecta o atalho Ctrl+E
-document.addEventListener('keydown', function (event) {
-    // Verifica se Ctrl (ou Cmd no Mac) e a tecla "E" foram pressionados
-    if ((event.ctrlKey || event.metaKey) && event.key === 'e') {
-        event.preventDefault();
-        executarAcao();
-    }
-});
-
-function executarAcao() {
+function toogleEditMode() {
     $('#edit-mode-toggle').trigger('click');
-}   
+} 
 
-$('.ordenar-button').on('click', function() {
-    const order = $(this).val();
-    Unicorn.call('produtos_unicorn', 'ordenar', JSON.stringify({order}));
-});
+function toogleCreate() {
+    $('#novo-modal-button').trigger('click');
+}  

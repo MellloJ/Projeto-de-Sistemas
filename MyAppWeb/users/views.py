@@ -167,3 +167,19 @@ class AddressCreateView(generics.CreateAPIView):
     )
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
+
+class AddressDeleteView(generics.DestroyAPIView):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+    lookup_field = 'pk'
+
+    @swagger_auto_schema(
+        operation_description="Deleta endereço existente, identificado pelo id.",
+        responses={
+            204: openapi.Response("Endereço deletado com sucesso"),
+            404: openapi.Response("Id fornecido não existe no banco")
+        },
+    )
+
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)

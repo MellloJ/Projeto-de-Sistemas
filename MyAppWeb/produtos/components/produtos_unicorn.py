@@ -84,8 +84,7 @@ class ProdutosUnicornView(UnicornView):
         produtos = produtos.order_by('-avaliacao')
         self.produtos = produtos
 
-        self.call("loadProdutosView")
-        self.call("loadProdutosEdit")
+        # self.call("loadProdutosEdit")
             
     def filter(self, data):
         try:
@@ -112,8 +111,7 @@ class ProdutosUnicornView(UnicornView):
             produtos = produtos.filter(avaliacao__gte=float(rating), avaliacao__lt=float(rating) + 1)
         
         self.produtos = produtos.order_by('-avaliacao')
-        self.call("loadProdutosView")
-        self.call("loadProdutosEdit")
+        # self.call("loadProdutosEdit")
 
     def ordenar(self, criterio):
         try:
@@ -130,7 +128,6 @@ class ProdutosUnicornView(UnicornView):
         elif order == 'preco':
             self.produtos = self.produtos.order_by('preco_unitario')
         
-        self.call("loadProdutosView")
-        self.call("loadProdutosEdit")
+        # self.call("loadProdutosEdit")
 
 # CREATE EXTENSION IF NOT EXISTS unaccent;

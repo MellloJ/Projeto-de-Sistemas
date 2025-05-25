@@ -71,7 +71,7 @@ class Address(models.Model):
     related_object = GenericForeignKey('content_type', 'object_id')
     
     class Meta:
-        db_table = 'Adress'
+        db_table = 'Address'
     
     def __str__(self):
         return f"{self.street}, {self.number}"

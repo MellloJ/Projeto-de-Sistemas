@@ -213,11 +213,10 @@ $("#createCategorias").on('submit', function (e) {
     formData.append('descricao', $(this).find('#descricao').val());
 
     const imagem = $(this).find('#imagem').prop('files')[0];
+
     if (imagem) {
         formData.append('imagem', imagem);
     }
-
-    console.log(formData);
 
     $.ajax({
         url: "/produtos/api/categorias/",

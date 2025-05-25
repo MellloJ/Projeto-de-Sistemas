@@ -24,5 +24,6 @@ class CategoriaSerializer(serializers.ModelSerializer):
         fields = [
             'id', 
             'nome', 
-            'descricao'
+            'descricao',
+            'imagem'
         ]

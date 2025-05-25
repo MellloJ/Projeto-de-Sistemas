@@ -63,13 +63,11 @@ class Address(models.Model):
     state = models.CharField(max_length=50, null=False)
     street = models.CharField(null=False)
     number = models.CharField(max_length=20, null=True)
+    quadra = models.CharField(max_length=20, null=True, blank=True)
+    lote = models.CharField(max_length=20, null=True, blank=True)
     reference = models.CharField(null=True, blank=True)
     observation = models.CharField(null=True, blank=True)
-    # Relacionamento genérico
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, default=1)
-    object_id = models.PositiveIntegerField(default=1)
-    related_object = GenericForeignKey('content_type', 'object_id')
-    
+   
     class Meta:
         db_table = 'Adress'
     

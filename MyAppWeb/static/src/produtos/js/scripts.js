@@ -44,10 +44,18 @@ $('#edit-mode-toggle').on('click', function () {
     }
 });
 
-$('.edit-item-btn').on('click', function () {
+$('.edit-produto-btn').on('click', function () {
     if (editMode) {
         const itemId = $(this).data('id');
-        editar(itemId);
+        editarProduto(itemId);
+    }
+});
+
+$('.edit-categoria-btn').on('click', function () {
+    if (editMode) {
+        console.log('Editando categoria');
+        const itemId = $(this).data('id');
+        editarCategoria(itemId);
     }
 });
 
@@ -56,7 +64,7 @@ $('.ordenar-button').on('click', function() {
     Unicorn.call('produtos_unicorn', 'ordenar', JSON.stringify({order}));
 });
 
-$('#delete-button').on('click', function () {
+$('#delete-produto-btn').on('click', function () {
 
     let itemId = $(this).attr('delete-id');
     let modal = new Modal(document.getElementById('editProdutos'));
@@ -248,10 +256,10 @@ function resetEditMode() {
     editMode = false;
     $('#edit-mode-toggle').removeClass('bg-orange-500')
     $('#edit-mode-toggle').addClass('bg-orange-400');
-    $('.produtos-card').removeClass('ring-4 ring-orange-300').find('img').removeClass('cursor-pointer');
+    $('.produtos-card, .categoria-card').removeClass('ring-4 ring-orange-300').find('img').removeClass('cursor-pointer');
 }
 
-function editar(itemId) {
+function editarProduto(itemId) {
 
     const form = $('#editProdutos');
     const modal = new Modal(document.getElementById('editProdutos'));
@@ -260,7 +268,7 @@ function editar(itemId) {
         url: `/produtos/api/editar/produto/${itemId}`,
         method: 'GET',
         success: function(data) {
-            form.find('#delete-button').attr('delete-id', itemId);
+            form.find('#delete-produto-btn').attr('delete-id', itemId);
             form.find('#nome').val(data.nome);
             form.find('#descricao').val(data.descricao);
             form.find('#categoria').val(data.categoria);
@@ -324,6 +332,69 @@ function editar(itemId) {
     });
 }
 
+function editarCategoria(itemId) {
+
+    const form = $('#editCategorias');
+    const modal = new Modal(document.getElementById('editCategorias'));
+
+    $.ajax({
+        url: `/produtos/api/editar/categoria/${itemId}`,
+        method: 'GET',
+        success: function(data) {
+            form.find('#delete-categoria-btn').attr('delete-id', itemId);
+            form.find('#nome').val(data.nome);
+            form.find('#descricao').val(data.descricao);
+        },
+        error: function(xhr, status, error) {
+            console.error('Erro ao buscar os dados do item:', error);
+        }
+    });
+
+    modal.show();
+
+    form.find('[data-modal-toggle="editCategorias"]').off('click').on('click', function () {
+        modal.hide();
+    });
+
+    form.off('submit').on('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData()
+
+        formData.append('id', itemId);
+        formData.append('nome', form.find('#nome').val());
+        formData.append('descricao', form.find('#descricao').val());
+
+        const imagem = form.find('#imagem').prop('files')[0];
+        if (imagem) {
+            formData.append('imagem', imagem);
+        }
+
+        $.ajax({
+            url: `/produtos/api/editar/categoria/${itemId}`,
+            method: 'PUT',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            processData: false, // Prevent jQuery from processing the data
+            contentType: false, // Prevent jQuery from setting the content type
+            data: formData,
+            success: function() {
+                modal.hide();
+                Unicorn.call('categorias_unicorn', 'recarregar');
+                resetEditMode();
+            },
+            error: function(xhr, error) {
+                if (xhr.status === 401) {
+                    console.error('Não autorizado. Verifique o token de autenticação.');
+                } else {
+                    console.error('Erro ao editar o item:', error);
+                }
+            }
+        });
+    });
+}
+
 function loadProdutosView() {
     $('.vizualizar-produtos').off('click').on('click', function () {
         const form = $('#viewProdutos');
@@ -356,12 +427,12 @@ function loadProdutosView() {
 }
 
 function loadProdutosEdit() {
-    $('.edit-item-btn').off('click').on('click', function () {
-    if (editMode) {
-        const itemId = $(this).data('id');
-        editar(itemId);
-    }
-});
+    $('.edit-produto-btn').off('click').on('click', function () {
+        if (editMode) {
+            const itemId = $(this).data('id');
+            editarProduto(itemId);
+        }
+    });
 }
 
 function toogleEditMode() {

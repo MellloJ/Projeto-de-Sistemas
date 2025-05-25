@@ -5,6 +5,22 @@ from produtos.models import *
 class CategoriasUnicornView(UnicornView):
     categorias = Categorias.objects.all()
 
+    editCategorias  = {
+        'wire' : "edit",
+        'action': '#',
+        'method': 'post',
+        'id': 'editCategorias',
+        'title': 'Editar Categorias',
+    }
+
+    viewCategorias  = {
+        'wire' : False,
+        'action': '#',
+        'method': 'get',
+        'id': 'viewCategorias',
+        'title': 'Vizualizar Categorias',
+    }
+
     createCategorias = {
         'wire': False,
         'action': '#',

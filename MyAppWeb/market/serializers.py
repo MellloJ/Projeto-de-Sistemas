@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Supermarket
+from users.models import SupermarketUser as Supermarket
 
 class MarketSeriallizer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from market.services.signupMarket import signupMarket
 from .forms import createMarketForm
-from market.models import Supermarket
+from users.models import SupermarketUser as Supermarket
 from django.views import View
 from rest_framework.views import APIView
 from rest_framework.response import Response

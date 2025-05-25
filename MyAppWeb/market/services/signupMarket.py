@@ -1,11 +1,11 @@
-from market.models import Supermarket, SupermarketManager
+from users.models import SupermarketUser
 from django.db import transaction, IntegrityError
 from django.core.exceptions import ValidationError
 
 class signupMarket:
     def checkUserExist(cnpj):
         try:
-            market = Supermarket.objects.get(cnpj=cnpj)
+            market = SupermarketUser.objects.get(cnpj=cnpj)
             return True
         except market.DoesNotExist:
             return False
@@ -13,7 +13,7 @@ class signupMarket:
     def register(name, cnpj, phone, email, password):
         try:
             with transaction.atomic():
-                market = Supermarket.objects.create_market(
+                market = SupermarketUser.objects.create(
                     cnpj=cnpj,
                     password=password,
                     email=email,

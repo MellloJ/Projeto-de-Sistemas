@@ -90,8 +90,7 @@ class ProdutosUnicornView(UnicornView):
         produtos = produtos.order_by('-avaliacao')
         self.produtos = produtos
 
-        self.call("loadProdutosView")
-        self.call("loadProdutosEdit")
+        # self.call("loadProdutosEdit")
             
     def filter(self, data):
         if not self.usuario_e_supermarket_user():
@@ -121,8 +120,7 @@ class ProdutosUnicornView(UnicornView):
             produtos = produtos.filter(avaliacao__gte=float(rating), avaliacao__lt=float(rating) + 1)
         
         self.produtos = produtos.order_by('-avaliacao')
-        self.call("loadProdutosView")
-        self.call("loadProdutosEdit")
+        # self.call("loadProdutosEdit")
 
     def ordenar(self, criterio):
         if not self.usuario_e_supermarket_user():
@@ -142,8 +140,7 @@ class ProdutosUnicornView(UnicornView):
         elif order == 'preco':
             self.produtos = self.produtos.order_by('preco_unitario')
         
-        self.call("loadProdutosView")
-        self.call("loadProdutosEdit")
+        # self.call("loadProdutosEdit")
 
     def usuario_e_supermarket_user(self):
         user = self.request.user

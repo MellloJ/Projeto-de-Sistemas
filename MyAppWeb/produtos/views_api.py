@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .models import *
-from .serializers import *
+from .models import Produtos, Categorias
+from .serializers import ProdutoSerializer, CategoriaSerializer
 
 class ProdutoListCreateView(generics.ListCreateAPIView):
     queryset = Produtos.objects.all()

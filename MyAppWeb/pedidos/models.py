@@ -1,5 +1,6 @@
 from django.db import models
-from auth_app.models import Address, User
+from auth_app.models import User
+from users.models import ClientUser, DeliveryUser, SupermarketUser, Address
 from produtos.models import Produtos
 
 class Pedido(models.Model):

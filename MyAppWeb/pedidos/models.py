@@ -28,7 +28,7 @@ class ItemPedido(models.Model):
 
 class DadosEntrega(models.Model):
     pedido_id = models.ForeignKey(Pedido, on_delete=models.CASCADE, related_name='dados_entrega')
-    tipo_veiculo = models.CharField(max_length=50)
+    tipo_veiculo = models.CharField(max_length=50, null=True, blank=True)
     endereco_id = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='entregas')
 
     def __str__(self):

@@ -55,7 +55,7 @@ class SupermarketUser(models.Model):
         db_table = 'SupermarketUser'
 
     def __str__(self):
-        return f"Supermercado: {self.name}"
+        return f"Supermercado: {self.fantasy_name}"
 
 class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

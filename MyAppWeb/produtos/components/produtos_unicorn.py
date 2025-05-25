@@ -46,7 +46,10 @@ class ProdutosUnicornView(UnicornView):
     categorias = Categorias.objects.all()
 
     def recarregar(self):
-        produtos = Produtos.objects.all()
+        if not self.usuario_e_supermarket_user():
+            return
+        
+        produtos = Produtos.objects.filter(supermarket=self.request.user.supermarket_user)
         self.produtos = produtos.order_by('-avaliacao')
 
     def remove_accents(self, input_str):
@@ -54,10 +57,13 @@ class ProdutosUnicornView(UnicornView):
         return ''.join([char for char in nfkd_form if not unicodedata.combining(char)])
 
     def mount(self):
+        if not self.usuario_e_supermarket_user():
+            return
+        
         request = self.request
         self.categoria = request.GET.get('c')
         self.pesquisa = request.GET.get('p')
-        produtos = Produtos.objects.all()
+        produtos = Produtos.objects.filter(supermarket=self.request.user.supermarket_user)
 
         if self.categoria:
             try:
@@ -88,6 +94,9 @@ class ProdutosUnicornView(UnicornView):
         self.call("loadProdutosEdit")
             
     def filter(self, data):
+        if not self.usuario_e_supermarket_user():
+            return
+        
         try:
             data = json.loads(data)
         except json.JSONDecodeError as e:
@@ -99,7 +108,7 @@ class ProdutosUnicornView(UnicornView):
         preco_max = data.get('preco_max')
         rating = data.get('rating')
 
-        produtos = Produtos.objects.all()
+        produtos = Produtos.objects.filter(supermarket=self.request.user.supermarket_user)
 
         if categoria:
             produtos = produtos.filter(categoria__id=int(categoria))
@@ -116,6 +125,9 @@ class ProdutosUnicornView(UnicornView):
         self.call("loadProdutosEdit")
 
     def ordenar(self, criterio):
+        if not self.usuario_e_supermarket_user():
+            return
+        
         try:
             criterio_data = json.loads(criterio)
         except json.JSONDecodeError as e:
@@ -132,5 +144,14 @@ class ProdutosUnicornView(UnicornView):
         
         self.call("loadProdutosView")
         self.call("loadProdutosEdit")
+
+    def usuario_e_supermarket_user(self):
+        user = self.request.user
+        if not user.is_authenticated:
+            return False
+        try:
+            return hasattr(user, 'supermarket_user') and user.supermarket_user is not None
+        except Exception:
+            return False
 
 # CREATE EXTENSION IF NOT EXISTS unaccent;

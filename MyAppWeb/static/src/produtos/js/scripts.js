@@ -121,6 +121,7 @@ function editar(itemId) {
             form.find('#preco_unitario').val(data.preco_unitario);
             form.find('#qtd_estoque').val(data.qtd_estoque);
             form.find('#codigo_barras').val(data.codigo_barras);
+            form.find('#supermarket').val(data.supermarket);
         },
         error: function(xhr, status, error) {
             console.error('Erro ao buscar os dados do item:', error);
@@ -146,6 +147,7 @@ function editar(itemId) {
         formData.append('preco_unitario', form.find('#preco_unitario').val());
         formData.append('qtd_estoque', form.find('#qtd_estoque').val());
         formData.append('codigo_barras', form.find('#codigo_barras').val());
+        formData.append('supermarket', form.find('#supermarket').val());
 
         const imagem = form.find('#imagem').prop('files')[0];
         if (imagem) {
@@ -254,6 +256,7 @@ $("#createProdutos").on('submit', function (e) {
     formData.append('preco_unitario', $(this).find('#preco_unitario').val());
     formData.append('qtd_estoque', $(this).find('#qtd_estoque').val());
     formData.append('codigo_barras', $(this).find('#codigo_barras').val());
+    formData.append('supermarket', $(this).find('#supermarket').val());
 
     const imagem = $(this).find('#imagem').prop('files')[0];
     if (imagem) {

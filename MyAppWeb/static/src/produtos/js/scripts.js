@@ -37,25 +37,28 @@ $('#edit-mode-toggle').on('click', function () {
     editMode = !editMode;
     if (editMode) {
         $(this).removeClass('bg-orange-400').addClass('bg-orange-500');
-        $('.produtos-card, .categoria-card').addClass('ring-4 ring-orange-300').find('img').addClass('cursor-pointer');
+        $('.produtos-card, .categoria-card').addClass('ring-4 ring-orange-300').find('img');
     } else{
         $(this).removeClass('bg-orange-500').addClass('bg-orange-400');
-        $('.produtos-card, .categoria-card').removeClass('ring-4 ring-orange-300').find('img').removeClass('cursor-pointer');
+        $('.produtos-card, .categoria-card').removeClass('ring-4 ring-orange-300').find('img');
     }
 });
 
 $('.edit-produto-btn').on('click', function () {
+    const itemId = $(this).data('id');
     if (editMode) {
-        const itemId = $(this).data('id');
         editarProduto(itemId);
+    } else {
+        visualizarProduto(itemId);
     }
 });
 
 $('.edit-categoria-btn').on('click', function () {
+    const itemId = $(this).data('id');
     if (editMode) {
-        console.log('Editando categoria');
-        const itemId = $(this).data('id');
         editarCategoria(itemId);
+    } else {
+        visualizarCategoria(itemId);
     }
 });
 
@@ -84,6 +87,39 @@ $('#delete-produto-btn').on('click', function () {
         success: function() {
             modal.hide();
             Unicorn.call('produtos_unicorn', 'recarregar');
+            resetEditMode();
+        },
+        error: function(xhr, error) {
+            if (xhr.status === 401) {
+                console.error('Não autorizado. Verifique o token de autenticação.');
+            } else {
+                console.error('Erro ao deletar o item:', error);
+            }
+        }
+    });
+    modal.hide();   
+});
+
+$('#delete-categoria-btn').on('click', function () {
+
+    let itemId = $(this).attr('delete-id');
+    let modal = new Modal(document.getElementById('editCategorias'));
+    let formData = new FormData()
+
+    formData.append('id', itemId);
+
+    $.ajax({
+        url: `/produtos/api/editar/categoria/${itemId}`,
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        processData: false, // Prevent jQuery from processing the data
+        contentType: false, // Prevent jQuery from setting the content type
+        data: formData,
+        success: function() {
+            modal.hide();
+            Unicorn.call('categorias_unicorn', 'recarregar');
             resetEditMode();
         },
         error: function(xhr, error) {
@@ -395,45 +431,65 @@ function editarCategoria(itemId) {
     });
 }
 
-function loadProdutosView() {
-    $('.vizualizar-produtos').off('click').on('click', function () {
-        const form = $('#viewProdutos');
-        const modal = new Modal(document.getElementById('viewProdutos'));
-        const itemId = $(this).data('id');
+function visualizarCategoria(itemId) {
+    const form = $('#viewCategorias');
+    const modal = new Modal(document.getElementById('viewCategorias'));
 
-        $.ajax({
-            url: `/produtos/api/editar/produto/${itemId}`,
-            method: 'GET',
-            success: function(data) {
-                form.find('#nome').val(data.nome);
-                form.find('#descricao').val(data.descricao);
-                form.find('#categoria').val(data.categoria);
-                form.find('#marca').val(data.marca);
-                form.find('#preco_unitario').val(data.preco_unitario);
-                form.find('#qtd_estoque').val(data.qtd_estoque);
-                form.find('#codigo_barras').val(data.codigo_barras);
-            },
-            error: function(xhr, status, error) {
-                console.error('Erro ao buscar os dados do item:', error);
-            }
-        });
-
-        modal.show();
-
-        form.find('[data-modal-toggle="viewProdutos"]').off('click').on('click', function () {
-            modal.hide();
-        });
-    });
-}
-
-function loadProdutosEdit() {
-    $('.edit-produto-btn').off('click').on('click', function () {
-        if (editMode) {
-            const itemId = $(this).data('id');
-            editarProduto(itemId);
+    $.ajax({
+        url: `/produtos/api/editar/categoria/${itemId}`,
+        method: 'GET',
+        success: function(data) {
+            form.find('#nome').val(data.nome);
+            form.find('#descricao').val(data.descricao);
+        },
+        error: function(xhr, status, error) {
+            console.error('Erro ao buscar os dados do item:', error);
         }
     });
+
+    modal.show();
+
+    form.find('[data-modal-toggle="viewCategorias"]').off('click').on('click', function () {
+        modal.hide();
+    });
 }
+
+function visualizarProduto(itemId) {
+    const form = $('#viewProdutos');
+    const modal = new Modal(document.getElementById('viewProdutos'));
+
+    $.ajax({
+        url: `/produtos/api/editar/produto/${itemId}`,
+        method: 'GET',
+        success: function(data) {
+            form.find('#nome').val(data.nome);
+            form.find('#descricao').val(data.descricao);
+            form.find('#categoria').val(data.categoria);
+            form.find('#marca').val(data.marca);
+            form.find('#preco_unitario').val(data.preco_unitario);
+            form.find('#qtd_estoque').val(data.qtd_estoque);
+            form.find('#codigo_barras').val(data.codigo_barras);
+        },
+        error: function(xhr, status, error) {
+            console.error('Erro ao buscar os dados do item:', error);
+        }
+    });
+
+    modal.show();
+
+    form.find('[data-modal-toggle="viewProdutos"]').off('click').on('click', function () {
+        modal.hide();
+    });
+}
+
+// function loadProdutosEdit() {
+//     $('.edit-produto-btn').off('click').on('click', function () {
+//         if (editMode) {
+//             const itemId = $(this).data('id');
+//             editarProduto(itemId);
+//         }
+//     });
+// }
 
 function toogleEditMode() {
     $('#edit-mode-toggle').trigger('click');

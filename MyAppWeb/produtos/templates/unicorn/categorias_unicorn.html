@@ -3,7 +3,7 @@
 
 <div class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-4 md:mb-8 lg:grid-cols-6 xl:grid-cols-8">
   {% for categoria in categorias %}
-    <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm categoria-card items-between flex flex-col justify-between cursor-pointer">
+    <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm categoria-card items-center flex flex-col justify-between cursor-pointer">
       <div>
         <a type="button" class="edit-categoria-btn" data-id="{{ categoria.id }}">
           {% if categoria.imagem %}

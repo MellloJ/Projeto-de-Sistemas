@@ -1,5 +1,5 @@
 from django import forms
-from .models import Supermarket
+from users.models import SupermarketUser as Supermarket
 
 class createMarketForm(forms.ModelForm):
     name = forms.CharField(

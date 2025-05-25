@@ -1,5 +1,6 @@
 from django.db import models
-from auth_app.models import Address, User
+from auth_app.models import User
+from users.models import ClientUser, DeliveryUser, SupermarketUser, Address
 from produtos.models import Produtos
 
 class Pedido(models.Model):
@@ -32,4 +33,3 @@ class DadosEntrega(models.Model):
 
     def __str__(self):
         return f"Dados de entrega para {self.pedido_id.numero_pedido if self.pedido_id else 'Pedido indefinido'}"
-

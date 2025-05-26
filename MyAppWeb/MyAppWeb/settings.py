@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
 SEEDER_APPS = [
     'auth_app',
+    'users',
     'produtos',
 ]
 

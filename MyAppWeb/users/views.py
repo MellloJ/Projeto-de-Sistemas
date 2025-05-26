@@ -167,3 +167,117 @@ class AddressCreateView(generics.CreateAPIView):
     )
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
+
+class AddressDeleteView(generics.DestroyAPIView):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+    lookup_field = 'pk'
+
+    @swagger_auto_schema(
+        operation_description="Deleta endereço existente, identificado pelo id.",
+        responses={
+            204: openapi.Response("Endereço deletado com sucesso"),
+            404: openapi.Response("Id fornecido não existe no banco")
+        },
+    )
+
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+
+class AddressEditView(generics.UpdateAPIView):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+    lookup_field = 'pk'
+
+    @swagger_auto_schema(
+        operation_description="Atualiza os dados de um endereço existente, identificado pelo ID.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user_email' : openapi.Schema(type=openapi.TYPE_STRING, description="Email do usuário associado ao endereço"),
+                'city': openapi.Schema(type=openapi.TYPE_STRING, description="Cidade do endereço"),
+                'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: MG)"),
+                'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
+                'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
+                'quadra': openapi.Schema(type=openapi.TYPE_STRING, description="Quadra do endereço (opcional)"),
+                'lote': openapi.Schema(type=openapi.TYPE_STRING, description="Lote do endereço (opcional)"),
+                'reference': openapi.Schema(type=openapi.TYPE_STRING, description="Ponto de referência (opcional)"),
+                'observation': openapi.Schema(type=openapi.TYPE_STRING, description="Observações (opcional)")
+            },
+            required=['user_emal','city', 'state', 'street'],
+            example={
+                "user_email" : "admin@example.com",
+                "city" : "Extrema",
+                "state" : "MG",
+                "street" : "Av. das Palmeiras",
+                "number" : "123",
+                "quadra" : "Q1",
+                "lote" : "L10",
+                "reference" : "Próximo ao mercado",
+                "observation" : "Apartamento no 2º andar"
+            }
+        ),
+        responses={
+            200: AddressSerializer,
+            400: openapi.Response("Erro na atualização. Verifique os dados enviados."),
+            404: openapi.Response("Endereço não encontrado.")
+        }
+    )
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_description="Atualiza parcialmente os dados de um endereço existente, identificado pelo ID.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'city': openapi.Schema(type=openapi.TYPE_STRING, description="Cidade do endereço"),
+                'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: MG)"),
+                'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
+                'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
+                'quadra': openapi.Schema(type=openapi.TYPE_STRING, description="Quadra do endereço (opcional)"),
+                'lote': openapi.Schema(type=openapi.TYPE_STRING, description="Lote do endereço (opcional)"),
+                'reference': openapi.Schema(type=openapi.TYPE_STRING, description="Ponto de referência (opcional)"),
+                'observation': openapi.Schema(type=openapi.TYPE_STRING, description="Observações (opcional)")
+            },
+            example={
+                "street": "Rua Nova",
+                "number": "456"
+            }
+        ),
+        responses={
+            200: AddressSerializer,
+            400: openapi.Response("Erro nos dados fornecidos."),
+            404: openapi.Response("Endereço não encontrado.")
+        }
+    )
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+
+class AddressListView(generics.ListAPIView):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+
+    @swagger_auto_schema(
+        operation_description="Lista todos os endereços cadastrados.",
+        responses={
+            200: AddressSerializer(many=True),
+        }
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+class AddressGetView(generics.RetrieveAPIView):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+    lookup_field = "pk"
+
+    @swagger_auto_schema(
+        operation_description="Obtém os detalhes de um endereço específico, identificado pelo ID.",
+        responses={
+            200: AddressSerializer,
+            404: openapi.Response("Endereço não encontrado.")
+        }
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)

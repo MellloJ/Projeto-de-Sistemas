@@ -248,6 +248,7 @@ $("#createProdutos").on('submit', function (e) {
             }
         }
     });
+    location.reload();
 })
 
 $("#createCategorias").on('submit', function (e) {
@@ -286,6 +287,7 @@ $("#createCategorias").on('submit', function (e) {
             }
         }
     });
+    location.reload();
 })
 
 // functions
@@ -298,7 +300,6 @@ function resetEditMode() {
 }
 
 function editarProduto(itemId) {
-
     const form = $('#editProdutos');
     const modal = new Modal(document.getElementById('editProdutos'));
 
@@ -371,6 +372,7 @@ function editarProduto(itemId) {
             }
         });
     });
+    location.reload();
 }
 
 function editarCategoria(itemId) {
@@ -435,6 +437,7 @@ function editarCategoria(itemId) {
                 }
             }
         });
+        location.reload();
     });
 }
 

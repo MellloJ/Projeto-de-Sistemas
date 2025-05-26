@@ -1,10 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import Group, Permission
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
+
 from django.db import models
-from django.conf import settings
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password, groupName, **extra_fields):
@@ -27,12 +25,14 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, null=False, unique=True)
-    first_name = models.CharField(max_length=30, null=False)
-    last_name = models.CharField(max_length=120, null=False)
-    completeName = models.CharField(max_length=150, null=False, unique=True)
-    cpf = models.CharField(max_length=11, unique=True)
-    phone = models.CharField(max_length=11, null=True, blank=True)
     password = models.CharField(max_length= 128, null=False)
+    phone = models.CharField(max_length=11, null=True, blank=True)
+    user_type = models.CharField(max_length=20, null=False, default='client')
+    photo = models.CharField(null=True, blank=True)
+    # first_name = models.CharField(max_length=30, null=False)
+    # last_name = models.CharField(max_length=120, null=False)
+    # completeName = models.CharField(max_length=150, null=False, unique=True)
+    # cpf = models.CharField(max_length=11, unique=True)
 
     #username = models.CharField(max_length=150, null=False)
     is_superuser = models.BooleanField(default=False)
@@ -44,48 +44,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['completeName', 'password']
+    REQUIRED_FIELDS = ['user_type', 'password']
 
     class Meta:
-        db_table = 'users'
+        db_table = 'User'
 
     def __str__(self):
         return self.email
-
-class DeliverUser(models.Model):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, 
-        on_delete=models.CASCADE,
-        related_name='deliver_user_profile'
-    )
-
-    comprovante_residencia = models.FileField(null=False)
-    rg_photo = models.FileField(null=False)
-    photo = models.FileField(null=False)
-    cpf = models.CharField(max_length=11, null=False, unique=True)
-    is_deliver = models.BooleanField(default=True)
-
-    class Meta:
-        db_table = 'deliver_users'
-
-    def __str__(self):
-        return f"Entregador: {self.user.email}"
-
-class Address(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    city = models.TextField()
-    state = models.TextField()
-    street = models.TextField()
-    number = models.CharField(max_length=20)
-    neighborhood = models.TextField()
-
-    # Relacionamento genérico
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, default=1)
-    object_id = models.PositiveIntegerField(default=1)
-    related_object = GenericForeignKey('content_type', 'object_id')
     
-    class Meta:
-        db_table = 'addresses'
-    
-    def __str__(self):
-        return f"{self.street}, {self.number}"

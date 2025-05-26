@@ -1,5 +1,6 @@
 from django.db import models
-from auth_app.models import Address, User
+from auth_app.models import User
+from users.models import ClientUser, DeliveryUser, SupermarketUser, Address
 from produtos.models import Produtos
 
 class Pedido(models.Model):
@@ -27,9 +28,8 @@ class ItemPedido(models.Model):
 
 class DadosEntrega(models.Model):
     pedido_id = models.ForeignKey(Pedido, on_delete=models.CASCADE, related_name='dados_entrega')
-    tipo_veiculo = models.CharField(max_length=50)
+    tipo_veiculo = models.CharField(max_length=50, null=True, blank=True)
     endereco_id = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='entregas')
 
     def __str__(self):
         return f"Dados de entrega para {self.pedido_id.numero_pedido if self.pedido_id else 'Pedido indefinido'}"
-

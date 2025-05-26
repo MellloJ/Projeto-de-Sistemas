@@ -24,7 +24,7 @@ urlpatterns = [
     path('produtos/', include('produtos.urls')),
     path('pedidos/', include('pedidos.urls')),
     path('admin/', admin.site.urls),
-    path('unicorn/', include('django_unicorn.urls')),
+    path('unicorn', include('django_unicorn.urls')),
     path('', include('market.urls')),
 
     # Documentação Swagger e ReDoc

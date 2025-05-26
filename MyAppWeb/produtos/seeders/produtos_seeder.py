@@ -1,5 +1,6 @@
 from jessilver_django_seed.seeders.BaseSeeder import BaseSeeder
 from produtos.models import *
+from users.models import SupermarketUser
 import random
 
 
@@ -14,42 +15,50 @@ class CategoriasSeeder(BaseSeeder):
                 {
                     'nome': 'Grãos',
                     'descricao': 'Categoria de grãos',
-                    'imagem': 'produtos/categorias/graos.svg'
+                    'imagem': 'produtos/categorias/graos.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Carnes',
                     'descricao': 'Categoria de carnes',
-                    'imagem': 'produtos/categorias/carnes.svg'
+                    'imagem': 'produtos/categorias/carnes.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Enlatados',
                     'descricao': 'Categoria de alimentos enlatados',
-                    'imagem': 'produtos/categorias/enlatados.svg'
+                    'imagem': 'produtos/categorias/enlatados.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Bebidas',
                     'descricao': 'Categoria de bebidas',
-                    'imagem': 'produtos/categorias/bebidas.svg'
+                    'imagem': 'produtos/categorias/bebidas.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Hortifruti',
                     'descricao': 'Categoria de hortifruti',
-                    'imagem': 'produtos/categorias/hortifruti.svg'
+                    'imagem': 'produtos/categorias/hortifruti.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Doces',
                     'descricao': 'Categoria de doces',
-                    'imagem': 'produtos/categorias/doces.svg'
+                    'imagem': 'produtos/categorias/doces.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Laticínios',
                     'descricao': 'Categoria de laticínios',
-                    'imagem': 'produtos/categorias/laticinios.svg'
+                    'imagem': 'produtos/categorias/laticinios.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Temperos',
                     'descricao': 'Categoria de temperos',
-                    'imagem': 'produtos/categorias/temperos.svg'
+                    'imagem': 'produtos/categorias/temperos.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
             ]
             for categoria in categorias_data:
@@ -79,7 +88,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '6789012345678',
                     'imagem': 'produtos/imagens/MacaGala.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Maçã Fuji',
@@ -91,7 +101,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '7890123156789',
                     'imagem': 'produtos/imagens/MacaFuji.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Maçã Verde',
@@ -103,7 +114,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '8901234567890',
                     'imagem': 'produtos/imagens/MacaVerde.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Banana Prata',
@@ -115,7 +127,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '9012345678901',
                     'imagem': 'produtos/imagens/BananaPrata.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Laranja Pera',
@@ -127,7 +140,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '0123456789012',
                     'imagem': 'produtos/imagens/LaranjaPera.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Abacaxi Pérola',
@@ -139,7 +153,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '1234567890124',
                     'imagem': 'produtos/imagens/AbacaxiPerola.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Manga Palmer',
@@ -151,7 +166,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '2345678901234',
                     'imagem': 'produtos/imagens/MangaPalmer.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Uva Thompson',
@@ -163,7 +179,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '3456789012345',
                     'imagem': 'produtos/imagens/UvaThompson.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Melancia',
@@ -175,7 +192,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '4567890123456',
                     'imagem': 'produtos/imagens/Melancia.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
 
                 # Bebidas
@@ -189,7 +207,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '1234567890123',
                     'imagem': 'produtos/imagens/pepsi.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Fanta Laranja',
@@ -201,7 +220,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '2234567890123',
                     'imagem': 'produtos/imagens/fanta_laranja.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Guaraná',
@@ -213,7 +233,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '3234567890123',
                     'imagem': 'produtos/imagens/guarana.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Coca Cola',
@@ -225,7 +246,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '4234567890123',
                     'imagem': 'produtos/imagens/coca_cola.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Guaraná Jesus',
@@ -237,7 +259,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '5234567890123',
                     'imagem': 'produtos/imagens/guarana_jesus.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
 
                 # Grãos
@@ -251,7 +274,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '5678901234567',
                     'imagem': 'produtos/imagens/ArrozIntegral.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Feijão Preto',
@@ -263,7 +287,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '6789012349678',
                     'imagem': 'produtos/imagens/FeijaoPreto.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Lentilha',
@@ -275,7 +300,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '7890123456789',
                     'imagem': 'produtos/imagens/Lentilha.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Grão de Bico',
@@ -287,7 +313,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '8901234567890',
                     'imagem': 'produtos/imagens/GraoDeBico.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Quinoa',
@@ -299,7 +326,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '9012345678901',
                     'imagem': 'produtos/imagens/Quinoa.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
 
                 # Carnes
@@ -313,7 +341,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '1234567890124',
                     'imagem': 'produtos/imagens/Picanha.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Frango Inteiro',
@@ -325,7 +354,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '2345678901235',
                     'imagem': 'produtos/imagens/FrangoInteiro.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Costela Suína',
@@ -337,7 +367,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '3456789012346',
                     'imagem': 'produtos/imagens/CostelaSuina.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Linguiça Toscana',
@@ -349,7 +380,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '4567890123457',
                     'imagem': 'produtos/imagens/LinguicaToscana.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Filé de Peito de Frango',
@@ -361,7 +393,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '5678901234568',
                     'imagem': 'produtos/imagens/FilePeitoFrango.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
             
                 # Enlatados
@@ -375,7 +408,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '6789012345679',
                     'imagem': 'produtos/imagens/MilhoVerde.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Ervilhas em Conserva',
@@ -387,7 +421,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '7890123456790',
                     'imagem': 'produtos/imagens/Ervilhas.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Atum em Óleo',
@@ -399,7 +434,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '8901234567901',
                     'imagem': 'produtos/imagens/Atum.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Sardinha em Molho de Tomate',
@@ -411,7 +447,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '9012345679012',
                     'imagem': 'produtos/imagens/Sardinha.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Tomate Pelado em Conserva',
@@ -423,7 +460,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '0123456789023',
                     'imagem': 'produtos/imagens/TomatePelado.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
 
                 # Doces
@@ -437,7 +475,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '1234567890125',
                     'imagem': 'produtos/imagens/ChocolateAoLeite.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Bala de Goma',
@@ -449,7 +488,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '2345678901236',
                     'imagem': 'produtos/imagens/BalaDeGoma.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Pé de Moleque',
@@ -461,7 +501,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '3456789012347',
                     'imagem': 'produtos/imagens/PeDeMoleque.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Doce de Leite',
@@ -473,7 +514,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '4567890123458',
                     'imagem': 'produtos/imagens/DoceDeLeite.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Brigadeiro',
@@ -485,7 +527,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '5678901234569',
                     'imagem': 'produtos/imagens/Brigadeiro.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
 
                 # Laticínios
@@ -499,7 +542,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '6789012345680',
                     'imagem': 'produtos/imagens/LeiteIntegral.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Queijo Mussarela',
@@ -511,7 +555,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '7890123456801',
                     'imagem': 'produtos/imagens/QueijoMussarela.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Iogurte Natural',
@@ -523,7 +568,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '8901234567802',
                     'imagem': 'produtos/imagens/IogurteNatural.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Manteiga com Sal',
@@ -535,7 +581,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '9012345678903',
                     'imagem': 'produtos/imagens/ManteigaComSal.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Requeijão Cremoso',
@@ -547,7 +594,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '0123456789034',
                     'imagem': 'produtos/imagens/RequeijaoCremoso.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
 
                 # Temperos
@@ -561,7 +609,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '1234567890126',
                     'imagem': 'produtos/imagens/PimentaDoReino.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Orégano',
@@ -573,7 +622,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '2345678901237',
                     'imagem': 'produtos/imagens/Oregano.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Colorau',
@@ -585,7 +635,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '3456789012348',
                     'imagem': 'produtos/imagens/Colorau.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Cominho',
@@ -597,7 +648,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '4567890123459',
                     'imagem': 'produtos/imagens/Cominho.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Páprica Doce',
@@ -609,7 +661,8 @@ class ProdutosSeeder(BaseSeeder):
                     'codigo_barras': '5678901234570',
                     'imagem': 'produtos/imagens/PapricaDoce.jpeg',
                     'qtd_avaliacoes': random.randint(0, 500),
-                    'avaliacao': round(random.uniform(1, 5), 1)
+                    'avaliacao': round(random.uniform(1, 5), 1),
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
             ]
 

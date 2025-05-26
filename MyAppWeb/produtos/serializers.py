@@ -15,7 +15,8 @@ class ProdutoSerializer(serializers.ModelSerializer):
             'codigo_barras', 
             'qtd_avaliacoes', 
             'avaliacao', 
-            'imagem'
+            'imagem',
+            'supermarket'
         ]
 
 class CategoriaSerializer(serializers.ModelSerializer):

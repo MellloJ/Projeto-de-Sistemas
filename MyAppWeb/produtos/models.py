@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from users.models import SupermarketUser
 
 class Categorias(models.Model):
     nome = models.TextField()
@@ -23,6 +24,7 @@ class Produtos(models.Model):
     qtd_avaliacoes = models.IntegerField(default=0)
     avaliacao = models.DecimalField(max_digits=10, decimal_places=2,default=0.0)
     imagem = models.ImageField(upload_to='produtos/imagens/', blank=True, null=True)
+    supermarket = models.ForeignKey(SupermarketUser, on_delete=models.SET_NULL, null=True, related_name='produtos')
 
     class Meta:
         db_table = 'produtos'

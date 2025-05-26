@@ -18,3 +18,13 @@ class ProdutoSerializer(serializers.ModelSerializer):
             'imagem',
             'supermarket'
         ]
+
+class CategoriaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Categorias
+        fields = [
+            'id', 
+            'nome', 
+            'descricao',
+            'imagem'
+        ]

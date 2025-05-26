@@ -15,42 +15,50 @@ class CategoriasSeeder(BaseSeeder):
                 {
                     'nome': 'Grãos',
                     'descricao': 'Categoria de grãos',
-                    'imagem': 'produtos/categorias/graos.svg'
+                    'imagem': 'produtos/categorias/graos.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Carnes',
                     'descricao': 'Categoria de carnes',
-                    'imagem': 'produtos/categorias/carnes.svg'
+                    'imagem': 'produtos/categorias/carnes.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Enlatados',
                     'descricao': 'Categoria de alimentos enlatados',
-                    'imagem': 'produtos/categorias/enlatados.svg'
+                    'imagem': 'produtos/categorias/enlatados.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Bebidas',
                     'descricao': 'Categoria de bebidas',
-                    'imagem': 'produtos/categorias/bebidas.svg'
+                    'imagem': 'produtos/categorias/bebidas.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Hortifruti',
                     'descricao': 'Categoria de hortifruti',
-                    'imagem': 'produtos/categorias/hortifruti.svg'
+                    'imagem': 'produtos/categorias/hortifruti.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Doces',
                     'descricao': 'Categoria de doces',
-                    'imagem': 'produtos/categorias/doces.svg'
+                    'imagem': 'produtos/categorias/doces.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Laticínios',
                     'descricao': 'Categoria de laticínios',
-                    'imagem': 'produtos/categorias/laticinios.svg'
+                    'imagem': 'produtos/categorias/laticinios.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
                 {
                     'nome': 'Temperos',
                     'descricao': 'Categoria de temperos',
-                    'imagem': 'produtos/categorias/temperos.svg'
+                    'imagem': 'produtos/categorias/temperos.svg',
+                    'supermarket': SupermarketUser.objects.get(id=1),
                 },
             ]
             for categoria in categorias_data:

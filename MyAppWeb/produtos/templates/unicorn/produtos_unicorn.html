@@ -105,7 +105,9 @@
               <label for="imagem" class="block mb-2 text-sm font-medium text-gray-900">Imagem</label>
               <input type="file" name="imagem" id="imagem" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
             </div>
-            <input type="hidden" name="supermarket" id="supermarket" value="{{ request.user.supermarket_user.id }}">
+            {% if request.user.supermarket_user.id %}
+              <input type="hidden" name="supermarket" id="supermarket" value="{{ request.user.supermarket_user.id }}">
+            {% endif %}
           </div>
         </div>
       </section>
@@ -220,7 +222,9 @@
               <input type="file" name="imagem" id="imagem" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" required>
               <p class="mt-2 text-sm text-red-600 hidden" id="imagem-error"><span class="font-medium">Erro:</span> Imagem é obrigatória.</p>
             </div>
-            <input type="hidden" name="supermarket" id="supermarket" value="{{ request.user.supermarket_user.id }}">
+            {% if request.user.supermarket_user.id %}
+              <input type="hidden" name="supermarket" id="supermarket" value="{{ request.user.supermarket_user.id }}">
+            {% endif %}
           </div>
         </div>
       </section>

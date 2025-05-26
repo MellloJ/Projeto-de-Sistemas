@@ -43,6 +43,9 @@
               <input type="file" name="imagem" id="imagem" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
               <p class="mt-2 text-sm text-red-600 hidden" id="imagem-error"><span class="font-medium">Erro:</span> Imagem é obrigatória.</p>
             </div>
+            {% if request.user.supermarket_user.id %}
+              <input type="hidden" name="supermarket" id="supermarket" value="{{ request.user.supermarket_user.id }}">
+            {% endif %}
           </div>
         </div>
       </section>
@@ -73,6 +76,7 @@
               <label for="descricao" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
               <textarea id="descricao" name="descricao" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500" placeholder="Digite a descrição da categoria" disabled></textarea>
             </div>
+
           </div>
         </div>
       </section>
@@ -102,6 +106,9 @@
               <input type="file" name="imagem" id="imagem" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" required>
               <p class="mt-2 text-sm text-red-600 hidden" id="imagem-error"><span class="font-medium">Erro:</span> Imagem é obrigatória.</p>
             </div>
+            {% if request.user.supermarket_user.id %}
+              <input type="hidden" name="supermarket" id="supermarket" value="{{ request.user.supermarket_user.id }}">
+            {% endif %}
           </div>
         </div>
       </section>

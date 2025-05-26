@@ -6,6 +6,7 @@ class Categorias(models.Model):
     nome = models.TextField()
     descricao = models.TextField()
     imagem = models.ImageField(upload_to='produtos/categorias/', blank=True, null=True)
+    supermarket = models.ForeignKey(SupermarketUser, on_delete=models.SET_NULL, null=True, related_name='categorias')
 
     class Meta:
         db_table = 'categorias'

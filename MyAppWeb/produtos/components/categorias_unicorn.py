@@ -1,9 +1,10 @@
 from django_unicorn.components import UnicornView
 from django.urls import reverse
 from produtos.models import *
+from produtos.services.validateSupermarketUser import usuario_e_supermarket_user
 
 class CategoriasUnicornView(UnicornView):
-    categorias = Categorias.objects.all()
+    categorias = None
 
     editCategorias  = {
         'wire' : "edit",
@@ -30,11 +31,17 @@ class CategoriasUnicornView(UnicornView):
     }
 
     def recarregar(self):
-        categorias = Categorias.objects.all()
+        if usuario_e_supermarket_user(self.request):
+            categorias = Categorias.objects.filter(supermarket=self.request.user.supermarket_user)
+        else:
+            categorias = Categorias.objects.none()
         self.categorias = categorias.order_by('nome')
 
     def mount(self):
-        categorias = Categorias.objects.all()
+        if usuario_e_supermarket_user(self.request):
+            categorias = Categorias.objects.filter(supermarket=self.request.user.supermarket_user)
+        else:
+            categorias = Categorias.objects.none()
         self.categorias = categorias.order_by('nome')
 
 # CREATE EXTENSION IF NOT EXISTS unaccent;

@@ -26,5 +26,6 @@ class CategoriaSerializer(serializers.ModelSerializer):
             'id', 
             'nome', 
             'descricao',
-            'imagem'
+            'imagem',
+            'supermarket'
         ]

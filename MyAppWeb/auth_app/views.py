@@ -7,6 +7,7 @@ from auth_app.services.signupUser import signupClient
 from .forms import signupUserForm
 from auth_app.services.confirmEmailUser import sendMail
 from auth_app.models import User
+from users.models import ClientUser
 from core.consts import CATEGORIAS_ALIMENTOS
 
 # Importando jwt do rest
@@ -31,6 +32,7 @@ class Signup(View):
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
                 cpf=form.cleaned_data['cpf'],
+                user_type='client',
                 phone=form.cleaned_data['phone'],
             )
             if user is None:

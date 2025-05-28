@@ -29,12 +29,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField(max_length=11, null=True, blank=True)
     user_type = models.CharField(max_length=20, null=False, default='client')
     photo = models.CharField(null=True, blank=True)
-    # first_name = models.CharField(max_length=30, null=False)
-    # last_name = models.CharField(max_length=120, null=False)
-    # completeName = models.CharField(max_length=150, null=False, unique=True)
-    # cpf = models.CharField(max_length=11, unique=True)
 
-    #username = models.CharField(max_length=150, null=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)

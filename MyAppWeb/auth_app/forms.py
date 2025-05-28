@@ -3,7 +3,7 @@ import re
 from auth_app.services.validateUser import validate_cpf
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
-from .models import *
+from users.models import ClientUser
 
 class signupUserForm(forms.ModelForm):
     first_name = forms.CharField(
@@ -47,7 +47,7 @@ class signupUserForm(forms.ModelForm):
     #type="email" id="email" name="email"  
     
     class Meta:
-        model = User
+        model = ClientUser
         fields = ['first_name', 'last_name', 'email', 'cpf', 'phone']
 
     def clean_cpf(self):

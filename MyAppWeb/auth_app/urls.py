@@ -30,8 +30,6 @@ urlpatterns = [
     path('api/token/', views.CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('api/token/refresh/', views.TokenRefreshView.as_view(), name='token_refresh'),
 
-    path('api/signup/', views.UserClientView.as_view(), name='register_client_api'),
-
     # Swagger UI
     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     

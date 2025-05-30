@@ -1,6 +1,5 @@
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import validate_email
-from django.utils.timezone import now
 from django.db import transaction, IntegrityError
 from auth_app.models import User, UserManager
 from users.models import ClientUser
@@ -16,8 +15,6 @@ class signupClient:
     def register(email, password, cpf, first_name, last_name, user_type, phone=None):
         #completeName = " ".join([first_name, last_name])
         
-        date_joined = now()
-        last_login = now()
         #group = Group.add('user')
         #permission = Permission.add('user')
 
@@ -27,10 +24,7 @@ class signupClient:
                     email=email,
                     password=password,
                     user_type=user_type,
-                    phone=phone,
-                    groupName=user_type,
-                    date_joined=date_joined,
-                    last_login=last_login
+                    phone=phone
                 )
                 if user is not None:
                     clientUser = ClientUser.objects.create(

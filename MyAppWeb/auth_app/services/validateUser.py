@@ -8,11 +8,8 @@ def calcDigito(digs):
     return '0' if res >= 10 else str(res)
 
 def validate_cpf(self, value):
-    
-    '''if not cpf:
-        return cpf'''
 
-    cpf = re.sub(r'[^0-9]', '', value)
+    cpf = re.sub(r'\D', '', value)
 
     if len(cpf) != 11 or cpf == cpf[0] * 11:
         raise serializers.ValidationError("CPF inválido.")

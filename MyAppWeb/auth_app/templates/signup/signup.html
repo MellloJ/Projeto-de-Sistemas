@@ -29,22 +29,26 @@
             <label for="email" class="block mb-2 text-sm font-medium text-[#0D1117]">Email</label>
             {{form.email}}
           </div>
-          <div>
-            <label for="password" class="block mb-2 text-sm font-medium text-[#0D1117]">Senha</label>
-            <input type="password" id="password" name="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
+          <div class="grid md:grid-cols-2 md:gap-6">
+            <div class="relative z-0 w-full group">
+              <label for="password" class="block mb-2 text-sm font-medium text-[#0D1117]">Senha</label>
+              <input type="password" id="password" name="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
+            </div>
+            <div class="relative z-0 w-full group">
+              <label for="repeat-password" class="block mb-2 text-sm font-medium text-[#0D1117]">Confirmar senha</label>
+              <input type="password" id="repeat-password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
+            </div>
           </div>
-          <div>
-            <label for="repeat-password" class="block mb-2 text-sm font-medium text-[#0D1117]">Confirmar sua senha</label>
-            <input type="password" id="repeat-password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
+          <div class="grid md:grid-cols-2 md:gap-4">
+            <div class="relative z-0 w-full group">
+                <label class="block mb-2 text-sm font-medium text-[#0D1117]">CPF</label>
+                {{form.cpf}}
+            </div>
+            <div class="relative z-0 w-full group"> 
+              <label class="block mb-2 text-sm font-medium text-[#0D1117]">Phone</label>
+              {{form.phone}}
+            </div>
           </div>
-          <div>
-              <label class="block mb-2 text-sm font-medium text-[#0D1117]">CPF</label>
-              {{form.cpf}}
-          </div>
-          <div>
-            <label class="block mb-2 text-sm font-medium text-[#0D1117]">Phone</label>
-            {{form.phone}}
-        </div>
           <div class="grid md:grid-cols-2 md:gap-6">
               <div class="relative z-0 w-full mb-5 group">
                   <label class="block mb-2 text-sm font-medium text-[#0D1117]">Nome</label>
@@ -76,6 +80,50 @@
 {% block scripts %}
 
 <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const phoneInput = document.getElementById('phone');
+    const cpfInput = document.getElementById('cpf');
+
+    phoneInput.addEventListener('input', function (e) {
+      let input = e.target.value.replace(/\D/g, '');
+
+      if (input.length > 11) {
+        input = input.slice(0, 11);
+      }
+
+      // Aplica formatação
+      if (input.length > 6) {
+        input = input.replace(/^(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+      } else if (input.length > 2) {
+        input = input.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+      } else {
+        input = input.replace(/^(\d{0,2})/, '($1');
+      }
+
+      e.target.value = input;
+    });
+
+    cpfInput.addEventListener('input', function (e) {
+      let input = e.target.value.replace(/\D/g, '');
+
+      if (input.length > 11) {
+        input = input.slice(0, 11);
+      }
+
+      // Aplica formatação
+      if (input.length > 9) {
+        input = input.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+      } else if (input.length > 6) {
+        input = input.replace(/^(\d{3})(\d{3})/, '$1.$2.');
+      } else if (input.length > 3) {
+        input = input.replace(/^(\d{3})/, '$1.');
+      }
+
+      e.target.value = input;
+    });
+  });
+
+  // Script para animação de transição entre páginas
   document.addEventListener('DOMContentLoaded', function() {
       // Pegando os elementos corretamente
       const loginLink = document.getElementById('login-link'); // <-- o link para login

@@ -1,6 +1,5 @@
 from django.core.mail import send_mail
 from django.conf import settings
-from auth_app.models import User
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from datetime import timedelta
@@ -18,12 +17,14 @@ def generateToken(user):
 
 def sendMail(request, user):
     subject = 'Confirmação de Cadastro'
-    token = generateToken(user)
+    token = generateToken(user.user)
     confirmationLink = request.build_absolute_uri(f'/confirm/?token={token}')
+    completeName = " ".join([user.first_name, user.last_name])
+    email = user.user.email
     
     context = {
-        'completeName': user.completeName,
-        'email': user.email,
+        'completeName': completeName,
+        'email': email,
         'link_confirmacao': confirmationLink,
     }
 
@@ -33,6 +34,6 @@ def sendMail(request, user):
         subject,
         strip_tags(htmlMessage),
         settings.DEFAULT_FROM_EMAIL,
-        [user.email],
+        [email],
         html_message=htmlMessage
     )

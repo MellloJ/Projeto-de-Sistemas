@@ -7,14 +7,13 @@ from auth_app.services.signupUser import signupClient
 from .forms import signupUserForm
 from auth_app.services.confirmEmailUser import sendMail
 from auth_app.models import User
+from users.models import ClientUser
 from core.consts import CATEGORIAS_ALIMENTOS
 
 # Importando jwt do rest
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from .serializers import CustomTokenObtainPairSerializer, UserClientSerializer
+from .serializers import CustomTokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.tokens import OutstandingToken, BlacklistedToken
 
@@ -31,6 +30,7 @@ class Signup(View):
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
                 cpf=form.cleaned_data['cpf'],
+                user_type='client',
                 phone=form.cleaned_data['phone'],
             )
             if user is None:
@@ -148,35 +148,3 @@ class Logout(View):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
-
-class UserClientView(APIView):
-    queryset = User.objects.all()
-    serializer_class = UserClientSerializer
-
-    def get(self, request):
-        user = User.objects.get(email=request.user.email)
-        serializer = UserClientSerializer(user)
-        return Response(serializer.data)
-    
-    def post(self, request):
-        serializer = UserClientSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            try:
-                user, message = serializer.save()
-            except Exception as e:
-                return Response({'errors': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-            if user:
-                return Response({
-                    'message': message,
-                    'user': {
-                        'email': user.email,
-                        'first_name': user.first_name,
-                        'last_name': user.last_name
-                    }
-                }, status=status.HTTP_201_CREATED)
-            else:
-                return Response({'errors': message}, status=status.HTTP_400_BAD_REQUEST)
-
-        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

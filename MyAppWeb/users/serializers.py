@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Address, DeliveryUser, SeparaterUser
+from .models import *
 
 User = get_user_model()
 
@@ -70,6 +70,59 @@ class UserSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         return user
+
+class ClientUserSerializer(serializers.ModelSerializer):
+    user = UserSerializer(help_text="Dados do usuário associado ao Cliente.")
+    first_name = serializers.CharField(
+        help_text="Primeiro nome do usuário.",
+        required=False
+    )
+    last_name = serializers.CharField(
+        help_text="Sobrenome do usuário.",
+        required=False
+    )
+    cpf = serializers.CharField(
+        help_text="CPF do usuário (11 dígitos, único).",
+        required=True
+    )
+
+    class Meta:
+        model = ClientUser
+        fields = ['user', 'first_name', 'last_name', 'cpf']
+        read_only_fields = ['first_name', 'last_name', 'cpf']
+
+    def validate_cpf(self, value):
+        from auth_app.services.validateUser import validate_cpf
+        return validate_cpf(self, value)
+
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user_serializer = UserSerializer(data=user_data)
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()
+
+        # Verifica se o CPF já está cadastrado
+        if ClientUser.objects.filter(cpf=validated_data['cpf']).exists():
+            raise serializers.ValidationError({"cpf": "CPF já cadastrado."})
+
+        # Cria o ClientUser com os dados validados
+        clientUser = ClientUser.objects.create(user=user, **validated_data)
+        return clientUser
+
+""" class UserClientSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ('email', 'password', 'first_name', 'last_name', 'cpf', 'phone')
+    
+    def validate_cpf(self, value):
+        from auth_app.services.validateUser import validate_cpf
+        return validate_cpf(self, value)
+
+    def create(self, validated_data):
+        from auth_app.services.signupUser import signupClient
+        return signupClient.register(**validated_data) """
 
 class DeliveryUserSerializer(serializers.ModelSerializer):
     user = UserSerializer(help_text="Dados do usuário associado ao entregador.")

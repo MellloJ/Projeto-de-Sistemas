@@ -270,6 +270,22 @@ class AddressListView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
+class AddressListUserView(generics.ListAPIView):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+    lookup_field = "user_email"
+
+    @swagger_auto_schema(
+        operation_description="Obtém todos os endereços associados a um usuário específico, identificado pelo email.",
+        responses={
+            200: AddressSerializer(many=True),
+            404: openapi.Response("Usuário não encontrado ou sem endereços associados.")
+        }
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
 class AddressGetView(generics.RetrieveAPIView):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer

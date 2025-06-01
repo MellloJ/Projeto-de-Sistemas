@@ -32,11 +32,16 @@ class AddressSerializer(serializers.ModelSerializer):
         required=False,
         help_text="Observações adicionais sobre o endereço (opcional)."
     )
+    user_email_display = serializers.SerializerMethodField()
 
     class Meta:
         model = Address
-        fields = ['user_email', 'city', 'state', 'street', 'number', 'quadra', 'lote', 'reference', 'observation']
+        fields = ['id', 'user_email','user_email_display', 'city', 'state', 'street', 'number', 'quadra', 'lote', 'reference', 'observation']
+        read_only_fields = ['id', 'user_email_display']
 
+    def get_user_email_display(self, obj):
+        return obj.user.email if obj.user else None
+        
     def create(self, validated_data):
         user_email = validated_data.pop('user_email')
         try:

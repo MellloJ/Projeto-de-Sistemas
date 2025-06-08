@@ -29,6 +29,7 @@ MY_APPS = [
     'produtos',
     'pedidos',
     'market',
+    'dashboard',
 ]
 
 INSTALLED_APPS = [
@@ -98,6 +99,7 @@ TEMPLATES = [
             BASE_DIR / 'users' / 'templates',
             BASE_DIR / 'auth_app' / 'templates',
             BASE_DIR / 'produtos' / 'templates',
+            BASE_DIR / 'dashboard' / 'templates',
             # Adicione outros diretórios de templates conforme necessário
         ],
         'APP_DIRS': True,
@@ -238,8 +240,8 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = 'auth_app.User' 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/login/'
+# LOGIN_REDIRECT_URL = '/'
+# LOGOUT_REDIRECT_URL = '/login/'
 
 # # Media files (Uploaded files)
 # MEDIA_URL = '/media/'

@@ -4,9 +4,7 @@ from .models import User # as Client
 from auth_app.services.validateUser import validate_cpf
 from django.utils.timezone import now
 
-def validate_cpf(value):
-    from auth_app.services.validateUser import validate_cpf as _validate_cpf
-    return _validate_cpf(None, value)
+# Removed redundant local definition of validate_cpf
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod

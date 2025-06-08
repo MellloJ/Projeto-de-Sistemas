@@ -10,6 +10,7 @@
 {% load component_tags %}
 
 {% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="{% static 'src/gerenciamento/css/styles.css' %}">
   <link rel="stylesheet" href="{% static 'src/produtos/css/styles.css' %}">
@@ -71,8 +72,8 @@
           <td class="px-4 py-2 text-center">{{ endereco.state }}</td>
           <td class="px-4 py-2 text-center">
             <div class="flex gap-2 justify-center">
-              <button class="edit-endereco-btn bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs" data-id="{{ endereco.id }}" data-modal-target="editEnderecos" data-modal-toggle="editEnderecos">Edit</button>
-              <button class="delete-endereco-btn bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs" data-id="{{ endereco.id }}">Delete</button>
+              <button class="edit-endereco-btn bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs" data-id="{{ endereco.id }}" type="button" >Edit</button>
+              <button class="delete-endereco-btn bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs" data-id="{{ endereco.id }}" >Delete</button>
             </div>
           </td>
         </tr>
@@ -84,7 +85,6 @@
   <!-- Novo Endereço Modal -->
   {% component "formModal" formModal=createEnderecos %}
     {% fill "modal_body" %}
-      <form id="novo-endereco-form" class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label for="novo-zip_code" class="block mb-2 text-sm font-medium text-gray-900">CEP</label>
@@ -116,7 +116,6 @@
           </div>
         </div>
         <input type="hidden" id="novo-user-id" name="user" value="{{ user.id }}">
-      </form>
     {% endfill %}
     {% fill "modal_footer" %}
       <div class="flex items-center justify-center space-x-4 w-full px-4">
@@ -131,60 +130,50 @@
   {% endcomponent %}
 
   <!-- Editar Endereço Modal -->
+  <button class="hidden" data-modal-toggle="editEnderecos" data-modal-target="editEnderecos"></button>
   {% component "formModal" formModal=editEnderecos %}
     {% fill "modal_body" %}
-      <form id="editar-endereco-form" class="space-y-6">
-        <input type="hidden" id="editar-id" name="id">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="hidden" id="edit-id" name="id" value="">
           <div>
-            <label for="editar-user" class="block mb-2 text-sm font-medium text-gray-900">Usuário (e-mail)</label>
-            <input type="email" id="editar-user" name="user" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" required>
-            <p class="mt-2 text-sm text-red-600 hidden" id="editar-user-error"></p>
+            <label for="edit-zip_code" class="block mb-2 text-sm font-medium text-gray-900">CEP</label>
+            <input type="text" id="edit-zip_code" name="zip_code" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o CEP">
           </div>
           <div>
-            <label for="editar-cidade" class="block mb-2 text-sm font-medium text-gray-900">Cidade</label>
-            <input type="text" id="editar-cidade" name="cidade" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" required>
-            <p class="mt-2 text-sm text-red-600 hidden" id="editar-city-error"></p>
+            <label for="edit-street" class="block mb-2 text-sm font-medium text-gray-900">Logradouro</label>
+            <input type="text" id="edit-street" name="street" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o logradouro" required>
           </div>
           <div>
-            <label for="editar-uf" class="block mb-2 text-sm font-medium text-gray-900">Estado</label>
-            <input type="text" id="editar-uf" name="uf" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" required>
-            <p class="mt-2 text-sm text-red-600 hidden" id="editar-state-error"></p>
+            <label for="edit-number" class="block mb-2 text-sm font-medium text-gray-900">Número</label>
+            <input type="text" id="edit-number" name="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o número">
           </div>
           <div>
-            <label for="editar-logradouro" class="block mb-2 text-sm font-medium text-gray-900">Rua</label>
-            <input type="text" id="editar-logradouro" name="logradouro" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" required>
-            <p class="mt-2 text-sm text-red-600 hidden" id="editar-street-error"></p>
+            <label for="edit-complement" class="block mb-2 text-sm font-medium text-gray-900">Complemento</label>
+            <input type="text" id="edit-complement" name="complement" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o complemento">
           </div>
           <div>
-            <label for="editar-numero" class="block mb-2 text-sm font-medium text-gray-900">Número</label>
-            <input type="text" id="editar-numero" name="numero" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
-            <p class="mt-2 text-sm text-red-600 hidden" id="editar-number-error"></p>
+            <label for="edit-neighborhood" class="block mb-2 text-sm font-medium text-gray-900">Bairro</label>
+            <input type="text" id="edit-neighborhood" name="neighborhood" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o bairro">
           </div>
           <div>
-            <label for="editar-complemento" class="block mb-2 text-sm font-medium text-gray-900">Complemento</label>
-            <input type="text" id="editar-complemento" name="complemento" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+            <label for="edit-city" class="block mb-2 text-sm font-medium text-gray-900">Cidade</label>
+            <input type="text" id="edit-city" name="city" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite a cidade" required>
           </div>
           <div>
-            <label for="editar-bairro" class="block mb-2 text-sm font-medium text-gray-900">Bairro</label>
-            <input type="text" id="editar-bairro" name="bairro" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
-          </div>
-          <div>
-            <label for="editar-cep" class="block mb-2 text-sm font-medium text-gray-900">CEP</label>
-            <input type="text" id="editar-cep" name="cep" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o CEP">
-          </div>
-          <div class="md:col-span-2">
-            <label for="editar-observation" class="block mb-2 text-sm font-medium text-gray-900">Observação</label>
-            <textarea id="editar-observation" name="observation" rows="2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"></textarea>
+            <label for="edit-state" class="block mb-2 text-sm font-medium text-gray-900">Estado</label>
+            <input type="text" id="edit-state" name="state" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o estado" required>
           </div>
         </div>
-      </form>
+        <input type="hidden" id="edit-user-id" name="user" value="{{ user.id }}">
     {% endfill %}
     {% fill "modal_footer" %}
-      <div class="flex justify-between gap-2">
-        <button type="button" class="close-modal-btn rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 font-semibold shadow transition">Cancelar</button>
-        <button type="submit" form="editar-endereco-form" class="rounded-lg bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 font-semibold shadow transition">Salvar</button>
-        <button type="button" id="delete-endereco-btn" class="rounded-lg bg-red-500 hover:bg-red-600 text-white px-6 py-2 font-semibold shadow transition">Deletar</button>
+      <div class="flex items-center justify-center space-x-4 w-full px-4">
+        <button type="submit" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto" data-modal-toggle="{{ editEnderecos.id }}">
+          Salvar
+        </button>
+        <button type="reset" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-gray-200 hover:bg-gray-300 px-3 py-2 text-sm font-medium text-gray-600 focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
+          Restaurar
+        </button>
       </div>
     {% endfill %}
   {% endcomponent %}
@@ -192,8 +181,9 @@
 {% endblock content %}
 
 {% block scripts %}
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <script src="{% static 'src/gerenciamento/js/scripts.js' %}"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="{% static 'src/gerenciamento/js/scripts.js' %}"></script>
 {% endblock scripts %}

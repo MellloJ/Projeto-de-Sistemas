@@ -74,11 +74,11 @@ class Enderecos(View):
         breadcrumbs = [
             {'name': 'Endereços'},
         ]
-        # Filtra endereços apenas do usuário atual
+
         enderecos = Address.objects.select_related('user').filter(user=request.user)
 
         editEnderecos = {
-            'wire': "edit",
+            'wire': False,
             'action': '#',
             'method': 'post',
             'id': 'editEnderecos',

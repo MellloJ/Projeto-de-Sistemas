@@ -1,56 +1,22 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Address, DeliveryUser, SeparaterUser
+from .models import Address, DeliveryUser, SeparaterUser, ClientUser, SupermarketUser
+from rest_framework.exceptions import NotAuthenticated
 
 User = get_user_model()
 
 class AddressSerializer(serializers.ModelSerializer):
-    user_email = serializers.EmailField(
-        write_only=True,
-        help_text="Email do usuário ao qual o endereço será associado."
-    )
+    zip_code = serializers.CharField(required=False, allow_null=True, help_text="CEP do endereço (opcional).")
+    street = serializers.CharField(help_text="Logradouro (rua, avenida, etc.) do endereço.")
+    number = serializers.CharField(required=False, allow_null=True, help_text="Número do endereço (opcional).")
+    complement = serializers.CharField(required=False, allow_null=True, help_text="Complemento do endereço (opcional).")
+    neighborhood = serializers.CharField(required=False, allow_null=True, help_text="Bairro do endereço (opcional).")
     city = serializers.CharField(help_text="Cidade do endereço.")
     state = serializers.CharField(help_text="Estado do endereço (ex.: SP, RJ).")
-    street = serializers.CharField(help_text="Rua do endereço.")
-    number = serializers.CharField(
-        required=False,
-        help_text="Número do endereço (opcional)."
-    )
-    quadra = serializers.CharField(
-        required=False,
-        help_text="Quadra do endereço (opcional)."
-    )
-    lote = serializers.CharField(
-        required=False,
-        help_text="Lote do endereço (opcional)."
-    )
-    reference = serializers.CharField(
-        required=False,
-        help_text="Ponto de referência do endereço (opcional)."
-    )
-    observation = serializers.CharField(
-        required=False,
-        help_text="Observações adicionais sobre o endereço (opcional)."
-    )
 
     class Meta:
         model = Address
-        fields = ['user_email', 'city', 'state', 'street', 'number', 'quadra', 'lote', 'reference', 'observation']
-
-    def create(self, validated_data):
-        user_email = validated_data.pop('user_email')
-        try:
-            user = User.objects.get(email=user_email)
-        except User.DoesNotExist:
-            raise serializers.ValidationError({"user_email": "Usuário com este email não existe."})
-
-        address = Address.objects.create(user=user, **validated_data)
-        return address
-
-    def validate(self, data):
-        if 'content_type' in data or 'object_id' in data:
-            raise serializers.ValidationError("Os campos content_type e object_id não devem ser fornecidos.")
-        return data
+        fields = ['user', 'zip_code', 'street', 'number', 'complement', 'neighborhood', 'city', 'state']
 
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(help_text="Email do usuário.")
@@ -134,3 +100,109 @@ class SeparaterUserSerializer(serializers.ModelSerializer):
             Address.objects.create(user=user, **address_data)
 
         return separater_user
+
+class ClientUserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(write_only=True)
+    password = serializers.CharField(write_only=True)
+    phone = serializers.CharField(write_only=True, required=False)
+    user_type = serializers.CharField(write_only=True, required=False)
+    photo = serializers.CharField(write_only=True, required=False)
+    first_name = serializers.CharField(write_only=True)
+    last_name = serializers.CharField(write_only=True, required=False)
+    cpf = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = ClientUser
+        fields = ('email', 'password', 'phone', 'user_type', 'photo', 'first_name', 'last_name', 'cpf')
+
+    def create(self, validated_data):
+        from auth_app.services.signupUser import signupClient
+        email = validated_data.pop('email')
+        password = validated_data.pop('password')
+        phone = validated_data.pop('phone', None)
+        user_type = validated_data.pop('user_type', 'client')
+        photo = validated_data.pop('photo', None)
+        first_name = validated_data.pop('first_name')
+        last_name = validated_data.pop('last_name', '')
+        cpf = validated_data.pop('cpf')
+        user, message = signupClient.register(
+            email=email,
+            password=password,
+            cpf=cpf,
+            first_name=first_name,
+            last_name=last_name,
+            phone=phone
+        )
+        if not user:
+            raise serializers.ValidationError({'user': message})
+        client_user = ClientUser.objects.create(user=user, first_name=first_name, last_name=last_name, cpf=cpf)
+        return client_user
+
+class SupermarketUserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(write_only=True)
+    password = serializers.CharField(write_only=True)
+    fantasy_name = serializers.CharField(write_only=True)
+    cnpj = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = SupermarketUser
+        fields = ('email', 'password', 'fantasy_name', 'cnpj')
+
+    def create(self, validated_data):
+        from auth_app.services.signupUser import signupSupermarket
+        email = validated_data.pop('email')
+        password = validated_data.pop('password')
+        fantasy_name = validated_data.pop('fantasy_name')
+        cnpj = validated_data.pop('cnpj')
+        user, message = signupSupermarket.register(
+            email=email,
+            password=password,
+            fantasy_name=fantasy_name,
+            cnpj=cnpj
+        )
+        if not user:
+            raise serializers.ValidationError({'user': message})
+        supermarket_user = SupermarketUser.objects.create(user=user, fantasy_name=fantasy_name, cnpj=cnpj)
+        return supermarket_user
+
+class UserProfileSerializer(serializers.Serializer):
+    user = UserSerializer()
+    profile_type = serializers.SerializerMethodField()
+    profile_data = serializers.SerializerMethodField()
+
+    def get_profile_type(self, obj):
+        if isinstance(obj, ClientUser):
+            return 'client'
+        elif isinstance(obj, DeliveryUser):
+            return 'delivery'
+        elif isinstance(obj, SupermarketUser):
+            return 'supermarket'
+        elif isinstance(obj, SeparaterUser):
+            return 'separater'
+        return 'unknown'
+
+    def get_profile_data(self, obj):
+        if isinstance(obj, ClientUser):
+            return {
+                'first_name': obj.first_name,
+                'last_name': obj.last_name,
+                'cpf': obj.cpf
+            }
+        elif isinstance(obj, DeliveryUser):
+            return {
+                'first_name': obj.first_name,
+                'last_name': obj.last_name,
+                'cpf': obj.cpf
+            }
+        elif isinstance(obj, SupermarketUser):
+            return {
+                'fantasy_name': obj.fantasy_name,
+                'cnpj': obj.cnpj
+            }
+        elif isinstance(obj, SeparaterUser):
+            return {
+                'first_name': obj.first_name,
+                'last_name': obj.last_name,
+                'cpf': obj.cpf
+            }
+        return {}

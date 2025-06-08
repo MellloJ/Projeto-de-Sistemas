@@ -160,23 +160,28 @@ class UserClientView(APIView):
     
     def post(self, request):
         serializer = UserClientSerializer(data=request.data)
-        
         if serializer.is_valid():
             try:
                 user, message = serializer.save()
             except Exception as e:
                 return Response({'errors': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
             if user:
+                # Buscar dados do perfil ClientUser
+                from users.models import ClientUser
+                try:
+                    client_profile = ClientUser.objects.get(user=user)
+                    first_name = client_profile.first_name
+                    last_name = client_profile.last_name
+                except ClientUser.DoesNotExist:
+                    first_name = last_name = None
                 return Response({
                     'message': message,
                     'user': {
                         'email': user.email,
-                        'first_name': user.first_name,
-                        'last_name': user.last_name
+                        'first_name': first_name,
+                        'last_name': last_name
                     }
                 }, status=status.HTTP_201_CREATED)
             else:
                 return Response({'errors': message}, status=status.HTTP_400_BAD_REQUEST)
-
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

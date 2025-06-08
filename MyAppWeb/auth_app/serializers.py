@@ -1,6 +1,12 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from .models import User # as Client
+from auth_app.services.validateUser import validate_cpf
+from django.utils.timezone import now
+
+def validate_cpf(value):
+    from auth_app.services.validateUser import validate_cpf as _validate_cpf
+    return _validate_cpf(None, value)
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -10,16 +16,39 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
 class UserClientSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    first_name = serializers.CharField(write_only=True, required=True)
+    last_name = serializers.CharField(write_only=True, required=True)
+    cpf = serializers.CharField(write_only=True, required=True, validators=[validate_cpf])
+    password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'first_name', 'last_name', 'cpf', 'phone')
-    
-    def validate_cpf(self, value):
-        from auth_app.services.validateUser import validate_cpf
-        return validate_cpf(self, value)
+        fields = ['id', 'email', 'phone', 'user_type', 'is_active', 'is_staff', 'last_login', 'date_joined', 'first_name', 'last_name', 'cpf', 'password']
+        extra_kwargs = {
+            'user_type': {'default': 'client'},
+            'is_active': {'default': False},
+            'is_staff': {'default': False},
+            'last_login': {'required': False},
+            'date_joined': {'required': False},
+        }
 
     def create(self, validated_data):
-        from auth_app.services.signupUser import signupClient
-        return signupClient.register(**validated_data)
+        validated_data['last_login'] = now()
+        validated_data['date_joined'] = now()
+        # Remove fields not in User
+        first_name = validated_data.pop('first_name')
+        last_name = validated_data.pop('last_name')
+        cpf = validated_data.pop('cpf')
+        password = validated_data.pop('password')
+        user = User.objects.create_user(
+            email=validated_data['email'],
+            password=password,
+            groupName='client',
+            phone=validated_data.get('phone'),
+            last_login=validated_data['last_login'],
+            date_joined=validated_data['date_joined']
+        )
+        # Cria o perfil ClientUser
+        from users.models import ClientUser
+        ClientUser.objects.create(user=user, first_name=first_name, last_name=last_name, cpf=cpf)
+        return user, 'Usuário criado com sucesso, confirme seu email'

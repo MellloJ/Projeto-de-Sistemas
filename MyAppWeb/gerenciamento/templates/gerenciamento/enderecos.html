@@ -1,0 +1,199 @@
+<!-- templates/categorias/index.html -->
+
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block title %} <title> {{title}} </title> {% endblock title %}
+
+{% load unicorn %}
+{% load component_tags %}
+
+{% block head %}
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="{% static 'src/gerenciamento/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'src/produtos/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'src/core/css/styles.css' %}">
+  {% unicorn_scripts %}
+{% endblock head %}
+
+{% block navbar %}
+  {% include "navbar.html" %}
+{% endblock navbar %}
+
+{% block sidebar %}
+  {% include "sidebar.html" %}
+{% endblock sidebar %}
+
+{% block content %}
+<section class="bg-gray-50 py-8 antialiased p-4 md:ml-64 h-screen pt-20">
+  <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+    <!-- Heading -->
+    <div class="mb-4 flex items-center justify-between space-y-4 sm:space-y-0 md:mb-8">
+      {% include "components/breadcrumb.html" with breadcrumbs=breadcrumbs %}
+      <div class="flex items-center justify-end space-x-4 w-full px-4">
+        <button id="novo-modal-button" data-modal-toggle="createEnderecos" data-modal-target="createEnderecos" type="button" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
+          <svg class="-ms-0.5 me-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          </svg>
+          Novo Endereço
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+    <table id="enderecos-table" class="min-w-full bg-white rounded-lg shadow text-sm">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-2 text-center">ID</th>
+          <th class="px-4 py-2 text-center">Usuário</th>
+          <th class="px-4 py-2 text-center">CEP</th>
+          <th class="px-4 py-2 text-center">Logradouro</th>
+          <th class="px-4 py-2 text-center">Número</th>
+          <th class="px-4 py-2 text-center">Complemento</th>
+          <th class="px-4 py-2 text-center">Bairro</th>
+          <th class="px-4 py-2 text-center">Cidade</th>
+          <th class="px-4 py-2 text-center">Estado</th>
+          <th class="px-4 py-2 text-center">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for endereco in enderecos %}
+        <tr>
+          <td class="px-4 py-2 text-center">{{ endereco.id }}</td>
+          <td class="px-4 py-2 text-center">{{ endereco.user.email }}</td>
+          <td class="px-4 py-2 text-center">{{ endereco.zip_code }}</td>
+          <td class="px-4 py-2 text-center">{{ endereco.street }}</td>
+          <td class="px-4 py-2 text-center">{{ endereco.number }}</td>
+          <td class="px-4 py-2 text-center">{{ endereco.complement }}</td>
+          <td class="px-4 py-2 text-center">{{ endereco.neighborhood }}</td>
+          <td class="px-4 py-2 text-center">{{ endereco.city }}</td>
+          <td class="px-4 py-2 text-center">{{ endereco.state }}</td>
+          <td class="px-4 py-2 text-center">
+            <div class="flex gap-2 justify-center">
+              <button class="edit-endereco-btn bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs" data-id="{{ endereco.id }}" data-modal-target="editEnderecos" data-modal-toggle="editEnderecos">Edit</button>
+              <button class="delete-endereco-btn bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs" data-id="{{ endereco.id }}">Delete</button>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Novo Endereço Modal -->
+  {% component "formModal" formModal=createEnderecos %}
+    {% fill "modal_body" %}
+      <form id="novo-endereco-form" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="novo-zip_code" class="block mb-2 text-sm font-medium text-gray-900">CEP</label>
+            <input type="text" id="novo-zip_code" name="zip_code" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o CEP">
+          </div>
+          <div>
+            <label for="novo-street" class="block mb-2 text-sm font-medium text-gray-900">Logradouro</label>
+            <input type="text" id="novo-street" name="street" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o logradouro" required>
+          </div>
+          <div>
+            <label for="novo-number" class="block mb-2 text-sm font-medium text-gray-900">Número</label>
+            <input type="text" id="novo-number" name="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o número">
+          </div>
+          <div>
+            <label for="novo-complement" class="block mb-2 text-sm font-medium text-gray-900">Complemento</label>
+            <input type="text" id="novo-complement" name="complement" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o complemento">
+          </div>
+          <div>
+            <label for="novo-neighborhood" class="block mb-2 text-sm font-medium text-gray-900">Bairro</label>
+            <input type="text" id="novo-neighborhood" name="neighborhood" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o bairro">
+          </div>
+          <div>
+            <label for="novo-city" class="block mb-2 text-sm font-medium text-gray-900">Cidade</label>
+            <input type="text" id="novo-city" name="city" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite a cidade" required>
+          </div>
+          <div>
+            <label for="novo-state" class="block mb-2 text-sm font-medium text-gray-900">Estado</label>
+            <input type="text" id="novo-state" name="state" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o estado" required>
+          </div>
+        </div>
+        <input type="hidden" id="novo-user-id" name="user" value="{{ user.id }}">
+      </form>
+    {% endfill %}
+    {% fill "modal_footer" %}
+      <div class="flex items-center justify-center space-x-4 w-full px-4">
+        <button type="submit" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto" data-modal-toggle="{{ createEnderecos.id }}">
+          Salvar
+        </button>
+        <button type="reset" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-gray-200 hover:bg-gray-300 px-3 py-2 text-sm font-medium text-gray-600 focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
+          Restaurar
+        </button>
+      </div>
+    {% endfill %}
+  {% endcomponent %}
+
+  <!-- Editar Endereço Modal -->
+  {% component "formModal" formModal=editEnderecos %}
+    {% fill "modal_body" %}
+      <form id="editar-endereco-form" class="space-y-6">
+        <input type="hidden" id="editar-id" name="id">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="editar-user" class="block mb-2 text-sm font-medium text-gray-900">Usuário (e-mail)</label>
+            <input type="email" id="editar-user" name="user" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" required>
+            <p class="mt-2 text-sm text-red-600 hidden" id="editar-user-error"></p>
+          </div>
+          <div>
+            <label for="editar-cidade" class="block mb-2 text-sm font-medium text-gray-900">Cidade</label>
+            <input type="text" id="editar-cidade" name="cidade" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" required>
+            <p class="mt-2 text-sm text-red-600 hidden" id="editar-city-error"></p>
+          </div>
+          <div>
+            <label for="editar-uf" class="block mb-2 text-sm font-medium text-gray-900">Estado</label>
+            <input type="text" id="editar-uf" name="uf" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" required>
+            <p class="mt-2 text-sm text-red-600 hidden" id="editar-state-error"></p>
+          </div>
+          <div>
+            <label for="editar-logradouro" class="block mb-2 text-sm font-medium text-gray-900">Rua</label>
+            <input type="text" id="editar-logradouro" name="logradouro" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" required>
+            <p class="mt-2 text-sm text-red-600 hidden" id="editar-street-error"></p>
+          </div>
+          <div>
+            <label for="editar-numero" class="block mb-2 text-sm font-medium text-gray-900">Número</label>
+            <input type="text" id="editar-numero" name="numero" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+            <p class="mt-2 text-sm text-red-600 hidden" id="editar-number-error"></p>
+          </div>
+          <div>
+            <label for="editar-complemento" class="block mb-2 text-sm font-medium text-gray-900">Complemento</label>
+            <input type="text" id="editar-complemento" name="complemento" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+          </div>
+          <div>
+            <label for="editar-bairro" class="block mb-2 text-sm font-medium text-gray-900">Bairro</label>
+            <input type="text" id="editar-bairro" name="bairro" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+          </div>
+          <div>
+            <label for="editar-cep" class="block mb-2 text-sm font-medium text-gray-900">CEP</label>
+            <input type="text" id="editar-cep" name="cep" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o CEP">
+          </div>
+          <div class="md:col-span-2">
+            <label for="editar-observation" class="block mb-2 text-sm font-medium text-gray-900">Observação</label>
+            <textarea id="editar-observation" name="observation" rows="2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"></textarea>
+          </div>
+        </div>
+      </form>
+    {% endfill %}
+    {% fill "modal_footer" %}
+      <div class="flex justify-between gap-2">
+        <button type="button" class="close-modal-btn rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 font-semibold shadow transition">Cancelar</button>
+        <button type="submit" form="editar-endereco-form" class="rounded-lg bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 font-semibold shadow transition">Salvar</button>
+        <button type="button" id="delete-endereco-btn" class="rounded-lg bg-red-500 hover:bg-red-600 text-white px-6 py-2 font-semibold shadow transition">Deletar</button>
+      </div>
+    {% endfill %}
+  {% endcomponent %}
+</section>
+{% endblock content %}
+
+{% block scripts %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="{% static 'src/gerenciamento/js/scripts.js' %}"></script>
+{% endblock scripts %}

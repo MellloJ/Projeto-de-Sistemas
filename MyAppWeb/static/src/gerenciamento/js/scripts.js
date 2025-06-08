@@ -283,3 +283,36 @@ $("#editEnderecos").on('submit', function(e) {
     });
 });
 
+$("#dados-mercado-form").on('submit', function(e) {
+    e.preventDefault();
+
+    const data = {
+        id: $('#id').val(),
+        fantasy_name: $('#fantasy_name').val(),
+        cnpj: $('#cnpj').val(),
+        email: $('#email').val(),
+        phone: $('#phone').val()
+    };
+    $.ajax({
+        url: '/gerenciamento/api/dados-mercado/',
+        method: 'PUT',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function() {
+            Swal.fire('Sucesso', 'Dados do mercado atualizados com sucesso.', 'success').then(() => {
+                location.reload();
+            });
+        },
+        error: function(xhr, error) {
+            if (xhr.status === 401) {
+                Swal.fire('Erro', 'Não autorizado. Faça login novamente.', 'error');
+            } else {
+                Swal.fire('Erro', 'Erro ao atualizar dados do mercado: ' + (xhr.responseJSON?.error || xhr.statusText), 'error');
+            }
+        }
+    });
+});
+

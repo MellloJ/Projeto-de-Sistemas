@@ -139,31 +139,38 @@ class ClientUserSerializer(serializers.ModelSerializer):
         return client_user
 
 class SupermarketUserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(write_only=True)
-    password = serializers.CharField(write_only=True)
-    fantasy_name = serializers.CharField(write_only=True)
-    cnpj = serializers.CharField(write_only=True)
+    email = serializers.EmailField(source='user.email', required=False)
+    phone = serializers.CharField(source='user.phone', required=False)
+    fantasy_name = serializers.CharField(required=False)
+    cnpj = serializers.CharField(required=False)
 
     class Meta:
         model = SupermarketUser
-        fields = ('email', 'password', 'fantasy_name', 'cnpj')
+        fields = ('id', 'fantasy_name', 'cnpj', 'email', 'phone')
 
     def create(self, validated_data):
-        from auth_app.services.signupUser import signupSupermarket
-        email = validated_data.pop('email')
-        password = validated_data.pop('password')
-        fantasy_name = validated_data.pop('fantasy_name')
-        cnpj = validated_data.pop('cnpj')
-        user, message = signupSupermarket.register(
-            email=email,
-            password=password,
-            fantasy_name=fantasy_name,
-            cnpj=cnpj
-        )
-        if not user:
-            raise serializers.ValidationError({'user': message})
-        supermarket_user = SupermarketUser.objects.create(user=user, fantasy_name=fantasy_name, cnpj=cnpj)
-        return supermarket_user
+        # Espera dados aninhados de usuário
+        user_data = validated_data.pop('user', None)
+        if not user_data:
+            raise serializers.ValidationError({'user': 'Dados do usuário são obrigatórios para cadastro.'})
+        user_serializer = UserSerializer(data=user_data)
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()
+        instance = SupermarketUser.objects.create(user=user, **validated_data)
+        return instance
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', {})
+        # Atualiza campos do SupermarketUser
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        # Atualiza campos do usuário relacionado
+        if user_data:
+            for attr, value in user_data.items():
+                setattr(instance.user, attr, value)
+            instance.user.save()
+        instance.save()
+        return instance
 
 class UserProfileSerializer(serializers.Serializer):
     user = UserSerializer()

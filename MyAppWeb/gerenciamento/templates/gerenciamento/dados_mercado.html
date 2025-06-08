@@ -33,24 +33,29 @@
     </div>
   </div>
   <div>
-    <form method="post" class="bg-white rounded-lg shadow p-6 space-y-6">
+    <form id="dados-mercado-form" class="bg-white rounded-lg shadow p-6 space-y-6">
       {% csrf_token %}
+      <input type="hidden" name="id" id="id" value="{{ user.supermarket_user.id }}">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label for="nome_fantasia" class="block mb-2 text-sm font-medium text-gray-900">Nome Fantasia</label>
-          <input type="text" id="nome_fantasia" name="nome_fantasia" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o nome fantasia" required>
+          <label for="fantasy_name" class="block mb-2 text-sm font-medium text-gray-900">Nome Fantasia</label>
+          <input type="text" id="fantasy_name" name="fantasy_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o nome fantasia" required
+          value="{{ user.supermarket_user.fantasy_name|default_if_none:'' }}">
         </div>
         <div>
           <label for="cnpj" class="block mb-2 text-sm font-medium text-gray-900">CNPJ</label>
-          <input type="text" id="cnpj" name="cnpj" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o CNPJ" required>
+          <input type="text" id="cnpj" name="cnpj" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o CNPJ" required
+            value="{{ user.supermarket_user.cnpj|default_if_none:'' }}">
         </div>
         <div>
           <label for="email" class="block mb-2 text-sm font-medium text-gray-900">E-mail</label>
-          <input type="email" id="email" name="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o e-mail do mercado" required>
+          <input type="email" id="email" name="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o e-mail do mercado" required
+            value="{{ user.email|default_if_none:'' }}">
         </div>
         <div>
-          <label for="telefone" class="block mb-2 text-sm font-medium text-gray-900">Telefone</label>
-          <input type="text" id="telefone" name="telefone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o telefone" required>
+          <label for="phone" class="block mb-2 text-sm font-medium text-gray-900">Telefone</label>
+          <input type="text" id="phone" name="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o telefone" required
+            value="{{ user.phone|default_if_none:'' }}">
         </div>
       </div>
       <div class="flex justify-end">
@@ -62,6 +67,7 @@
 {% endblock content %}
 
 {% block scripts %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <script src="{% static 'src/gerenciamento/scripts.js' %}"></script>
+  <script src="{% static 'src/gerenciamento/js/scripts.js' %}"></script>
 {% endblock scripts %}

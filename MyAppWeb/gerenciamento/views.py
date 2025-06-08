@@ -68,6 +68,10 @@ class DadosMercado(View):
 
         return render(request, 'gerenciamento/dados_mercado.html', context)
 
+    def post(self, request, *args, **kwargs):
+        from django.http import HttpResponseNotAllowed
+        return HttpResponseNotAllowed(['GET'])
+
 class Enderecos(View):
     def get(self, request):
 

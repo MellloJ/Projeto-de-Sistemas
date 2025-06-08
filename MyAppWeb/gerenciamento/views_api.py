@@ -4,7 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 import requests
 from users.serializers import AddressSerializer
-from users.models import Address
+from users.models import Address, SupermarketUser
+from users.serializers import SupermarketUserSerializer
 from rest_framework.permissions import IsAuthenticated
 
 class AddressListCreateView(generics.ListCreateAPIView):
@@ -47,3 +48,31 @@ class CepLookupAPIView(APIView):
             return Response({'error': 'Error fetching zip code'}, status=status.HTTP_502_BAD_GATEWAY)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class DadosMercadoAPIView(APIView):
+    def get(self, request):
+        # Permite buscar por id via query param: /gerenciamento/api/dados-mercado/?id=123
+        mercado_id = request.query_params.get('id')
+        if not mercado_id:
+            return Response({'error': 'Informe o id do mercado na query string.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            mercado = SupermarketUser.objects.get(id=mercado_id)
+            serializer = SupermarketUserSerializer(mercado)
+            return Response(serializer.data)
+        except SupermarketUser.DoesNotExist:
+            return Response({'error': 'Mercado não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request):
+        # Permite atualizar por id enviado no corpo JSON
+        mercado_id = request.data.get('id')
+        if not mercado_id:
+            return Response({'error': 'Informe o id do mercado no corpo da requisição.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            mercado = SupermarketUser.objects.get(id=mercado_id)
+        except SupermarketUser.DoesNotExist:
+            return Response({'error': 'Mercado não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = SupermarketUserSerializer(mercado, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

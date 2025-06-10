@@ -277,7 +277,12 @@
         <!-- Dropdown menu -->
         <div class="hidden z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow rounded-xl" id="dropdown">
           <div class="py-3 px-4">
-            <span class="block text-sm font-semibold text-gray-900" >Olá, {{ user.completeName }}</span>
+            <span class="block text-sm font-semibold text-gray-900">
+              Olá, {{ user.completeName }}
+              {% if user.supermarket_user.fantasy_name %}
+                {{ user.supermarket_user.fantasy_name }}
+              {% endif %}
+            </span>
             <span class="block text-sm text-gray-900 truncate" >{{ user.email }}</span>
           </div>
           {% comment %}

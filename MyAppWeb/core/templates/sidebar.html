@@ -51,6 +51,46 @@
             </li>
           </ul>
         </li>
+        <li>
+          <button type="button" class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100" aria-controls="dropdown-manage" data-collapse-toggle="dropdown-manage">
+            <svg class="w-6 h-6 text-gray-500 group-hover:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+               <path d="M10.83 5a3.001 3.001 0 0 0-5.66 0H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17ZM4 11h9.17a3.001 3.001 0 0 1 5.66 0H20a1 1 0 1 1 0 2h-1.17a3.001 3.001 0 0 1-5.66 0H4a1 1 0 1 1 0-2Zm1.17 6H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17a3.001 3.001 0 0 0-5.66 0Z"/>
+            </svg>
+            <span class="flex-1 ml-3 text-left whitespace-nowrap">
+              Gerenciar
+            </span>
+            <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+          <ul id="dropdown-manage" class="hidden py-2 space-y-2">
+            <li>
+              <a href="{% url 'gerenciamento_usuarios' %}" class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100">
+                Usuários
+                </a>
+            </li>
+            <li>
+              <a href="{% url 'gerenciamento_dados_mercado' %}" class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100">
+                Dados do Mercado
+                </a>
+            </li>
+            <li>
+              <a href="{% url 'gerenciamento_enderecos' %}" class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100">
+                Endereços
+                </a>
+            </li>
+            <li>
+              <a href="{% url 'gerenciamento_documentos' %}" class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100">
+                Documentos
+                </a>
+            </li>
+            <li>
+              <a href="{% url 'gerenciamento_servicos' %}" class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100">
+                Serviços
+                </a>
+            </li>
+          </ul>
+        </li>
         {% comment %}
         <li>
           <button type="button" class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100" aria-controls="dropdown-sales" data-collapse-toggle="dropdown-sales">

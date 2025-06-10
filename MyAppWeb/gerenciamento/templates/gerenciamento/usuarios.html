@@ -1,0 +1,86 @@
+<!-- templates/categorias/index.html -->
+
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block title %} <title> {{title}} </title> {% endblock title %}
+
+{% load unicorn %}
+
+{% load component_tags %}
+
+{% block head %}
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="{% static 'src/gerenciamento/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'src/produtos/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'src/core/css/styles.css' %}">
+  {% unicorn_scripts %}
+{% endblock head %}
+
+{% block navbar %}
+  {% include "navbar.html" %}
+{% endblock navbar %}
+
+{% block sidebar %}
+  {% include "sidebar.html" %}
+{% endblock sidebar %}
+
+{% block content %}
+<section class="bg-gray-50 py-8 antialiased p-4 md:ml-64 h-screen pt-20">
+  <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+    <!-- Heading -->
+    <div class="mb-4 flex items-center justify-between space-y-4 sm:space-y-0 md:mb-8">
+      {% include "components/breadcrumb.html" with breadcrumbs=breadcrumbs %}
+      <div class="flex items-center justify-end space-x-4 w-full px-4">
+        <button id="novo-modal-button" data-modal-toggle="createUsuarios" data-modal-target="createUsuarios" type="button" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
+          <svg class="-ms-0.5 me-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          </svg>
+          Novo Usuário
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+    <table id="usuarios-table" class="min-w-full bg-white rounded-lg shadow text-sm">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-2 text-center">ID</th>
+          <th class="px-4 py-2 text-center">Nome</th>
+          <th class="px-4 py-2 text-center">Sobrenome</th>
+          <th class="px-4 py-2 text-center">E-mail</th>
+          <th class="px-4 py-2 text-center">CPF</th>
+          <th class="px-4 py-2 text-center">Tipo</th>
+          <th class="px-4 py-2 text-center">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td class="px-4 py-2 text-center">{{ user.id }}</td>
+          <td class="px-4 py-2 text-center">{{ user.first_name }}</td>
+          <td class="px-4 py-2 text-center">{{ user.last_name }}</td>
+          <td class="px-4 py-2 text-center">{{ user.email }}</td>
+          <td class="px-4 py-2 text-center">{{ user.cpf }}</td>
+          <td class="px-4 py-2 text-center">{{ user.type }}</td>
+          <td class="px-4 py-2 text-center">
+            <div class="flex gap-2 justify-center">
+              <button class="edit-user-btn bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs" data-id="{{ user.id }}">Editar</button>
+              <button class="delete-user-btn bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs" data-id="{{ user.id }}">Deletar</button>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock content %}
+
+{% block scripts %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="{% static 'src/gerenciamento/js/scripts.js' %}"></script>
+{% endblock scripts %}

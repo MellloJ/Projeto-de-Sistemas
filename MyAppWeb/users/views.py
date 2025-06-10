@@ -32,11 +32,7 @@ class DeliveryUserCreateView(generics.CreateAPIView):
                         'city': openapi.Schema(type=openapi.TYPE_STRING, description="Cidade do endereço"),
                         'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: SP)"),
                         'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
-                        'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
-                        'quadra': openapi.Schema(type=openapi.TYPE_STRING, description="Quadra do endereço (opcional)"),
-                        'lote': openapi.Schema(type=openapi.TYPE_STRING, description="Lote do endereço (opcional)"),
-                        'reference': openapi.Schema(type=openapi.TYPE_STRING, description="Ponto de referência (opcional)"),
-                        'observation': openapi.Schema(type=openapi.TYPE_STRING, description="Observações (opcional)")
+                        'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)")
                     }
                 )
             },
@@ -53,11 +49,7 @@ class DeliveryUserCreateView(generics.CreateAPIView):
                     "city": "São Paulo",
                     "state": "SP",
                     "street": "Rua das Flores",
-                    "number": "123",
-                    "quadra": "Q1",
-                    "lote": "L5",
-                    "reference": "Próximo à praça",
-                    "observation": "Casa com portão azul"
+                    "number": "123"
                 }
             }
         ),
@@ -94,11 +86,7 @@ class SeparaterUserCreateView(generics.CreateAPIView):
                         'city': openapi.Schema(type=openapi.TYPE_STRING, description="Cidade do endereço"),
                         'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: RJ)"),
                         'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
-                        'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
-                        'quadra': openapi.Schema(type=openapi.TYPE_STRING, description="Quadra do endereço (opcional)"),
-                        'lote': openapi.Schema(type=openapi.TYPE_STRING, description="Lote do endereço (opcional)"),
-                        'reference': openapi.Schema(type=openapi.TYPE_STRING, description="Ponto de referência (opcional)"),
-                        'observation': openapi.Schema(type=openapi.TYPE_STRING, description="Observações (opcional)")
+                        'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)")
                     }
                 )
             },
@@ -115,11 +103,7 @@ class SeparaterUserCreateView(generics.CreateAPIView):
                     "city": "Rio de Janeiro",
                     "state": "RJ",
                     "street": "Avenida Atlântica",
-                    "number": "456",
-                    "quadra": "Q2",
-                    "lote": "L10",
-                    "reference": "Perto do mercado",
-                    "observation": "Apartamento 101"
+                    "number": "456"
                 }
             }
         ),
@@ -144,11 +128,7 @@ class AddressCreateView(generics.CreateAPIView):
                 'city': openapi.Schema(type=openapi.TYPE_STRING, description="Cidade do endereço"),
                 'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: MG)"),
                 'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
-                'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
-                'quadra': openapi.Schema(type=openapi.TYPE_STRING, description="Quadra do endereço (opcional)"),
-                'lote': openapi.Schema(type=openapi.TYPE_STRING, description="Lote do endereço (opcional)"),
-                'reference': openapi.Schema(type=openapi.TYPE_STRING, description="Ponto de referência (opcional)"),
-                'observation': openapi.Schema(type=openapi.TYPE_STRING, description="Observações (opcional)")
+                'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)")
             },
             required=['user_email', 'city', 'state', 'street'],
             example={
@@ -156,11 +136,7 @@ class AddressCreateView(generics.CreateAPIView):
                 "city": "Belo Horizonte",
                 "state": "MG",
                 "street": "Rua dos Ipês",
-                "number": "789",
-                "quadra": "Q3",
-                "lote": "L15",
-                "reference": "Ao lado da escola",
-                "observation": "Casa com jardim"
+                "number": "789"
             }
         ),
         responses={
@@ -202,10 +178,6 @@ class AddressEditView(generics.UpdateAPIView):
                 'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: MG)"),
                 'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
                 'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
-                'quadra': openapi.Schema(type=openapi.TYPE_STRING, description="Quadra do endereço (opcional)"),
-                'lote': openapi.Schema(type=openapi.TYPE_STRING, description="Lote do endereço (opcional)"),
-                'reference': openapi.Schema(type=openapi.TYPE_STRING, description="Ponto de referência (opcional)"),
-                'observation': openapi.Schema(type=openapi.TYPE_STRING, description="Observações (opcional)")
             },
             required=['user_emal','city', 'state', 'street'],
             example={
@@ -213,11 +185,7 @@ class AddressEditView(generics.UpdateAPIView):
                 "city" : "Extrema",
                 "state" : "MG",
                 "street" : "Av. das Palmeiras",
-                "number" : "123",
-                "quadra" : "Q1",
-                "lote" : "L10",
-                "reference" : "Próximo ao mercado",
-                "observation" : "Apartamento no 2º andar"
+                "number" : "123"
             }
         ),
         responses={
@@ -238,10 +206,6 @@ class AddressEditView(generics.UpdateAPIView):
                 'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: MG)"),
                 'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
                 'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
-                'quadra': openapi.Schema(type=openapi.TYPE_STRING, description="Quadra do endereço (opcional)"),
-                'lote': openapi.Schema(type=openapi.TYPE_STRING, description="Lote do endereço (opcional)"),
-                'reference': openapi.Schema(type=openapi.TYPE_STRING, description="Ponto de referência (opcional)"),
-                'observation': openapi.Schema(type=openapi.TYPE_STRING, description="Observações (opcional)")
             },
             example={
                 "street": "Rua Nova",

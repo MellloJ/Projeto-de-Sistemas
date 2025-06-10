@@ -13,9 +13,8 @@ class SuperUserSeeder(BaseSeeder):
             User.objects.create_superuser(
                 email='admin@example.com',
                 password='123456789',
-                is_active=True,
-                last_login=now(),
-                date_joined=now()
+                user_type='superuser',
+                is_active=True
             )
             self.succes(f'Super User created')
         else:

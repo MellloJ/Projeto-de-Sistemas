@@ -356,3 +356,95 @@ class ClientUserCreateView(APIView):
                 return Response({'errors': message}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+class ClientUserDeleteView(generics.DestroyAPIView):
+    queryset = ClientUser.objects.all()
+    serializer_class = ClientUserSerializer
+    lookup_field = 'user__email'
+
+    @swagger_auto_schema(
+        operation_description="Deleta um usuário do tipo ClientUser, identificado pelo email.",
+        responses={
+            204: openapi.Response("Usuário deletado com sucesso"),
+            404: openapi.Response("Usuário não encontrado.")
+        },
+    )
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+
+class ClientUserEditView(generics.UpdateAPIView):
+    queryset = ClientUser.objects.all()
+    serializer_class = ClientUserSerializer
+    lookup_field = 'user__email'
+
+    @swagger_auto_schema(
+        operation_description="Atualiza os dados de um cliente existente, identificado pelo usuário associado.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user': openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'email': openapi.Schema(type=openapi.TYPE_STRING, description="Email do cliente associado"),
+                        'password': openapi.Schema(type=openapi.TYPE_STRING, description="Senha do cliente (mínimo 8 caracteres)")
+                    }
+                ),
+                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description="Primeiro nome do cliente"),
+                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description="Sobrenome do cliente (opcional)"),
+                'cpf': openapi.Schema(type=openapi.TYPE_STRING, description="CPF do cliente (11 dígitos, único)")
+            },
+            required=['user', 'first_name', 'cpf'],
+            example={
+                "user": {
+                    "email": "clientuser@example.com",
+                    "password": "123456789"
+                },
+                "first_name": "João",
+                "last_name": "Silva",
+                "cpf": "59331091001"
+            }
+        ),
+        responses={
+            200: ClientUserSerializer,
+            400: openapi.Response("Erro na atualização. Verifique os dados enviados."),
+            404: openapi.Response("Usuário não encontrado.")
+        }
+    )
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_description="Atualiza parcialmente os dados de um endereço existente, identificado pelo ID.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description="Primeiro nome do cliente"),
+                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description="Sobrenome do cliente"),
+                'cpf': openapi.Schema(type=openapi.TYPE_STRING, description="CPF do cliente (11 dígitos, único)")
+            },
+            example={
+                "first_name": "Carlos",
+                "last_name": "Oliveira"
+            }
+        ),
+        responses={
+            200: ClientUserSerializer,
+            400: openapi.Response("Erro nos dados fornecidos."),
+            404: openapi.Response("Usuário não encontrado.")
+        }
+    )
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+
+class ClientUserListView(generics.ListAPIView):
+    queryset = ClientUser.objects.all()
+    serializer_class = ClientUserSerializer
+
+    @swagger_auto_schema(
+        operation_description="Lista todos os usuários cadastrados do tipo cliente (ClientUser).",
+        responses={
+            200: ClientUserSerializer(many=True),
+        }
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)

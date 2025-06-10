@@ -101,42 +101,42 @@ class SeparaterUserSerializer(serializers.ModelSerializer):
 
         return separater_user
 
-class ClientUserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(write_only=True)
-    password = serializers.CharField(write_only=True)
-    phone = serializers.CharField(write_only=True, required=False)
-    user_type = serializers.CharField(write_only=True, required=False)
-    photo = serializers.CharField(write_only=True, required=False)
-    first_name = serializers.CharField(write_only=True)
-    last_name = serializers.CharField(write_only=True, required=False)
-    cpf = serializers.CharField(write_only=True)
+# class ClientUserSerializer(serializers.ModelSerializer):
+#     email = serializers.EmailField(write_only=True)
+#     password = serializers.CharField(write_only=True)
+#     phone = serializers.CharField(write_only=True, required=False)
+#     user_type = serializers.CharField(write_only=True, required=False)
+#     photo = serializers.CharField(write_only=True, required=False)
+#     first_name = serializers.CharField(write_only=True)
+#     last_name = serializers.CharField(write_only=True, required=False)
+#     cpf = serializers.CharField(write_only=True)
 
-    class Meta:
-        model = ClientUser
-        fields = ('email', 'password', 'phone', 'user_type', 'photo', 'first_name', 'last_name', 'cpf')
+#     class Meta:
+#         model = ClientUser
+#         fields = ('email', 'password', 'phone', 'user_type', 'photo', 'first_name', 'last_name', 'cpf')
 
-    def create(self, validated_data):
-        from auth_app.services.signupUser import signupClient
-        email = validated_data.pop('email')
-        password = validated_data.pop('password')
-        phone = validated_data.pop('phone', None)
-        user_type = validated_data.pop('user_type', 'client')
-        photo = validated_data.pop('photo', None)
-        first_name = validated_data.pop('first_name')
-        last_name = validated_data.pop('last_name', '')
-        cpf = validated_data.pop('cpf')
-        user, message = signupClient.register(
-            email=email,
-            password=password,
-            cpf=cpf,
-            first_name=first_name,
-            last_name=last_name,
-            phone=phone
-        )
-        if not user:
-            raise serializers.ValidationError({'user': message})
-        client_user = ClientUser.objects.create(user=user, first_name=first_name, last_name=last_name, cpf=cpf)
-        return client_user
+#     def create(self, validated_data):
+#         from auth_app.services.signupUser import signupClient
+#         email = validated_data.pop('email')
+#         password = validated_data.pop('password')
+#         phone = validated_data.pop('phone', None)
+#         user_type = validated_data.pop('user_type', 'client')
+#         photo = validated_data.pop('photo', None)
+#         first_name = validated_data.pop('first_name')
+#         last_name = validated_data.pop('last_name', '')
+#         cpf = validated_data.pop('cpf')
+#         user, message = signupClient.register(
+#             email=email,
+#             password=password,
+#             cpf=cpf,
+#             first_name=first_name,
+#             last_name=last_name,
+#             phone=phone
+#         )
+#         if not user:
+#             raise serializers.ValidationError({'user': message})
+#         client_user = ClientUser.objects.create(user=user, first_name=first_name, last_name=last_name, cpf=cpf)
+#         return client_user
 
 class SupermarketUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='user.email', required=False)

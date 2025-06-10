@@ -3,6 +3,39 @@ from django.utils.timezone import now
 from users.models import ClientUser, DeliveryUser, SupermarketUser, SeparaterUser
 from auth_app.models import User
 
+from rest_framework.test import APITestCase
+from rest_framework import status
+
+class ClientUserCreateTests(APITestCase):
+    def test_signup_success(self):
+        data = {
+            "user": {
+                "email": "joao@email.com",
+                "password": "123456789",
+                "phone": "11987654321"
+            },
+            "first_name": "João",
+            "last_name": "Silva",
+            "cpf": "34005834132"
+        }
+        response = self.client.post('/users/clients/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_signup_invalid_cpf(self):
+        data = {
+            "user": {
+                "email": "joao@email.com",
+                "password": "123456789",
+                "phone": "11987654321"
+            },
+            "first_name": "João",
+            "last_name": "Silva",
+            "cpf": "11111111111"
+        }
+        response = self.client.post('/users/clients/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('cpf', response.data['errors'])
+
 class ClientUserModelTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(email='client@example.com', password='123', groupName='client', last_login=now(), date_joined=now())
@@ -17,6 +50,7 @@ class ClientUserModelTest(TestCase):
         self.client_user.first_name = 'Maria'
         self.client_user.save()
         self.assertEqual(ClientUser.objects.get(id=self.client_user.id).first_name, 'Maria')
+
 
 class DeliveryUserModelTest(TestCase):
     def setUp(self):

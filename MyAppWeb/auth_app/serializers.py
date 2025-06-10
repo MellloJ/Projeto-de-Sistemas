@@ -11,6 +11,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         token['email'] = user.email  # Adicionando dados ao token
+<<<<<<< HEAD
         return token
 
 class UserClientSerializer(serializers.ModelSerializer):
@@ -50,3 +51,6 @@ class UserClientSerializer(serializers.ModelSerializer):
         from users.models import ClientUser
         ClientUser.objects.create(user=user, first_name=first_name, last_name=last_name, cpf=cpf)
         return user, 'Usuário criado com sucesso, confirme seu email'
+=======
+        return token
+>>>>>>> 3b5fee5c81893941965ce2d1d8ce80f0083fd401

@@ -10,4 +10,7 @@ urlpatterns = [
     path('users/addresses/edit/<int:pk>', AddressEditView.as_view(), name='address-edit'),
     path('users/addresses/get/all', AddressListView.as_view(), name='address-get-all'),
     path('users/addresses/get/<int:pk>', AddressGetView.as_view(), name='address-get-one'),
+
+    path('users/clients/', ClientUserCreateView.as_view(), name='client-create'),
+    path('users/clients/get/<int:pk>', ClientUserGetView.as_view(), name='client-get-one'),
 ]

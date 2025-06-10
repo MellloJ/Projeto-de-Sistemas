@@ -1,20 +1,23 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import Group, Permission
+from django.utils.timezone import now
 
 from django.db import models
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password, groupName, **extra_fields):
+    def create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError('O email é obrigatório')
         
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        group, created = Group.objects.get_or_create(name=groupName)
+        date_joined = now()
+        last_login = now()
+        user = self.model(email=email, last_login=last_login, date_joined=date_joined, **extra_fields)
+        #group, created = Group.objects.get_or_create(name=groupName)
         user.set_password(password)
         user.save(using=self._db)
-        user.groups.add(group)
+        #user.groups.add(group)
         return user
     
     def create_superuser(self, email, password=None, **extra_fields):
@@ -29,12 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField(max_length=11, null=True, blank=True)
     user_type = models.CharField(max_length=20, null=False, default='client')
     photo = models.CharField(null=True, blank=True)
-    # first_name = models.CharField(max_length=30, null=False)
-    # last_name = models.CharField(max_length=120, null=False)
-    # completeName = models.CharField(max_length=150, null=False, unique=True)
-    # cpf = models.CharField(max_length=11, unique=True)
 
-    #username = models.CharField(max_length=150, null=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)

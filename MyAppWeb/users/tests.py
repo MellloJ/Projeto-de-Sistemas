@@ -1,12 +1,11 @@
 from django.test import TestCase
 from django.utils.timezone import now
-from users.models import ClientUser, DeliveryUser, SupermarketUser, SeparaterUser
+from users.models import ClientUser, DeliveryUser, SupermarketUser, SeparaterUser, Address
 from auth_app.models import User
 
 from rest_framework.test import APITestCase
 from rest_framework import status
-from .models import Address
-from auth_app.models import User
+from django.urls import reverse
 
 class ClientUserCreateTests(APITestCase):
     def test_signup_success(self):
@@ -40,7 +39,7 @@ class ClientUserCreateTests(APITestCase):
 
 class ClientUserModelTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email='client@example.com', password='123', groupName='client', last_login=now(), date_joined=now())
+        self.user = User.objects.create_user(email='client@example.com', password='123')
         self.client_user = ClientUser.objects.create(user=self.user, first_name='João', last_name='Silva', cpf='12345678901')
 
     def test_create_client_user(self):
@@ -53,10 +52,9 @@ class ClientUserModelTest(TestCase):
         self.client_user.save()
         self.assertEqual(ClientUser.objects.get(id=self.client_user.id).first_name, 'Maria')
 
-
 class DeliveryUserModelTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email='delivery@example.com', password='123', groupName='delivery', last_login=now(), date_joined=now())
+        self.user = User.objects.create_user(email='delivery@example.com', password='123')
         self.delivery_user = DeliveryUser.objects.create(user=self.user, first_name='Carlos', last_name='Oliveira', cpf='23456789012')
 
     def test_create_delivery_user(self):
@@ -71,7 +69,7 @@ class DeliveryUserModelTest(TestCase):
 
 class SupermarketUserModelTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email='market@example.com', password='123', groupName='supermarket', last_login=now(), date_joined=now())
+        self.user = User.objects.create_user(email='market@example.com', password='123')
         self.supermarket_user = SupermarketUser.objects.create(user=self.user, fantasy_name='Mercado Bom', cnpj='12345678000199')
 
     def test_create_supermarket_user(self):
@@ -86,7 +84,7 @@ class SupermarketUserModelTest(TestCase):
 
 class SeparaterUserModelTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email='sep@example.com', password='123', groupName='separater', last_login=now(), date_joined=now())
+        self.user = User.objects.create_user(email='sep@example.com', password='123')
         self.separater_user = SeparaterUser.objects.create(user=self.user, first_name='Ana', last_name='Lima', cpf='34567890123')
 
     def test_create_separater_user(self):
@@ -99,16 +97,15 @@ class SeparaterUserModelTest(TestCase):
         self.separater_user.save()
         self.assertEqual(SeparaterUser.objects.get(id=self.separater_user.id).cpf, '99999999999')
 
-
 class AddressModelTests(APITestCase):
     def setUp(self):
         # Para quando tivermos as permissões bem definidas
         """ self.client.login(username='testuser', password='testpassword')
         self.client.force_authenticate(user=self.client.user) """
         self.user = User.objects.create_user(email='client@example.com', password='123456789', is_active=True)
-        self.address = Address.objects.create(user=self.user, city="Cidade Exemplo", state="SP", street="Rua Exemplo", number="123")
-        print(self.address)
-        
+        self.address = Address.objects.create(user=self.user, zip_code='01001-000', street='Rua Exemplo', number='123', complement='Apto 1', neighborhood='Exemplo', city='Cidade Exemplo', state='SP')
+        self.assertTrue(Address.objects.filter(id=self.address.id).exists())
+
     def test_create_address(self):
         data = {
             "user_email": "client@example.com",
@@ -123,27 +120,31 @@ class AddressModelTests(APITestCase):
         #self.assertEqual(self.client_user.first_name, 'João')
     
     def test_get_address_user(self):
-        response = self.client.get(f'/users/addresses/get/{self.user.email}/')
-        print(f"Response status: {response.status_code}")
-        print(f"Response data: {response.data}")
+        url = reverse('address-get-by-user', kwargs={'user__email': self.user.email})
+        response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['street'], self.address.street)
 
     def test_get_address_one(self):
-        response = self.client.get(f'/users/addresses/{self.address.id}/')
+        url = reverse('address-get-one', kwargs={'pk': self.address.id})
+        response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['street'], self.address.street)
+        self.assertEqual(response.data[0]['street'], self.address.street)
 
     def test_put_address(self):
         data = {
+            "user_email": self.user.email,
             "street": "Rua Atualizada",
             "number": "456",
             "city": "Cidade Atualizada",
             "state": "RJ",
-            "zip_code": "87654321"
+            "zip_code": "20000-000",
+            "complement": "Apto 2",
+            "neighborhood": "Bairro Atualizado"
         }
-        response = self.client.put(f'/users/addresses/{self.address.id}/', data, format='json')
+        url = reverse('address-edit', kwargs={'pk': self.address.id})
+        response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.address.refresh_from_db()
         self.assertEqual(self.address.street, "Rua Atualizada")
@@ -152,12 +153,14 @@ class AddressModelTests(APITestCase):
         data = {
             "street": "Rua Parcialmente Atualizada"
         }
-        response = self.client.patch(f'/users/addresses/{self.address.id}/', data, format='json')
+        url = reverse('address-edit', kwargs={'pk': self.address.id})
+        response = self.client.patch(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.address.refresh_from_db()
         self.assertEqual(self.address.street, "Rua Parcialmente Atualizada")
     
     def test_delete_address(self):
-        response = self.client.delete(f'/users/addresses/{self.address.id}/')
+        url = reverse('address-delete', kwargs={'pk': self.address.id})
+        response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Address.objects.count(), 1)
+        self.assertEqual(Address.objects.count(), 0)

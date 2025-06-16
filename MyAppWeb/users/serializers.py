@@ -6,6 +6,7 @@ from rest_framework.exceptions import NotAuthenticated
 User = get_user_model()
 
 class AddressSerializer(serializers.ModelSerializer):
+    user_email = serializers.EmailField(write_only=True, help_text="Email do usuário associado ao endereço.")
     zip_code = serializers.CharField(required=False, allow_null=True, help_text="CEP do endereço (opcional).")
     street = serializers.CharField(help_text="Logradouro (rua, avenida, etc.) do endereço.")
     number = serializers.CharField(required=False, allow_null=True, help_text="Número do endereço (opcional).")
@@ -16,7 +17,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Address
-        fields = ['user', 'zip_code', 'street', 'number', 'complement', 'neighborhood', 'city', 'state', 'id']
+        fields = ['user_email', 'zip_code', 'street', 'number', 'complement', 'neighborhood', 'city', 'state', 'id']
         read_only_fields = ['id']
     
     def create(self, validated_data):
@@ -85,21 +86,6 @@ class ClientUserSerializer(serializers.ModelSerializer):
         # Cria o ClientUser com os dados validados
         clientUser = ClientUser.objects.create(user=user, **validated_data)
         return clientUser
-
-""" class UserClientSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-
-    class Meta:
-        model = User
-        fields = ('email', 'password', 'first_name', 'last_name', 'cpf', 'phone')
-    
-    def validate_cpf(self, value):
-        from auth_app.services.validateUser import validate_cpf
-        return validate_cpf(self, value)
-
-    def create(self, validated_data):
-        from auth_app.services.signupUser import signupClient
-        return signupClient.register(**validated_data) """
 
 class DeliveryUserSerializer(serializers.ModelSerializer):
     user = UserSerializer(help_text="Dados do usuário associado ao entregador.")

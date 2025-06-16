@@ -128,15 +128,21 @@ class AddressCreateView(generics.CreateAPIView):
                 'city': openapi.Schema(type=openapi.TYPE_STRING, description="Cidade do endereço"),
                 'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: MG)"),
                 'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
-                'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)")
+                'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
+                'complement': openapi.Schema(type=openapi.TYPE_STRING, description="Complemento do endereço (opcional)"),
+                'neighborhood': openapi.Schema(type=openapi.TYPE_STRING, description="Bairro do endereço (opcional)"),
+                'zip_code': openapi.Schema(type=openapi.TYPE_STRING, description="CEP do endereço (opcional)")
             },
             required=['user_email', 'city', 'state', 'street'],
             example={
-                "user_email": "entregador1@example.com",
+                "user_email": "admin@example.com",
                 "city": "Belo Horizonte",
                 "state": "MG",
                 "street": "Rua dos Ipês",
-                "number": "789"
+                "number": "789",
+                "zip_code": "12345-678",
+                "complement": "Apto 101",
+                "neighborhood": "Centro"
             }
         ),
         responses={
@@ -178,6 +184,9 @@ class AddressEditView(generics.UpdateAPIView):
                 'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: MG)"),
                 'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
                 'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
+                'zip_code': openapi.Schema(type=openapi.TYPE_STRING, description="CEP do endereço (opcional)"),
+                'complement': openapi.Schema(type=openapi.TYPE_STRING, description="Complemento do endereço (opcional)"),
+                'neighborhood': openapi.Schema(type=openapi.TYPE_STRING, description="Bairro do endereço (opcional)"),
             },
             required=['user_emal','city', 'state', 'street'],
             example={
@@ -185,7 +194,10 @@ class AddressEditView(generics.UpdateAPIView):
                 "city" : "Extrema",
                 "state" : "MG",
                 "street" : "Av. das Palmeiras",
-                "number" : "123"
+                "number" : "123",
+                "zip_code": "12345-678",
+                "complement": "Apto 101",
+                "neighborhood": "Centro"
             }
         ),
         responses={
@@ -206,6 +218,9 @@ class AddressEditView(generics.UpdateAPIView):
                 'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: MG)"),
                 'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
                 'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
+                'zip_code': openapi.Schema(type=openapi.TYPE_STRING, description="CEP do endereço (opcional)"),
+                'complement': openapi.Schema(type=openapi.TYPE_STRING, description="Complemento do endereço (opcional)"),
+                'neighborhood': openapi.Schema(type=openapi.TYPE_STRING, description="Bairro do endereço (opcional)"),
             },
             example={
                 "street": "Rua Nova",
@@ -238,7 +253,7 @@ class AddressListView(generics.ListAPIView):
 class AddressListUserView(generics.ListAPIView):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
-    lookup_field = "user_email"
+    lookup_field = "user__email"
 
     @swagger_auto_schema(
         operation_description="Obtém todos os endereços associados a um usuário específico, identificado pelo email.",

@@ -104,23 +104,24 @@ class AddressModelTests(APITestCase):
         self.client.force_authenticate(user=self.client.user) """
         self.user = User.objects.create_user(email='client@example.com', password='123456789', is_active=True)
         self.address = Address.objects.create(user=self.user, zip_code='01001-000', street='Rua Exemplo', number='123', complement='Apto 1', neighborhood='Exemplo', city='Cidade Exemplo', state='SP')
-        self.assertTrue(Address.objects.filter(id=self.address.id).exists())
 
     def test_create_address(self):
         data = {
-            "user_email": "client@example.com",
+            "user": self.user.id,
             "city": "Belo Horizonte",
             "state": "MG",
             "street": "Rua dos Ipês",
-            "number": "789"
+            "number": "789",
+            "zip_code": "30123-456",
+            "complement": "Casa",
+            "neighborhood": "Centro"
         }
         response = self.client.post('/users/addresses/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Address.objects.count(), 2)
-        #self.assertEqual(self.client_user.first_name, 'João')
     
     def test_get_address_user(self):
-        url = reverse('address-get-by-user', kwargs={'user__email': self.user.email})
+        url = reverse('address-get-by-user', kwargs={'user_id': self.user.id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
@@ -130,11 +131,12 @@ class AddressModelTests(APITestCase):
         url = reverse('address-get-one', kwargs={'pk': self.address.id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]['street'], self.address.street)
+        self.assertIn('street', response.data)
+        self.assertEqual(response.data['street'], self.address.street)
 
     def test_put_address(self):
         data = {
-            "user_email": self.user.email,
+            "user": self.user.id,
             "street": "Rua Atualizada",
             "number": "456",
             "city": "Cidade Atualizada",

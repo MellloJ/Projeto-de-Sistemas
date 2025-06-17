@@ -6,7 +6,6 @@ from rest_framework.exceptions import NotAuthenticated
 User = get_user_model()
 
 class AddressSerializer(serializers.ModelSerializer):
-    user_email = serializers.EmailField(write_only=True, help_text="Email do usuário associado ao endereço.")
     zip_code = serializers.CharField(required=False, allow_null=True, help_text="CEP do endereço (opcional).")
     street = serializers.CharField(help_text="Logradouro (rua, avenida, etc.) do endereço.")
     number = serializers.CharField(required=False, allow_null=True, help_text="Número do endereço (opcional).")
@@ -17,10 +16,10 @@ class AddressSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Address
-        fields = ['user_email', 'zip_code', 'street', 'number', 'complement', 'neighborhood', 'city', 'state', 'id']
+        fields = ['user', 'zip_code', 'street', 'number', 'complement', 'neighborhood', 'city', 'state', 'id']
         read_only_fields = ['id']
     
-    def create(self, validated_data):
+"""     def create(self, validated_data):
         user_email = validated_data.pop('user_email')
         try:
             user = User.objects.get(email=user_email)
@@ -28,7 +27,7 @@ class AddressSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"user_email": "Usuário com este email não existe."})
 
         address = Address.objects.create(user=user, **validated_data)
-        return address
+        return address """
 
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(help_text="Email do usuário.")

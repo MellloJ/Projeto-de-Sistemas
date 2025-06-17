@@ -124,7 +124,6 @@ class AddressCreateView(generics.CreateAPIView):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                'user_email': openapi.Schema(type=openapi.TYPE_STRING, description="Email do usuário existente"),
                 'city': openapi.Schema(type=openapi.TYPE_STRING, description="Cidade do endereço"),
                 'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: MG)"),
                 'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
@@ -133,9 +132,8 @@ class AddressCreateView(generics.CreateAPIView):
                 'neighborhood': openapi.Schema(type=openapi.TYPE_STRING, description="Bairro do endereço (opcional)"),
                 'zip_code': openapi.Schema(type=openapi.TYPE_STRING, description="CEP do endereço (opcional)")
             },
-            required=['user_email', 'city', 'state', 'street'],
+            required=['city', 'state', 'street'],
             example={
-                "user_email": "admin@example.com",
                 "city": "Belo Horizonte",
                 "state": "MG",
                 "street": "Rua dos Ipês",
@@ -147,7 +145,7 @@ class AddressCreateView(generics.CreateAPIView):
         ),
         responses={
             201: AddressSerializer,
-            400: openapi.Response("Erro nos dados fornecidos, como email inválido ou campos obrigatórios ausentes.")
+            400: openapi.Response("Erro nos dados fornecidos, como usuário inválido ou campos obrigatórios ausentes.")
         }
     )
     def post(self, request, *args, **kwargs):
@@ -179,7 +177,6 @@ class AddressEditView(generics.UpdateAPIView):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                'user_email' : openapi.Schema(type=openapi.TYPE_STRING, description="Email do usuário associado ao endereço"),
                 'city': openapi.Schema(type=openapi.TYPE_STRING, description="Cidade do endereço"),
                 'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: MG)"),
                 'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
@@ -188,7 +185,7 @@ class AddressEditView(generics.UpdateAPIView):
                 'complement': openapi.Schema(type=openapi.TYPE_STRING, description="Complemento do endereço (opcional)"),
                 'neighborhood': openapi.Schema(type=openapi.TYPE_STRING, description="Bairro do endereço (opcional)"),
             },
-            required=['user_emal','city', 'state', 'street'],
+            required=['city', 'state', 'street'],
             example={
                 "user_email" : "admin@example.com",
                 "city" : "Extrema",
@@ -253,7 +250,10 @@ class AddressListView(generics.ListAPIView):
 class AddressListUserView(generics.ListAPIView):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
-    lookup_field = "user__email"
+    
+    def get_queryset(self):
+        user_id = self.kwargs.get("user_id")
+        return Address.objects.filter(user__id=user_id)
 
     @swagger_auto_schema(
         operation_description="Obtém todos os endereços associados a um usuário específico, identificado pelo email.",

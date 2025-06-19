@@ -16,7 +16,18 @@ class AddressSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Address
-        fields = ['user', 'zip_code', 'street', 'number', 'complement', 'neighborhood', 'city', 'state']
+        fields = ['user', 'zip_code', 'street', 'number', 'complement', 'neighborhood', 'city', 'state', 'id']
+        read_only_fields = ['id']
+    
+"""     def create(self, validated_data):
+        user_email = validated_data.pop('user_email')
+        try:
+            user = User.objects.get(email=user_email)
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"user_email": "Usuário com este email não existe."})
+
+        address = Address.objects.create(user=user, **validated_data)
+        return address """
 
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(help_text="Email do usuário.")
@@ -74,21 +85,6 @@ class ClientUserSerializer(serializers.ModelSerializer):
         # Cria o ClientUser com os dados validados
         clientUser = ClientUser.objects.create(user=user, **validated_data)
         return clientUser
-
-""" class UserClientSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-
-    class Meta:
-        model = User
-        fields = ('email', 'password', 'first_name', 'last_name', 'cpf', 'phone')
-    
-    def validate_cpf(self, value):
-        from auth_app.services.validateUser import validate_cpf
-        return validate_cpf(self, value)
-
-    def create(self, validated_data):
-        from auth_app.services.signupUser import signupClient
-        return signupClient.register(**validated_data) """
 
 class DeliveryUserSerializer(serializers.ModelSerializer):
     user = UserSerializer(help_text="Dados do usuário associado ao entregador.")

@@ -32,11 +32,7 @@ class DeliveryUserCreateView(generics.CreateAPIView):
                         'city': openapi.Schema(type=openapi.TYPE_STRING, description="Cidade do endereço"),
                         'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: SP)"),
                         'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
-                        'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
-                        'quadra': openapi.Schema(type=openapi.TYPE_STRING, description="Quadra do endereço (opcional)"),
-                        'lote': openapi.Schema(type=openapi.TYPE_STRING, description="Lote do endereço (opcional)"),
-                        'reference': openapi.Schema(type=openapi.TYPE_STRING, description="Ponto de referência (opcional)"),
-                        'observation': openapi.Schema(type=openapi.TYPE_STRING, description="Observações (opcional)")
+                        'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)")
                     }
                 )
             },
@@ -53,11 +49,7 @@ class DeliveryUserCreateView(generics.CreateAPIView):
                     "city": "São Paulo",
                     "state": "SP",
                     "street": "Rua das Flores",
-                    "number": "123",
-                    "quadra": "Q1",
-                    "lote": "L5",
-                    "reference": "Próximo à praça",
-                    "observation": "Casa com portão azul"
+                    "number": "123"
                 }
             }
         ),
@@ -94,11 +86,7 @@ class SeparaterUserCreateView(generics.CreateAPIView):
                         'city': openapi.Schema(type=openapi.TYPE_STRING, description="Cidade do endereço"),
                         'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: RJ)"),
                         'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
-                        'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
-                        'quadra': openapi.Schema(type=openapi.TYPE_STRING, description="Quadra do endereço (opcional)"),
-                        'lote': openapi.Schema(type=openapi.TYPE_STRING, description="Lote do endereço (opcional)"),
-                        'reference': openapi.Schema(type=openapi.TYPE_STRING, description="Ponto de referência (opcional)"),
-                        'observation': openapi.Schema(type=openapi.TYPE_STRING, description="Observações (opcional)")
+                        'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)")
                     }
                 )
             },
@@ -115,11 +103,7 @@ class SeparaterUserCreateView(generics.CreateAPIView):
                     "city": "Rio de Janeiro",
                     "state": "RJ",
                     "street": "Avenida Atlântica",
-                    "number": "456",
-                    "quadra": "Q2",
-                    "lote": "L10",
-                    "reference": "Perto do mercado",
-                    "observation": "Apartamento 101"
+                    "number": "456"
                 }
             }
         ),
@@ -140,32 +124,28 @@ class AddressCreateView(generics.CreateAPIView):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                'user_email': openapi.Schema(type=openapi.TYPE_STRING, description="Email do usuário existente"),
                 'city': openapi.Schema(type=openapi.TYPE_STRING, description="Cidade do endereço"),
                 'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: MG)"),
                 'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
                 'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
-                'quadra': openapi.Schema(type=openapi.TYPE_STRING, description="Quadra do endereço (opcional)"),
-                'lote': openapi.Schema(type=openapi.TYPE_STRING, description="Lote do endereço (opcional)"),
-                'reference': openapi.Schema(type=openapi.TYPE_STRING, description="Ponto de referência (opcional)"),
-                'observation': openapi.Schema(type=openapi.TYPE_STRING, description="Observações (opcional)")
+                'complement': openapi.Schema(type=openapi.TYPE_STRING, description="Complemento do endereço (opcional)"),
+                'neighborhood': openapi.Schema(type=openapi.TYPE_STRING, description="Bairro do endereço (opcional)"),
+                'zip_code': openapi.Schema(type=openapi.TYPE_STRING, description="CEP do endereço (opcional)")
             },
-            required=['user_email', 'city', 'state', 'street'],
+            required=['city', 'state', 'street'],
             example={
-                "user_email": "entregador1@example.com",
                 "city": "Belo Horizonte",
                 "state": "MG",
                 "street": "Rua dos Ipês",
                 "number": "789",
-                "quadra": "Q3",
-                "lote": "L15",
-                "reference": "Ao lado da escola",
-                "observation": "Casa com jardim"
+                "zip_code": "12345-678",
+                "complement": "Apto 101",
+                "neighborhood": "Centro"
             }
         ),
         responses={
             201: AddressSerializer,
-            400: openapi.Response("Erro nos dados fornecidos, como email inválido ou campos obrigatórios ausentes.")
+            400: openapi.Response("Erro nos dados fornecidos, como usuário inválido ou campos obrigatórios ausentes.")
         }
     )
     def post(self, request, *args, **kwargs):
@@ -197,27 +177,24 @@ class AddressEditView(generics.UpdateAPIView):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                'user_email' : openapi.Schema(type=openapi.TYPE_STRING, description="Email do usuário associado ao endereço"),
                 'city': openapi.Schema(type=openapi.TYPE_STRING, description="Cidade do endereço"),
                 'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: MG)"),
                 'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
                 'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
-                'quadra': openapi.Schema(type=openapi.TYPE_STRING, description="Quadra do endereço (opcional)"),
-                'lote': openapi.Schema(type=openapi.TYPE_STRING, description="Lote do endereço (opcional)"),
-                'reference': openapi.Schema(type=openapi.TYPE_STRING, description="Ponto de referência (opcional)"),
-                'observation': openapi.Schema(type=openapi.TYPE_STRING, description="Observações (opcional)")
+                'zip_code': openapi.Schema(type=openapi.TYPE_STRING, description="CEP do endereço (opcional)"),
+                'complement': openapi.Schema(type=openapi.TYPE_STRING, description="Complemento do endereço (opcional)"),
+                'neighborhood': openapi.Schema(type=openapi.TYPE_STRING, description="Bairro do endereço (opcional)"),
             },
-            required=['user_emal','city', 'state', 'street'],
+            required=['city', 'state', 'street'],
             example={
                 "user_email" : "admin@example.com",
                 "city" : "Extrema",
                 "state" : "MG",
                 "street" : "Av. das Palmeiras",
                 "number" : "123",
-                "quadra" : "Q1",
-                "lote" : "L10",
-                "reference" : "Próximo ao mercado",
-                "observation" : "Apartamento no 2º andar"
+                "zip_code": "12345-678",
+                "complement": "Apto 101",
+                "neighborhood": "Centro"
             }
         ),
         responses={
@@ -238,10 +215,9 @@ class AddressEditView(generics.UpdateAPIView):
                 'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: MG)"),
                 'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
                 'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
-                'quadra': openapi.Schema(type=openapi.TYPE_STRING, description="Quadra do endereço (opcional)"),
-                'lote': openapi.Schema(type=openapi.TYPE_STRING, description="Lote do endereço (opcional)"),
-                'reference': openapi.Schema(type=openapi.TYPE_STRING, description="Ponto de referência (opcional)"),
-                'observation': openapi.Schema(type=openapi.TYPE_STRING, description="Observações (opcional)")
+                'zip_code': openapi.Schema(type=openapi.TYPE_STRING, description="CEP do endereço (opcional)"),
+                'complement': openapi.Schema(type=openapi.TYPE_STRING, description="Complemento do endereço (opcional)"),
+                'neighborhood': openapi.Schema(type=openapi.TYPE_STRING, description="Bairro do endereço (opcional)"),
             },
             example={
                 "street": "Rua Nova",
@@ -265,6 +241,25 @@ class AddressListView(generics.ListAPIView):
         operation_description="Lista todos os endereços cadastrados.",
         responses={
             200: AddressSerializer(many=True),
+        }
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+
+class AddressListUserView(generics.ListAPIView):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+    
+    def get_queryset(self):
+        user_id = self.kwargs.get("user_id")
+        return Address.objects.filter(user__id=user_id)
+
+    @swagger_auto_schema(
+        operation_description="Obtém todos os endereços associados a um usuário específico, identificado pelo email.",
+        responses={
+            200: AddressSerializer(many=True),
+            404: openapi.Response("Usuário não encontrado ou sem endereços associados.")
         }
     )
     def get(self, request, *args, **kwargs):

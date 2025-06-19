@@ -22,10 +22,8 @@ class MarketSeriallizer(serializers.ModelSerializer):
         user = User.objects.create_user(
             email=validated_data['email'],
             password=validated_data['password'],
-            groupName='supermarket',
-            phone=validated_data['phone'],
-            last_login=now(),
-            date_joined=now()
+            user_type='supermarket',
+            phone=validated_data['phone']
         )
         # Cria o perfil SupermarketUser
         market = Supermarket.objects.create(

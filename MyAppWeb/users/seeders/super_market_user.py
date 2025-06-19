@@ -14,9 +14,7 @@ class SupermarketUserSeeder(BaseSeeder):
             user = User.objects.create_user(
                 email='market@example.com',
                 password='123456789',
-                is_active=True,
-                last_login=now(),
-                date_joined=now()
+                is_active=True
             )
             SupermarketUser.objects.create(
                 user=user,

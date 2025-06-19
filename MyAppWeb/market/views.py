@@ -48,7 +48,6 @@ class SupermarketView(APIView):
 
     def post(self, request):
         serializer = MarketSeriallizer(data=request.data)
-        
         if serializer.is_valid():
             try:
                 market, message = serializer.save()
@@ -58,12 +57,12 @@ class SupermarketView(APIView):
             if market is not None:
                 return Response({
                     'user': {
-                        'messsage' : message,
-                        'email': market.email,
-                        'name': market.name,
+                        'messsage': message,
+                        'email': market.user.email,
+                        'name': market.fantasy_name,
                     }
                 }, status=status.HTTP_201_CREATED)
             else:
                 return Response({'errors': message}, status=status.HTTP_400_BAD_REQUEST)
-
+        print('DEBUG serializer.errors:', serializer.errors)  # Debug line
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

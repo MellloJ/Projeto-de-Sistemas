@@ -10,6 +10,9 @@ class CategoriasSeeder(BaseSeeder):
         return 'CategoriasSeeder'
 
     def seed(self):
+        if Categorias.objects.exists():
+            self.error('Categorias already exist')
+            return
         try:
             categorias_data = [
                 {

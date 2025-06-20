@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 from django.utils.timezone import now
 from users.models import ClientUser, DeliveryUser, SupermarketUser, SeparaterUser
 from auth_app.models import User
@@ -51,6 +52,64 @@ class ClientUserModelTest(TestCase):
         self.client_user.save()
         self.assertEqual(ClientUser.objects.get(id=self.client_user.id).first_name, 'Maria')
 
+class DeliveryUserAPITests(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(email='entregador1@example.com', password='123456789', is_active=True)
+        self.delivery_user = DeliveryUser.objects.create(user=self.user, first_name='Entregador', last_name='Teste', cpf='50370095022')
+    
+    def test_api_create_delivery_user(self):
+        data = {
+            "user" : {
+                "email" : "entregador2@example.com",
+                "password" : "123456789",
+                "phone" : "11987654321"
+            },
+            "first_name": "Entregador",
+            "last_name": "Teste 2",
+            "cpf": "05684811000"
+        }
+        response = self.client.post('/users/delivery-users/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(DeliveryUser.objects.count(), 2)
+        self.assertEqual(DeliveryUser.objects.get(cpf="05684811000").last_name, 'Teste 2')
+    
+    def test_api_delete_delivery_user(self):
+        url = reverse('delivery-user-delete', kwargs={'pk': self.delivery_user.id})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(DeliveryUser.objects.count(), 0)
+    
+    def test_api_get_delivery_users(self):
+        url = reverse('delivery-user-get-one', kwargs={'pk': self.delivery_user.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['last_name'], 'Teste')
+    
+    def test_api_put_delivery_user(self):
+        url = reverse('delivery-user-edit', kwargs={'pk': self.delivery_user.id})
+        data = {
+            "user": {
+                "email": "entregador1@example.com",
+                "password": "123456789",
+            },
+            "first_name": "Entregador Atualizado",
+            "last_name": "Teste Atualizado",
+            "cpf": "50370095022",
+        }
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.delivery_user.refresh_from_db()
+        self.assertEqual(self.delivery_user.first_name, 'Entregador Atualizado')
+    
+    def test_api_patch_delivery_user(self):
+        url = reverse('delivery-user-edit', kwargs={'pk': self.delivery_user.id})
+        data = {
+            "last_name": "Teste Parcialmente Atualizado"
+        }
+        response = self.client.patch(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.delivery_user.refresh_from_db()
+        self.assertEqual(self.delivery_user.last_name, 'Teste Parcialmente Atualizado')
 
 class DeliveryUserModelTest(TestCase):
     def setUp(self):

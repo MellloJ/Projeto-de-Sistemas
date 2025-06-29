@@ -79,12 +79,6 @@ class DeliveryUserAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(DeliveryUser.objects.count(), 0)
     
-    def test_api_get_delivery_users(self):
-        url = reverse('delivery-user-get-one', kwargs={'pk': self.delivery_user.id})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['last_name'], 'Teste')
-    
     def test_api_put_delivery_user(self):
         url = reverse('delivery-user-edit', kwargs={'pk': self.delivery_user.id})
         data = {
@@ -110,6 +104,19 @@ class DeliveryUserAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.delivery_user.refresh_from_db()
         self.assertEqual(self.delivery_user.last_name, 'Teste Parcialmente Atualizado')
+    
+    def test_api_get_all_delivery_users(self):
+        url = reverse('delivery-user-list')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertIsInstance(response.data, list)
+    
+    def test_api_get_delivery_users(self):
+        url = reverse('delivery-user-get-one', kwargs={'pk': self.delivery_user.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['last_name'], 'Teste')
 
 class DeliveryUserModelTest(TestCase):
     def setUp(self):

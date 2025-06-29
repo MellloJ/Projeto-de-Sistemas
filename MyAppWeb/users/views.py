@@ -181,7 +181,6 @@ class DeliveryUserEditView(generics.UpdateAPIView):
         )
     def patch(self, request, *args, **kwargs):
         return super().patch(request, *args, **kwargs)
-        
 
 class DeliveryUserGetView(generics.RetrieveAPIView):
     queryset = DeliveryUser.objects.all()
@@ -196,6 +195,20 @@ class DeliveryUserGetView(generics.RetrieveAPIView):
         }
     )
 
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+class DeliveryUserListView(generics.ListAPIView):
+    queryset = DeliveryUser.objects.all()
+    serializer_class = DeliveryUserSerializer
+
+    @swagger_auto_schema(
+        operation_description="Lista todos os usuários cadastrados do tipo entregador (DeliveryUser).",
+        responses={
+            200: DeliveryUserSerializer(many=True),
+        }
+    )
+    
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 

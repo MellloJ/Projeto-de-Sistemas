@@ -2,7 +2,6 @@ from django.test import TestCase
 from django.utils.timezone import now
 from users.models import ClientUser, DeliveryUser, SupermarketUser, SeparaterUser
 from auth_app.models import User
-from django.urls import reverse
 from rest_framework import status
 
 from rest_framework.test import APITestCase

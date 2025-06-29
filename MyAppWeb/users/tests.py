@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.utils.timezone import now
 from users.models import ClientUser, DeliveryUser, SupermarketUser, SeparaterUser
 from auth_app.models import User
+from django.urls import reverse
+from rest_framework import status
 
 from rest_framework.test import APITestCase
 from rest_framework import status
@@ -51,7 +53,6 @@ class ClientUserModelTest(TestCase):
         self.client_user.save()
         self.assertEqual(ClientUser.objects.get(id=self.client_user.id).first_name, 'Maria')
 
-
 class DeliveryUserModelTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(email='delivery@example.com', password='123', groupName='delivery', last_login=now(), date_joined=now())
@@ -81,6 +82,66 @@ class SupermarketUserModelTest(TestCase):
         self.supermarket_user.fantasy_name = 'Mercado Top'
         self.supermarket_user.save()
         self.assertEqual(SupermarketUser.objects.get(id=self.supermarket_user.id).fantasy_name, 'Mercado Top')
+
+class SeparaterUserAPITests(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(email='separador1@example.com', password='123456789', is_active=True)
+        self.separater = SeparaterUser.objects.create(user=self.user, first_name='Separador', last_name="Teste", cpf='34567890123')
+    
+    def test_api_create_separater_user(self):
+        data = {
+            "user": {
+                "email": "separador2@example.com",
+                "password": "123456789",
+                "phone": "11987654321"
+                },
+            "first_name": "Separador",
+            "last_name": "Teste 2",
+            "cpf": "90425606066"
+        }
+        response = self.client.post('/users/separater-users/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(SeparaterUser.objects.count(), 2)
+        self.assertEqual(SeparaterUser.objects.get(cpf="90425606066").last_name, 'Teste 2')
+    
+    def test_api_delete_separater_user(self):
+        url = reverse('separater-user-delete', kwargs={'pk': self.separater.id})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(SeparaterUser.objects.count(), 0)
+    
+    def test_api_get_separater_user(self):
+        url = reverse('separater-user-get-one', kwargs={'pk': self.separater.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['last_name'], 'Teste')
+    
+    def test_api_put_update_separater_user(self):
+        url = reverse('separater-user-edit', kwargs={'pk': self.separater.id})
+        data = {
+            "user": {
+                "email": "separador1@example.com",
+                "password": "123456789",
+            },
+            "first_name": "Separador Atualizado",
+            "last_name": "Teste Atualizado",
+            "cpf": "34567890123",
+        }
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.separater.refresh_from_db()
+        self.assertEqual(self.separater.first_name, 'Separador Atualizado')
+        self.assertEqual(self.separater.last_name, 'Teste Atualizado')
+    
+    def test_api_patch_update_separater_user(self):
+        url = reverse('separater-user-edit', kwargs={'pk': self.separater.id})
+        data = {
+            "first_name": "Separador Parcial",
+        }
+        response = self.client.patch(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.separater.refresh_from_db()
+        self.assertEqual(self.separater.first_name, 'Separador Parcial')
 
 class SeparaterUserModelTest(TestCase):
     def setUp(self):

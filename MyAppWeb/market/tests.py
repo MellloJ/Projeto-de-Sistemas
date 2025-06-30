@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 
 class CreateMarketTest(APITestCase):
-    def test_create_sucess(self):
+    def test_create_market(self):
         data = {
             "name": "Mercado Teste",
             "cnpj": "12345678000195",

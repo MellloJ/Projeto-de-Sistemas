@@ -16,7 +16,18 @@ class AddressSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Address
-        fields = ['user', 'zip_code', 'street', 'number', 'complement', 'neighborhood', 'city', 'state']
+        fields = ['user', 'zip_code', 'street', 'number', 'complement', 'neighborhood', 'city', 'state', 'id']
+        read_only_fields = ['id']
+    
+"""     def create(self, validated_data):
+        user_email = validated_data.pop('user_email')
+        try:
+            user = User.objects.get(email=user_email)
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"user_email": "Usuário com este email não existe."})
+
+        address = Address.objects.create(user=user, **validated_data)
+        return address """
 
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(help_text="Email do usuário.")

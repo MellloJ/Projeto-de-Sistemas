@@ -55,7 +55,7 @@ class SupermarketUser(models.Model):
         db_table = 'SupermarketUser'
 
     def __str__(self):
-        return f"Supermercado: {self.name}"
+        return f"Supermercado: {self.fantasy_name}"
 
 class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -68,7 +68,7 @@ class Address(models.Model):
     state = models.CharField(max_length=2, null=False)
 
     class Meta:
-        db_table = 'Adress'
+        db_table = 'Address'
     
     def __str__(self):
         return f"{self.street}, {self.number}"

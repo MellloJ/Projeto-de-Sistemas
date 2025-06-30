@@ -13,6 +13,7 @@ urlpatterns = [
     re_path(r'^$', PedidoCreateView.as_view(), name='pedidos-list-post'),                          # POST (para garantir funcionamento do teste de criação via API)
     path('<int:id>', PedidoRetrieveUpdateDeleteView.as_view(), name='pedidos-detail'),             # GET, PATCH, DELETE
     path('<str:numeroPedido>/numeroPedido', PedidoByNumeroPedidoView.as_view(), name='pedidos-by-numero'),  # GET (por número)
+    path('from-user/<int:user_id>', PedidoByUserView.as_view(), name='pedidos-by-user'),                # GET (por usuário)
     path('<int:id>/cancel', PedidoCancelView.as_view(), name='pedidos-cancel'),                     # DELETE (cancelamento)
     path('<int:id>/statusPagamento', AtualizaStatusPagamentoView.as_view(), name='pedidos-status-pagamento'), # PATCH (status)
 ]

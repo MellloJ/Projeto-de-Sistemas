@@ -258,6 +258,121 @@ class SeparaterUserCreateView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
 
+class SeparaterUserDeleteView(generics.DestroyAPIView):
+    queryset = SeparaterUser.objects.all()
+    serializer_class = SeparaterUserSerializer
+    lookup_field = 'pk'
+
+    @swagger_auto_schema(
+        operation_description="Deleta um usuário do tipo SeparaterUser, identificado pelo ID.",
+        responses={
+            204: openapi.Response("Usuário deletado com sucesso"),
+            404: openapi.Response("Usuário não encontrado")
+        },
+    )
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+
+class SeparaterUserEditView(generics.UpdateAPIView):
+    queryset = SeparaterUser.objects.all()
+    serializer_class = SeparaterUserSerializer
+    lookup_field = 'pk'
+
+    @swagger_auto_schema(
+        operation_description="Atualiza os dados de um usuário do tipo SeparaterUser, identificado pelo ID.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user': openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'email': openapi.Schema(type=openapi.TYPE_STRING, description="Email do usuário"),
+                        'password': openapi.Schema(type=openapi.TYPE_STRING, description="Senha do usuário")
+                    }
+                ),
+                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description="Primeiro nome do separador"),
+                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description="Sobrenome do separador (opcional)"),
+                'cpf': openapi.Schema(type=openapi.TYPE_STRING, description="CPF do separador (11 dígitos, único)"),
+            },
+            required=['user', 'first_name', 'cpf'],
+                    example={
+                "user": {
+                    "email": "separador1@example.com",
+                    "password": "123456789"
+                },
+                "first_name": "Carlos",
+                "last_name": "Alberto",
+                "cpf": "12345678901"
+            }
+        ),
+            responses={
+                200: DeliveryUserSerializer,
+                400: openapi.Response("Erro na atualização. Verifique os dados enviados."),
+                404: openapi.Response("Entregador não encontrado.")
+            }
+    )
+
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
+    
+    @swagger_auto_schema(
+        operation_description="Atualiza parcialmente os dados de um SeparaterUser, identificado pelo ID.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user': openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'email': openapi.Schema(type=openapi.TYPE_STRING, description="Email do usuário"),
+                        'password': openapi.Schema(type=openapi.TYPE_STRING, description="Senha do usuário")
+                    }
+                ),
+                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description="Primeiro nome do separador"),
+                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description="Sobrenome do separador (opcional)"),
+                'cpf': openapi.Schema(type=openapi.TYPE_STRING, description="CPF do separador (11 dígitos, único)"),
+            },
+            required=[],
+            example={
+                "first_name": "Carlos",
+            }
+        ),
+            responses={
+                200: DeliveryUserSerializer,
+                400: openapi.Response("Erro na atualização. Verifique os dados enviados."),
+                404: openapi.Response("Separador não encontrado.")
+            }
+        )
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+
+class SeparaterUserGetView(generics.RetrieveAPIView):
+    queryset = SeparaterUser.objects.all()
+    serializer_class = SeparaterUserSerializer
+    lookup_field = "pk"
+
+    @swagger_auto_schema(
+        operation_description="Obtém os detalhes de um separador específico, identificado pelo ID.",
+        responses={
+            200: SeparaterUserSerializer,
+            404: openapi.Response("Usuário não encontrado.")
+        }
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+    
+class SeparaterUserListView(generics.ListAPIView):
+    queryset = SeparaterUser.objects.all()
+    serializer_class = SeparaterUserSerializer
+
+    @swagger_auto_schema(
+        operation_description="Lista todos os usuários cadastrados do tipo separador (SeparaterUser).",
+        responses={
+            200: SeparaterUserSerializer(many=True),
+        }
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
 class AddressCreateView(generics.CreateAPIView):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer

@@ -60,7 +60,7 @@ class PedidoAPITest(APITestCase):
         self.assertEqual(Pedido.objects.count(), 2)
     
     def test_api_get_pedido_by_user(self):
-        url = reverse('pedidos-by-user', args=[self.client_user.user.id])
+        url = reverse('pedidos-by-user', args=[self.client_user.user.email])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)

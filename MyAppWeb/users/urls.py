@@ -3,6 +3,10 @@ from .views import *
 
 urlpatterns = [
     path('users/delivery-users/', DeliveryUserCreateView.as_view(), name='delivery-user-create'),
+    path('users/delivery-users/delete/<int:pk>', DeliveryUserDeleteView.as_view(), name='delivery-user-delete'),
+    path('users/delivery/users/edit/<int:pk>', DeliveryUserEditView.as_view(), name='delivery-user-edit'),
+    path('users/delivery-users/get/all', DeliveryUserListView.as_view(), name='delivery-user-list'),
+    path('users/delivery-users/get/<int:pk>', DeliveryUserGetView.as_view(), name='delivery-user-get-one'),
     path('users/separater-users/', SeparaterUserCreateView.as_view(), name='separater-user-create'),
 
     path('users/addresses/', AddressCreateView.as_view(), name='address-create'),

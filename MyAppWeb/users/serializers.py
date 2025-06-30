@@ -124,6 +124,27 @@ class DeliveryUserSerializer(serializers.ModelSerializer):
         model = DeliveryUser
         fields = ['user', 'first_name', 'last_name', 'cpf', 'address']
 
+    def update(self, instance, validated_data):
+        # Extrai os dados aninhados do usuário
+        user_data = validated_data.pop('user', None)
+
+        # Atualiza os campos de ClientUser
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Atualiza os campos do User
+        if user_data:
+            user = instance.user
+            for attr, value in user_data.items():
+                if attr == 'password':
+                    user.set_password(value)
+                else:
+                    setattr(user, attr, value)
+            user.save()
+
+        return instance
+
     def create(self, validated_data):
         user_data = validated_data.pop('user')
         address_data = validated_data.pop('address', None)

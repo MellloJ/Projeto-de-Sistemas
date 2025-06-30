@@ -61,6 +61,149 @@ class DeliveryUserCreateView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
 
+class DeliveryUserDeleteView(generics.DestroyAPIView):
+    queryset = DeliveryUser.objects.all()
+    serializer_class = DeliveryUserSerializer
+    lookup_field = 'pk'
+
+    @swagger_auto_schema(
+        operation_description="Deleta entregador existente, identificado pelo id.",
+        responses={
+            204: openapi.Response("Entregador deletado com sucesso"),
+            404: openapi.Response("Id fornecido não existe no banco")
+        },
+    )
+
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+
+class DeliveryUserEditView(generics.UpdateAPIView):
+    queryset = DeliveryUser.objects.all()
+    serializer_class = DeliveryUserSerializer
+    lookup_field = 'pk'
+
+    @swagger_auto_schema(
+        operation_description="Atualiza os dados de um entregador existente, identificado pelo ID.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user': openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'email': openapi.Schema(type=openapi.TYPE_STRING, description="Email do usuário"),
+                        'password': openapi.Schema(type=openapi.TYPE_STRING, description="Senha do usuário")
+                    }
+                ),
+                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description="Primeiro nome do entregador"),
+                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description="Sobrenome do entregador (opcional)"),
+                'cpf': openapi.Schema(type=openapi.TYPE_STRING, description="CPF do entregador (11 dígitos, único)"),
+                'address': openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'city': openapi.Schema(type=openapi.TYPE_STRING, description="Cidade do endereço"),
+                        'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: SP)"),
+                        'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
+                        'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
+                        'quadra': openapi.Schema(type=openapi.TYPE_STRING, description="Quadra do endereço (opcional)"),
+                        'lote': openapi.Schema(type=openapi.TYPE_STRING, description="Lote do endereço (opcional)"),
+                        'reference': openapi.Schema(type=openapi.TYPE_STRING, description="Ponto de referência (opcional)"),
+                        'observation': openapi.Schema(type=openapi.TYPE_STRING, description="Observações (opcional)")
+                    }
+                )
+            },
+            required=['user', 'first_name', 'cpf'],
+            example={
+                "user": {
+                    "email": "entregador1@example.com",
+                    "password": "123456789"
+                },
+                "first_name": "Carlos",
+                "last_name": "Alberto",
+                "cpf": "12345678901"
+            }
+        ),
+            responses={
+                200: DeliveryUserSerializer,
+                400: openapi.Response("Erro na atualização. Verifique os dados enviados."),
+                404: openapi.Response("Entregador não encontrado.")
+            }
+        )
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
+        
+    @swagger_auto_schema(
+        operation_description="Atualiza parcialmente os dados de um entregador existente, identificado pelo ID.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user': openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'email': openapi.Schema(type=openapi.TYPE_STRING, description="Email do usuário"),
+                        'password': openapi.Schema(type=openapi.TYPE_STRING, description="Senha do usuário")
+                    }
+                ),
+                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description="Primeiro nome do entregador"),
+                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description="Sobrenome do entregador (opcional)"),
+                'cpf': openapi.Schema(type=openapi.TYPE_STRING, description="CPF do entregador (11 dígitos, único)"),
+                'address': openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'city': openapi.Schema(type=openapi.TYPE_STRING, description="Cidade do endereço"),
+                        'state': openapi.Schema(type=openapi.TYPE_STRING, description="Estado do endereço (ex.: SP)"),
+                        'street': openapi.Schema(type=openapi.TYPE_STRING, description="Rua do endereço"),
+                        'number': openapi.Schema(type=openapi.TYPE_STRING, description="Número do endereço (opcional)"),
+                        'quadra': openapi.Schema(type=openapi.TYPE_STRING, description="Quadra do endereço (opcional)"),
+                        'lote': openapi.Schema(type=openapi.TYPE_STRING, description="Lote do endereço (opcional)"),
+                        'reference': openapi.Schema(type=openapi.TYPE_STRING, description="Ponto de referência (opcional)"),
+                        'observation': openapi.Schema(type=openapi.TYPE_STRING, description="Observações (opcional)")
+                    }
+                )
+            },
+            required=[],
+            example={
+                "first_name": "Carlos",
+            }
+        ),
+            responses={
+                200: DeliveryUserSerializer,
+                400: openapi.Response("Erro na atualização. Verifique os dados enviados."),
+                404: openapi.Response("Entregador não encontrado.")
+            }
+        )
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+
+class DeliveryUserGetView(generics.RetrieveAPIView):
+    queryset = DeliveryUser.objects.all()
+    serializer_class = DeliveryUserSerializer
+    lookup_field = "pk"
+
+    @swagger_auto_schema(
+        operation_description="Obtém os detalhes de um entregador específico, identificado pelo ID.",
+        responses={
+            200: AddressSerializer,
+            404: openapi.Response("Entregador não encontrado.")
+        }
+    )
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+class DeliveryUserListView(generics.ListAPIView):
+    queryset = DeliveryUser.objects.all()
+    serializer_class = DeliveryUserSerializer
+
+    @swagger_auto_schema(
+        operation_description="Lista todos os usuários cadastrados do tipo entregador (DeliveryUser).",
+        responses={
+            200: DeliveryUserSerializer(many=True),
+        }
+    )
+    
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
 class SeparaterUserCreateView(generics.CreateAPIView):
     queryset = SeparaterUser.objects.all()
     serializer_class = SeparaterUserSerializer

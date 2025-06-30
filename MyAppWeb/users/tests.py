@@ -38,7 +38,7 @@ class ClientUserCreateTests(APITestCase):
 
 class ClientUserModelTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email='client@example.com', password='123', groupName='client', last_login=now(), date_joined=now())
+        self.user = User.objects.create_user(email='client@example.com', password='123', user_type='client')
         self.client_user = ClientUser.objects.create(user=self.user, first_name='João', last_name='Silva', cpf='12345678901')
 
     def test_create_client_user(self):
@@ -54,7 +54,7 @@ class ClientUserModelTest(TestCase):
 
 class DeliveryUserModelTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email='delivery@example.com', password='123', groupName='delivery', last_login=now(), date_joined=now())
+        self.user = User.objects.create_user(email='delivery@example.com', password='123', user_type='delivery')
         self.delivery_user = DeliveryUser.objects.create(user=self.user, first_name='Carlos', last_name='Oliveira', cpf='23456789012')
 
     def test_create_delivery_user(self):
@@ -69,7 +69,7 @@ class DeliveryUserModelTest(TestCase):
 
 class SupermarketUserModelTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email='market@example.com', password='123', groupName='supermarket', last_login=now(), date_joined=now())
+        self.user = User.objects.create_user(email='market@example.com', password='123', user_type='supermarket')
         self.supermarket_user = SupermarketUser.objects.create(user=self.user, fantasy_name='Mercado Bom', cnpj='12345678000199')
 
     def test_create_supermarket_user(self):
@@ -84,7 +84,7 @@ class SupermarketUserModelTest(TestCase):
 
 class SeparaterUserModelTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email='sep@example.com', password='123', groupName='separater', last_login=now(), date_joined=now())
+        self.user = User.objects.create_user(email='sep@example.com', password='123', user_type='separater')
         self.separater_user = SeparaterUser.objects.create(user=self.user, first_name='Ana', last_name='Lima', cpf='34567890123')
 
     def test_create_separater_user(self):

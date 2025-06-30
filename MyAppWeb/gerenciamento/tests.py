@@ -11,9 +11,7 @@ class AddressAPITests(APITestCase):
         self.user = User.objects.create_user(
             email='testuser@example.com',
             password='testpass123',
-            groupName='client',
-            last_login=now(),
-            date_joined=now(),
+            user_type='client',
             is_active=True
         )
         self.address_data = {
@@ -73,9 +71,7 @@ class DadosMercadoAPITests(APITestCase):
         self.user = User.objects.create_user(
             email='marketuser@example.com',
             password='testpass123',
-            groupName='supermarket',
-            last_login=now(),
-            date_joined=now(),
+            user_type='supermarket',
             is_active=True
         )
         self.supermarket = SupermarketUser.objects.create(

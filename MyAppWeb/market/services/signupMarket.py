@@ -18,10 +18,8 @@ class signupMarket:
                 user = User.objects.create_user(
                     email=email,
                     password=password,
-                    groupName='supermarket',
-                    phone=phone,
-                    last_login=now(),
-                    date_joined=now()
+                    user_type='supermarket',
+                    phone=phone
                 )
                 market = SupermarketUser.objects.create(
                     user=user,

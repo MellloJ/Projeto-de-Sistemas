@@ -14,4 +14,7 @@ urlpatterns = [
 
     path('users/clients/', ClientUserCreateView.as_view(), name='client-create'),
     path('users/clients/get/<int:pk>', ClientUserGetView.as_view(), name='client-get-one'),
+    path('users/clients/get/all', ClientUserListView.as_view(), name='client-get-all'),
+    path('users/clients/edit/<user__email>', ClientUserEditView.as_view(), name='client-edit'),
+    path('users/clients/delete/<user__email>', ClientUserDeleteView.as_view(), name='client-delete'),
 ]

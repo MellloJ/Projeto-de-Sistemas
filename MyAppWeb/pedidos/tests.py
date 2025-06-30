@@ -9,9 +9,9 @@ from django.utils.timezone import now
 
 class PedidoModelTest(TestCase):
     def setUp(self):
-        user = User.objects.create_user(email='client@pedido.com', password='123', groupName='client', last_login=now(), date_joined=now())
+        user = User.objects.create_user(email='client@pedido.com', password='123', user_type='client', )
         self.client_user = ClientUser.objects.create(user=user, first_name='Cliente', last_name='Teste', cpf='12345678901')
-        market_user = User.objects.create_user(email='market@pedido.com', password='123', groupName='supermarket', last_login=now(), date_joined=now())
+        market_user = User.objects.create_user(email='market@pedido.com', password='123', user_type='supermarket', )
         self.supermarket = SupermarketUser.objects.create(user=market_user, fantasy_name='Mercado Pedido', cnpj='12345678000199')
         self.categoria = Categorias.objects.create(nome='Bebidas', descricao='Bebidas', supermarket=self.supermarket)
         self.produto = Produtos.objects.create(nome='Coca-Cola', descricao='Refrigerante', categoria=self.categoria, marca='Coca', preco_unitario=5.99, qtd_estoque=100, codigo_barras='1234567890123', supermarket=self.supermarket)
@@ -24,9 +24,9 @@ class PedidoModelTest(TestCase):
 
 class PedidoAPITest(APITestCase):
     def setUp(self):
-        user = User.objects.create_user(email='client@pedido.com', password='123', groupName='client', last_login=now(), date_joined=now())
+        user = User.objects.create_user(email='client@pedido.com', password='123', user_type='client')
         self.client_user = ClientUser.objects.create(user=user, first_name='Cliente', last_name='Teste', cpf='12345678901')
-        market_user = User.objects.create_user(email='market@pedido.com', password='123', groupName='supermarket', last_login=now(), date_joined=now())
+        market_user = User.objects.create_user(email='market@pedido.com', password='123', user_type='supermarket', )
         self.supermarket = SupermarketUser.objects.create(user=market_user, fantasy_name='Mercado Pedido', cnpj='12345678000199')
         self.categoria = Categorias.objects.create(nome='Bebidas', descricao='Bebidas', supermarket=self.supermarket)
         self.produto = Produtos.objects.create(nome='Coca-Cola', descricao='Refrigerante', categoria=self.categoria, marca='Coca', preco_unitario=5.99, qtd_estoque=100, codigo_barras='1234567890123', supermarket=self.supermarket)
@@ -58,3 +58,10 @@ class PedidoAPITest(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Pedido.objects.count(), 2)
+    
+    def test_api_get_pedido_by_user(self):
+        url = reverse('pedidos-by-user', args=[self.client_user.user.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertIsInstance(response.data, list)

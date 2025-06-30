@@ -27,6 +27,13 @@ class PedidoByNumeroPedidoView(APIView):
         serializer = PedidoSerializer(pedido)
         return Response(serializer.data)
 
+class PedidoByUserView(APIView):
+    @swagger_auto_schema(responses={200: PedidoSerializer(many=True)})
+    def get(self, request, user_id):
+        pedidos = Pedido.objects.filter(usuario_id=user_id)
+        serializer = PedidoSerializer(pedidos, many=True)
+        return Response(serializer.data)
+
 class PedidoCancelView(APIView):
     @swagger_auto_schema(responses={200: openapi.Response('Pedido cancelado com sucesso')})
     def delete(self, request, id):

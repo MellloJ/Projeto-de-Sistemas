@@ -1,0 +1,51 @@
+* {
+    font-family: Poppins, sans-serif !important;
+    --bg-white: #fff;
+    --base-color: #FFC107;
+    --base-color-dark: #ff9d00;
+}
+
+.main-bg-color{
+    background-color: var(--base-color) !important;
+}
+
+.main-bg-color:hover{
+    background-color: var(--base-color-dark) !important;
+}
+
+.main-bg-color-dark{
+    background-color: var(--base-color-dark) !important;
+}
+
+.main-color{
+    color: var(--base-color) !important;
+}
+
+.main-color-dark{
+    color: var(--base-color-dark) !important;
+}
+
+body {
+    height: 100dvh;
+}
+
+#left_img {
+    filter: drop-shadow(0 40px 60px rgb(206, 206, 206)) ;
+    z-index: -10;
+}
+
+#right_img {
+    filter: drop-shadow(0 40px 60px rgb(206, 206, 206));
+    z-index: -10;
+}
+
+#default-carousel img{
+    min-width: 100px;
+    min-height: 100px;
+    max-width: 300px;
+    max-height: 300px;
+    width: 80dvh;
+    height: 80dvh;
+    object-fit: cover;
+    min-width: 300px;
+}

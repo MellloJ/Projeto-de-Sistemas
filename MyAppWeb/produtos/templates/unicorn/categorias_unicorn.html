@@ -1,0 +1,127 @@
+{% load static %}
+{% load component_tags %}
+
+<div class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-4 md:mb-8 lg:grid-cols-6 xl:grid-cols-8">
+  {% for categoria in categorias %}
+    <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm categoria-card items-center flex flex-col justify-between cursor-pointer">
+      <div>
+        <a type="button" class="edit-categoria-btn" data-id="{{ categoria.id }}">
+          {% if categoria.imagem %}
+            <img class="object-contain rounded-t-lg p-4" src="{{ categoria.imagem.url }}" alt="" />
+          {% else %}
+            <img class="object-contain rounded-t-lg p-4" src="{% static '/src/produtos/img/empty.svg' %}" alt="" />
+          {% endif %}
+        </a>
+      </div>
+      <div class="flex p-3 items-end justify-center">
+        <p class="mb-2 text-center font-bold tracking-tight text-gray-900">{{ categoria.nome }}</p>
+      </div>
+    </div>
+  {% endfor %}
+
+  <div class="hidden" data-modal-toggle="{{ editCategorias.id }}" data-modal-target="{{ editCategorias.id }}" ></div>
+
+
+  <!-- Editar Categoria modal -->
+  {% component "formModal" formModal=editCategorias %}
+    {% fill "modal_body" %}
+      <section class="bg-white">
+        <div class="pb-4 px-4 mx-auto max-w-2xl lg:pb-8">
+          <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+            <div class="sm:col-span-2">
+              <label for="nome" class="block mb-2 text-sm font-medium text-gray-900">Nome</label>
+              <input type="text" name="nome" id="nome" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite o nome da categoria" required>
+              <p class="mt-2 text-sm text-red-600 hidden" id="nome-error"><span class="font-medium">Erro:</span> Nome é obrigatório.</p>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="descricao" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
+              <textarea id="descricao" name="descricao" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500" placeholder="Digite a descrição da categoria" required></textarea>
+              <p class="mt-2 text-sm text-red-600 hidden" id="descricao-error"><span class="font-medium">Erro:</span> Descrição é obrigatória.</p>
+            </div>
+            <div>
+              <label for="imagem" class="block mb-2 text-sm font-medium text-gray-900">Imagem</label>
+              <input type="file" name="imagem" id="imagem" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
+              <p class="mt-2 text-sm text-red-600 hidden" id="imagem-error"><span class="font-medium">Erro:</span> Imagem é obrigatória.</p>
+            </div>
+            {% if request.user.supermarket_user.id %}
+              <input type="hidden" name="supermarket" id="supermarket" value="{{ request.user.supermarket_user.id }}">
+            {% endif %}
+          </div>
+        </div>
+      </section>
+    {% endfill %}
+    {% fill "modal_footer" %}
+      <div class="flex items-center justify-center space-x-4 w-full px-4">
+        <button type="submit" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto" data-modal-toggle="{{ editCategorias.id }}">
+          Salvar
+        </button>
+        <button type="button" data-id="" id="delete-categoria-btn" class="focus:outline-none text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2">
+          Deletar
+        </button>
+      </div>
+    {% endfill %}
+  {% endcomponent %}
+
+  <!-- Ver Categoria modal -->
+  {% component "formModal" formModal=viewCategorias %}
+    {% fill "modal_body" %}
+      <section class="bg-white">
+        <div class="pb-4 px-4 mx-auto max-w-2xl lg:pb-8">
+          <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+            <div class="sm:col-span-2">
+              <label for="nome" class="block mb-2 text-sm font-medium text-gray-900">Nome</label>
+              <input type="text" name="nome" id="nome" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite o nome da categoria" disabled>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="descricao" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
+              <textarea id="descricao" name="descricao" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500" placeholder="Digite a descrição da categoria" disabled></textarea>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    {% endfill %}
+    {% fill "modal_footer" %}
+    {% endfill %}
+  {% endcomponent %}
+  
+  <!-- Criar Categoria modal -->
+  {% component "formModal" formModal=createCategorias %}
+    {% fill "modal_body" %}
+      <section class="bg-white">
+        <div class="pb-4 px-4 mx-auto max-w-2xl lg:pb-8">
+          <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+            <div class="sm:col-span-2">
+              <label for="nome" class="block mb-2 text-sm font-medium text-gray-900">Nome</label>
+              <input type="text" name="nome" id="nome" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Digite o nome da categoria" required>
+              <p class="mt-2 text-sm text-red-600 hidden" id="nome-error"><span class="font-medium">Erro:</span> Nome é obrigatório.</p>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="descricao" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
+              <textarea id="descricao" name="descricao" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500" placeholder="Digite a descrição da categoria" required></textarea>
+              <p class="mt-2 text-sm text-red-600 hidden" id="descricao-error"><span class="font-medium">Erro:</span> Descrição é obrigatória.</p>
+            </div>
+            <div>
+              <label for="imagem" class="block mb-2 text-sm font-medium text-gray-900">Imagem</label>
+              <input type="file" name="imagem" id="imagem" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" required>
+              <p class="mt-2 text-sm text-red-600 hidden" id="imagem-error"><span class="font-medium">Erro:</span> Imagem é obrigatória.</p>
+            </div>
+            {% if request.user.supermarket_user.id %}
+              <input type="hidden" name="supermarket" id="supermarket" value="{{ request.user.supermarket_user.id }}">
+            {% endif %}
+          </div>
+        </div>
+      </section>
+    {% endfill %}
+    {% fill "modal_footer" %}
+      <div class="flex items-center justify-center space-x-4 w-full px-4">
+        <button type="submit" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-orange-400 hover:bg-orange-500 px-3 py-2 text-sm font-medium text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto" data-modal-toggle="{{ createCategorias.id }}">
+          Salvar
+        </button>
+        <button type="reset" class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-gray-200 hover:bg-gray-300 px-3 py-2 text-sm font-medium text-gray-600 focus:z-10 focus:outline-none focus:ring-4 focus:ring-orange-300 sm:w-auto">
+          Restaurar
+        </button>
+      </div>
+    {% endfill %}
+  {% endcomponent %}
+</div>

@@ -1,0 +1,79 @@
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block color-nav %}orange-400{% endblock %}
+
+{% block navbar %}
+  {% include "navbar.html" %}
+{% endblock navbar %}
+
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-3 w-full gap-4 px-4 pt-20">
+
+  <div class="hidden sm:block md:col-span-1 relative">
+    <div class="absolute top-0 left-0 flex flex-col justify-center gap-12 w-full pt-4">
+      {% include "index/moto.html" %}
+      {% include "index/carrinho.html" %}
+    </div>
+  </div>
+
+  <div class="w-full mt-4 p-6 bg-white border border-gray-200 rounded-lg shadow-sm transform transition-transform duration-1000 ease-in-out">
+    <form method="post" action="{% url 'register_market' %}" class="space-y-5">
+      {% csrf_token %}
+      <h3 class="text-xl font-semibold text-gray-800">Cadastre-se</h3>
+
+      {% if errors %}
+        <div class="text-red-600 text-sm">
+          {{errors}}
+        </div>
+      {% endif %}
+
+      <div>
+        <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
+        {{form.email}}
+      </div>
+
+      <div>
+        <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Senha</label>
+        <input type="password" id="password" name="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required />
+      </div>
+
+      <div>
+        <label for="repeat-password" class="block mb-2 text-sm font-medium text-gray-900">Confirmar sua senha</label>
+        <input type="password" id="repeat-password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required />
+      </div>
+
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900">CNPJ</label>
+        {{form.cnpj}}
+      </div>
+
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900">Phone</label>
+        {{form.phone}}
+      </div>
+
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900">Nome do Mercado</label>
+        {{form.name}}
+      </div>
+
+      <div class="flex items-start mb-4">
+        <input id="terms" type="checkbox" class="w-4 h-4 text-orange-400 bg-gray-50 border border-gray-300 rounded focus:ring-orange-300">
+        <label for="terms" class="ml-2 text-sm text-gray-500">Concordo com os <a href="#" class="hover:underline text-orange-400">termos e condições</a></label>
+      </div>
+
+      <button type="submit" class="w-full text-white bg-orange-400 hover:bg-orange-500 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-lg px-5 py-2.5">Register new account</button>
+    </form>
+  </div>
+
+  <div class="hidden sm:block md:col-span-1 relative">
+    <img id="right_img" class="w-full h-auto max-h-[500px] object-contain" src="{% static 'src/core/img/Right_back.svg' %}" alt="">
+    <div class="absolute top-0 left-0 flex flex-col justify-center gap-16 w-full pt-4">
+      {% include "index/celular.html" %}
+      {% include "index/carro.html" %}
+    </div>
+  </div>
+</div>
+{% endblock %}

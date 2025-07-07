@@ -1,0 +1,109 @@
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block color-nav %}orange-400{% endblock %}
+
+{% block navbar %}
+  {% include "navbar.html" %}
+{% endblock navbar %}
+
+{% block content %}
+<section class="flex w-9/10 h-full mx-auto justify-between px-15 pt-7 items-center overflow:hidden">
+    
+  <div id="background" class="absolute z-[-1] top-0 right-0 w-6/10 h-full bg-[#ffb730] rounded-l-full transform transition-transform duration-1000 ease-in-out"></div>
+
+  <div id="background-svg" class="w-1/2 transform translate-x-full transition-transform duration-1000 ease-in-out">
+    <img class="w-auto rounded" src="{% static 'auth_app/img/undraw_shopping-app_b80f.svg' %}" alt="Ícone de compra">
+  </div>
+
+  <div id="form-container" class="max-w-sm mt-18 p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 transform -translate-x-235 transition-transform duration-1000 ease-in-out">
+    <form method="post" action="{% url 'signup' %}" class="space-y-5"> {% csrf_token %}
+        <h3 class="text-xl bold font-medium text-black-800">Cadastre-se</h3>
+          <div>
+            {% if errors %}
+              <div class="alert alert-danger" role="alert">
+                  {{errors}}
+                </div>
+              {% endif %}
+            <label for="email" class="block mb-2 text-sm font-medium text-[#0D1117]">Email</label>
+            {{form.email}}
+          </div>
+          <div>
+            <label for="password" class="block mb-2 text-sm font-medium text-[#0D1117]">Senha</label>
+            <input type="password" id="password" name="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
+          </div>
+          <div>
+            <label for="repeat-password" class="block mb-2 text-sm font-medium text-[#0D1117]">Confirmar sua senha</label>
+            <input type="password" id="repeat-password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
+          </div>
+          <div>
+              <label class="block mb-2 text-sm font-medium text-[#0D1117]">CPF</label>
+              {{form.cpf}}
+          </div>
+          <div>
+            <label class="block mb-2 text-sm font-medium text-[#0D1117]">Phone</label>
+            {{form.phone}}
+        </div>
+          <div class="grid md:grid-cols-2 md:gap-6">
+              <div class="relative z-0 w-full mb-5 group">
+                  <label class="block mb-2 text-sm font-medium text-[#0D1117]">Nome</label>
+                  {{form.first_name}}
+              </div>
+              <div class="relative z-0 w-full mb-5 group">
+                  <label class="block mb-2 text-sm font-medium text-[#0D1117]">Sobrenome</label>
+                  {{form.last_name}}
+              </div>
+          </div>
+          <div class="flex items-start mb-5">
+            <div class="flex items-center h-5">
+              <input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300" required />
+            </div>
+            <label for="terms" class="ms-2 text-sm font-medium text-gray-500">Concordo com os <a href="#" class="hover:underline dark:text-orange-400">termos e condições</a></label>
+          </div>
+
+              <button type="submit" class="w-full text-white bg-orange-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg px-5 py-2.5 text-center">Register new account</button>
+          
+          <div class="text-sm font-medium text-gray-500">
+              Já tem uma conta? <a href="{% url 'login' %}" id="login-link" class="text-orange-400 hover:underline">Faça login</a>
+          </div>
+    </form>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Pegando os elementos corretamente
+      const loginLink = document.getElementById('login-link'); // <-- o link para login
+      const background_svg = document.getElementById('background-svg'); // <-- o background svg
+      const formContainer = document.getElementById('form-container'); // <-- o formulário
+      const background = document.getElementById('background'); // <-- o background
+  
+      // Só continua se todos os elementos existirem na tela
+      if (loginLink && background_svg && formContainer) {
+          loginLink.addEventListener('click', function(e) {
+              e.preventDefault(); // Para não mudar de página imediatamente
+  
+              // Adiciona a classe para iniciar a animação
+              background.classList.remove('rounded-l-full');
+              background.classList.add('rounded-r-full');
+              background_svg.classList.remove('translate-x-full');
+              background.classList.add('-translate-x-4/6');
+              formContainer.classList.add('z-[-2]');
+              formContainer.classList.remove('-translate-x-235');
+  
+              // Espera o tempo da animação (1000ms) e depois redireciona para o login
+              setTimeout(() => {
+                  window.location.href = loginLink.href;
+              }, 1000); // <- 1 segundo, igual ao 'duration-1000'
+          });
+      } else {
+          console.error('Elementos não encontrados para a animação!');
+      }
+  });
+  </script>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block color-nav %}orange-400{% endblock %}
+
+{% block title%}
+ <title>Cadastro Fracassado</title>
+{% endblock %}
+
+{% block content %}
+    {% if errors %}
+        <div class="alert alert-danger" role="alert">
+            {{errors}}
+        </div>
+    {% endif %}
+    <h1> Email denied!</h1>
+    <a href="{% url 'signup' %}" id="login-link" class="text-my-green-color hover:underline">Tentar novamente</a>
+{% endblock %}

@@ -3,7 +3,7 @@ import re
 from auth_app.services.validateUser import validate_cpf
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
-from .models import *
+from users.models import ClientUser
 
 class signupUserForm(forms.ModelForm):
     first_name = forms.CharField(
@@ -23,17 +23,19 @@ class signupUserForm(forms.ModelForm):
         })
         )
     cpf = forms.CharField(
-        max_length=11,
+        max_length=15,
         widget=forms.TextInput(attrs={
             'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5',
             'placeholder': '000.000.000-00',
+            'id': 'cpf',
         })
         )
     phone = forms.CharField(
-        max_length=11,
+        max_length=15,
         widget=forms.TextInput(attrs={
             'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5',
             'placeholder': '(63)9999-9999',
+            'id' : 'phone',
         })
         )
     email = forms.EmailField(
@@ -44,10 +46,9 @@ class signupUserForm(forms.ModelForm):
             'placeholder': 'email@dominio.com',
         })
     )
-    #type="email" id="email" name="email"  
     
     class Meta:
-        model = User
+        model = ClientUser
         fields = ['first_name', 'last_name', 'email', 'cpf', 'phone']
 
     def clean_cpf(self):
@@ -56,8 +57,17 @@ class signupUserForm(forms.ModelForm):
         if not cpf:
             return cpf
         else:
-            validate_cpf(self, cpf)
+            cpf = validate_cpf(self, cpf)
         return cpf
+    
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        digits = re.sub(r'\D', '', phone)
+
+        if len(digits) != 11:
+            raise ValidationError("O telefone deve conter 11 dígitos (DDD + número).")
+
+        return digits
         
 
     def clean_email(self):

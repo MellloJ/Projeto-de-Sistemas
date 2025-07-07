@@ -1,0 +1,73 @@
+<!-- templates/categorias/index.html -->
+
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block title %} <title> {{title}} </title> {% endblock title %}
+
+{% load unicorn %}
+
+{% load component_tags %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'src/produtos/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'src/core/css/styles.css' %}">
+  {% unicorn_scripts %}
+{% endblock head %}
+
+{% block navbar %}
+  {% include "navbar.html" %}
+{% endblock navbar %}
+
+{% block sidebar %}
+  {% include "sidebar.html" %}
+{% endblock sidebar %}
+
+{% block content %}
+<section class="bg-gray-50 py-8 antialiased p-4 md:ml-64 h-screen pt-20">
+  <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+    <!-- Heading -->
+     <div class="mb-4 items-center justify-between space-y-4 sm:flex sm:space-y-0 md:mb-8">
+      {% include "components/breadcrumb.html" with breadcrumbs=breadcrumbs %}
+    </div>
+  </div>
+  <div>
+    <form id="dados-mercado-form" class="bg-white rounded-lg shadow p-6 space-y-6">
+      {% csrf_token %}
+      <input type="hidden" name="id" id="id" value="{{ user.supermarket_user.id }}">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="fantasy_name" class="block mb-2 text-sm font-medium text-gray-900">Nome Fantasia</label>
+          <input type="text" id="fantasy_name" name="fantasy_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o nome fantasia" required
+          value="{{ user.supermarket_user.fantasy_name|default_if_none:'' }}">
+        </div>
+        <div>
+          <label for="cnpj" class="block mb-2 text-sm font-medium text-gray-900">CNPJ</label>
+          <input type="text" id="cnpj" name="cnpj" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o CNPJ" required
+            value="{{ user.supermarket_user.cnpj|default_if_none:'' }}">
+        </div>
+        <div>
+          <label for="email" class="block mb-2 text-sm font-medium text-gray-900">E-mail</label>
+          <input type="email" id="email" name="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o e-mail do mercado" required
+            value="{{ user.email|default_if_none:'' }}">
+        </div>
+        <div>
+          <label for="phone" class="block mb-2 text-sm font-medium text-gray-900">Telefone</label>
+          <input type="text" id="phone" name="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="Digite o telefone" required
+            value="{{ user.phone|default_if_none:'' }}">
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <button type="submit" class="rounded-lg bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 font-semibold shadow transition">Salvar</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock content %}
+
+{% block scripts %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="{% static 'src/gerenciamento/js/scripts.js' %}"></script>
+{% endblock scripts %}

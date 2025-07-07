@@ -1,8 +1,8 @@
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import validate_email
-from django.utils.timezone import now
 from django.db import transaction, IntegrityError
 from auth_app.models import User, UserManager
+from users.models import ClientUser
 
 class signupClient:
     def checkUserExist(email):
@@ -12,11 +12,9 @@ class signupClient:
         except User.DoesNotExist:
             return False
     
-    def register(email, password, cpf, first_name, last_name, phone=None):
-        completeName = " ".join([first_name, last_name])
+    def register(email, password, cpf, first_name, last_name, user_type, phone=None):
+        #completeName = " ".join([first_name, last_name])
         
-        date_joined = now()
-        last_login = now()
         #group = Group.add('user')
         #permission = Permission.add('user')
 
@@ -25,16 +23,19 @@ class signupClient:
                 user = User.objects.create_user(
                     email=email,
                     password=password,
-                    groupName='client',
-                    first_name=first_name,
-                    last_name=last_name,
-                    completeName=completeName,
-                    cpf=cpf,
-                    phone=phone,
-                    date_joined=date_joined,
-                    last_login=last_login
+                    user_type=user_type,
+                    phone=phone
                 )
-            return user, "Usuário criado com sucesso, confirme seu email"
+                if user is not None:
+                    clientUser = ClientUser.objects.create(
+                        user=user,
+                        first_name=first_name,
+                        last_name=last_name,
+                        cpf=cpf,
+                    )
+                else:
+                    raise ValidationError("Erro ao criar usuário, tente novamente.")
+            return clientUser, "Usuário criado com sucesso, confirme seu email"
         except IntegrityError as e:
             return None, "E-mail ou CPF já está em uso."
 

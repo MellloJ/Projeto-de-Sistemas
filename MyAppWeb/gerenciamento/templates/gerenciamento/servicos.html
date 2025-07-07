@@ -1,0 +1,44 @@
+<!-- templates/categorias/index.html -->
+
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block title %} <title> {{title}} </title> {% endblock title %}
+
+{% load unicorn %}
+
+{% load component_tags %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'src/produtos/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'src/core/css/styles.css' %}">
+  {% unicorn_scripts %}
+{% endblock head %}
+
+{% block navbar %}
+  {% include "navbar.html" %}
+{% endblock navbar %}
+
+{% block sidebar %}
+  {% include "sidebar.html" %}
+{% endblock sidebar %}
+
+{% block content %}
+<section class="bg-gray-50 py-8 antialiased p-4 md:ml-64 h-screen pt-20">
+  <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+    <!-- Heading -->
+     <div class="mb-4 items-center justify-between space-y-4 sm:flex sm:space-y-0 md:mb-8">
+      {% include "components/breadcrumb.html" with breadcrumbs=breadcrumbs %}
+    </div>
+  </div>
+  <div>
+   
+  </div>
+</section>
+{% endblock content %}
+
+{% block scripts %}
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="{% static 'src/gerenciamento/scripts.js' %}"></script>
+{% endblock scripts %}

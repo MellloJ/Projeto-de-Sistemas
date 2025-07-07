@@ -55,21 +55,20 @@ class SupermarketUser(models.Model):
         db_table = 'SupermarketUser'
 
     def __str__(self):
-        return f"Supermercado: {self.name}"
+        return f"Supermercado: {self.fantasy_name}"
 
 class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    zip_code = models.CharField(max_length=20, null=True, blank=True)
+    street = models.CharField(max_length=255, null=False)
+    number = models.CharField(max_length=20, null=True, blank=True)
+    complement = models.CharField(max_length=100, null=True, blank=True)
+    neighborhood = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=100, null=False)
-    state = models.CharField(max_length=50, null=False)
-    street = models.CharField(null=False)
-    number = models.CharField(max_length=20, null=True)
-    quadra = models.CharField(max_length=20, null=True, blank=True)
-    lote = models.CharField(max_length=20, null=True, blank=True)
-    reference = models.CharField(null=True, blank=True)
-    observation = models.CharField(null=True, blank=True)
-   
+    state = models.CharField(max_length=2, null=False)
+
     class Meta:
-        db_table = 'Adress'
+        db_table = 'Address'
     
     def __str__(self):
         return f"{self.street}, {self.number}"

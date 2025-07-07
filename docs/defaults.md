@@ -2,7 +2,7 @@
 
 <table align="center">
     <tr>
-        <td><a href="..\README.md">Home</a></td>
+        <td><a href="../README.md">Home</a></td>
         <td>Padrões</td>
         <td><a href="plan.md">Planejamento</a></td>
         <td><a href="us.md">Quem Somos</a></td>
